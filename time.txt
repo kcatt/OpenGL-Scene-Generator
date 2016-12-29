@@ -1,0 +1,4 @@
+12/17/2016|3.5|Got programming environment set up and began work on math library.
+12/18/2016|1.5|Finished math library and tested it. Started work on Material stuff.
+12/26/2016|1.5|Finished color class and started work on the transform class.
+12/27/2016|5|Worked on transform class and finished material class. Learning modern OpenGL stuff.
