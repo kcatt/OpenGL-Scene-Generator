@@ -9,7 +9,7 @@ class Mat4x4
         /*******************
          * Public Variable *
          *******************/
-        float matrix[4][4];
+        GLfloat matrix[4][4];
         
         /****************
          * Constructors *
@@ -20,12 +20,12 @@ class Mat4x4
         /********************
          * Public Functions *
          ********************/
-        void SetIdentity();
-        void PostMultiply(const Mat4x4& mat);
-        void PreMultiply(const Mat4x4& mat);
-        void Set(const Mat4x4& mat);
-        void Set(const float mat[4][4]);
-        Mat4x4 Transpose();
+        void    SetIdentity();
+        void    PostMultiply(const Mat4x4& mat);
+        void    PreMultiply(const Mat4x4& mat);
+        void    Set(const Mat4x4& mat);
+        void    Set(const GLfloat mat[4][4]);
+        Mat4x4  Transpose();
 
         // operator= cannot be defined using friend
         inline Mat4x4& operator=(const Mat4x4& rhs)

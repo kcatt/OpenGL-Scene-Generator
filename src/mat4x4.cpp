@@ -22,7 +22,7 @@ void Mat4x4::SetIdentity()
 void Mat4x4::PostMultiply(const Mat4x4& mat)
 {
     Mat4x4 temp(*this);
-    float sum;
+    GLfloat sum;
    
     for (int i = 0; i < 4; i++)
     {
@@ -39,7 +39,7 @@ void Mat4x4::PostMultiply(const Mat4x4& mat)
 void Mat4x4::PreMultiply(const Mat4x4& mat)
 {
     Mat4x4 temp(*this);
-    float sum;
+    GLfloat sum;
    
     for (int i = 0; i < 4; i++)
     {
@@ -64,7 +64,7 @@ void Mat4x4::Set(const Mat4x4& mat)
     }
 }
 
-void Mat4x4::Set(const float mat[4][4])
+void Mat4x4::Set(const GLfloat mat[4][4])
 {
     for (int i = 0; i < 4; i++)
     {

@@ -1,5 +1,11 @@
 #include "scene_object.h"
 
+SceneObject::~SceneObject()
+{
+    if (objectVerts != NULL)
+        delete[] objectVerts;
+}
+
 void SceneObject::Draw() { }
 
 void SceneObject::TellMaterials()

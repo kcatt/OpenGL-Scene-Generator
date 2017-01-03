@@ -24,7 +24,7 @@ void Transform::Translate(const Vector3& translation)
     Translate(translation.x, translation.y, translation.z);
 }
 
-void Transform::Translate(float x, float y, float z)
+void Transform::Translate(GLfloat x, GLfloat y, GLfloat z)
 {
     position.x += x;
     position.y += y;
@@ -38,7 +38,7 @@ void Transform::Rotate(const Vector3& rotation)
     Rotate(rotation.x, rotation.y, rotation.z);
 }
 
-void Transform::Rotate(float x, float y, float z)
+void Transform::Rotate(GLfloat x, GLfloat y, GLfloat z)
 {
     rotation.x += x;
     rotation.y += y;
@@ -53,7 +53,7 @@ void Transform::Scale(const Vector3& scale)
     Scale(scale.x, scale.y, scale.z);
 }
 
-void Transform::Scale(float x, float y, flaot z)
+void Transform::Scale(GLfloat x, GLfloat y, flaot z)
 {
     scale.x += x;
     scale.y += y;
@@ -65,7 +65,7 @@ void Transform::SetPosition(const Vector3& position)
     SetPosition(position.x, position.y, position.z);
 }
 
-void Transform::SetPosition(float x, float y, float z)
+void Transform::SetPosition(GLfloat x, GLfloat y, GLfloat z)
 {
     position.x = x;
     position.y = y;
@@ -79,7 +79,7 @@ void Transform::SetRotation(const Vector3& rotation)
     SetRotation(rotation.x, rotation.y, rotation.z);
 }
 
-void Transform::SetRotation(float x, float y, float z)
+void Transform::SetRotation(GLfloat x, GLfloat y, GLfloat z)
 {
     rotation.x = x;
     rotation.y = y;
@@ -94,7 +94,7 @@ void Transform::SetScale(const Vector3& scale)
     SetScale(scale.x, scale.y, scale.z);
 }
 
-void Transform::SetScale(float x, float y, float z)
+void Transform::SetScale(GLfloat x, GLfloat y, GLfloat z)
 {
     scale.x = x;
     scale.y = y;
@@ -103,15 +103,15 @@ void Transform::SetScale(float x, float y, float z)
     ApplyTransform();
 }
 
-void Transform::Rotate(float angle, const Vector3& axis)
+void Transform::Rotate(GLfloat angle, const Vector3& axis)
 {
     Mat4x4 rm;
     Mat4x4 invRm;
     axis.Normalize();
-    float radians = angle * 3.14159/180;
-    float c = cos(radians);
-    float s = sin(radians);
-    float cMin = 1.0 - c;
+    GLfloat radians = angle * 3.14159/180;
+    GLfloat c = cos(radians);
+    GLfloat s = sin(radians);
+    GLfloat cMin = 1.0 - c;
 
     rm.matrix[0][0] = c + cMin*pow(axis.x, 2);
     rm.matrix[0][1] = cMin*axis.y*axis.x - s*axis.z;
@@ -167,7 +167,7 @@ void Transform::ApplyTransform()
     Mat4x4 scaleMat;
     Mat4x4 invScale;
     
-    const float sEps = 0.00001;
+    const GLfloat sEps = 0.00001;
     
     scaleMat.matrix[0][0] = scale.x;
     scaleMat.matrix[1][1] = scale.y;

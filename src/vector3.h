@@ -9,27 +9,27 @@ class Vector3
         /********************
          * Public Variables *
          ********************/
-        float x;
-        float y;
-        float z;
+        GLfloat x;
+        GLfloat y;
+        GLfloat z;
 
         /****************
          * Constructors *
          ****************/
         Vector3(const Vector3& v);
-        Vector3(float x = 0, float y = 0, float z = 0);
+        Vector3(GLfloat x = 0, GLfloat y = 0, GLfloat z = 0);
 
         /********************
          * Public Functions *
          ********************/
-        void  Scale(float scalar);
-        float Dot(const Vector3& v) const;
-        void  Cross(const Vector3& v);
-        void  Reverse();
-        float Magnitude() const;
-        void  Normalize();
-        void  Set(float x, float y, float z);
-        void  Set(const Vector3& v);
+        void    Scale(GLfloat scalar);
+        GLfloat Dot(const Vector3& v) const;
+        void    Cross(const Vector3& v);
+        void    Reverse();
+        GLfloat Magnitude() const;
+        void    Normalize();
+        void    Set(GLfloat x, GLfloat y, GLfloat z);
+        void    Set(const Vector3& v);
         
         /********************
          * Static Functions *
@@ -39,7 +39,7 @@ class Vector3
         /********************
          * Friend Functions *
          ********************/
-        friend Vector3 operator*(const Vector3& lhs, float scalar);
+        friend Vector3 operator*(const Vector3& lhs, GLfloat scalar);
         friend Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
         friend std::ostream& operator<<(std::ostream& out, const Vector3& v);
 

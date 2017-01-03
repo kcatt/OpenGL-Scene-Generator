@@ -1,4 +1,4 @@
-Color3 operator*(const float& scalar)
+Color3 operator*(const GLfloat& scalar)
 {
     Color3 temp(*this);
     temp.r *= value;
@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& out, const Color3& c)
     return out;
 }
 
-Color3::Color3(float r, float g, float b)
+Color3::Color3(GLfloat r, GLfloat g, GLfloat b)
 {
     this->Set(r, g, b);
 }
@@ -34,7 +34,7 @@ Color3::Color3(const Color3& color)
     this->b = color.b;
 }
 
-void Color3::Add(float r, float g, float b)
+void Color3::Add(GLfloat r, GLfloat g, GLfloat b)
 {
     this->r += r;
     this->g += g;
@@ -56,7 +56,7 @@ void Color3::Add(const Color3& color)
     this->b += color.b;
 }
 
-void Color3::Set(float r, float g, float b)
+void Color3::Set(GLfloat r, GLfloat g, GLfloat b)
 {
     this->r = r;
     this->g = g;
@@ -71,7 +71,7 @@ void Color3::Set(const Color3& color)
 }
 
 // Makes 4-tuple from this color. Index 3 indicates homogenous.
-void Color3::Build4Tuple(float v[])
+void Color3::Build4Tuple(GLfloat v[])
 {
     v[0] = this->r;
     v[1] = this->g;

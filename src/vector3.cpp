@@ -2,7 +2,7 @@
 #include "vector3.h"
 
 // Friend Functions
-Vector3 operator*(const Vector3& lhs, float scalar)
+Vector3 operator*(const Vector3& lhs, GLfloat scalar)
 {
     Vector3 retVal(lhs);
 
@@ -35,21 +35,21 @@ Vector3::Vector3(const Vector3& v)
     this->Set(v);
 }
 
-Vector3::Vector3(float x, float y, float z)
+Vector3::Vector3(GLfloat x, GLfloat y, GLfloat z)
 {
     this->x = x;
     this->y = y;
     this->z = z;
 }
 
-void Vector3::Scale(float scalar)
+void Vector3::Scale(GLfloat scalar)
 {
     x *= scalar;
     y *= scalar;
     z *= scalar;
 }
 
-float Vector3::Dot(const Vector3& v) const
+GLfloat Vector3::Dot(const Vector3& v) const
 {
     return (this->x*v.x + this->y*v.y + this->z*v.z);
 }
@@ -69,14 +69,14 @@ void Vector3::Reverse()
     this->z *= -1;
 }
 
-float Vector3::Magnitude() const
+GLfloat Vector3::Magnitude() const
 {
-    return (float)sqrt(this->Dot(*this));
+    return (GLfloat)sqrt(this->Dot(*this));
 }
 
 void Vector3::Normalize()
 {
-    float magnitude = this->Magnitude();
+    GLfloat magnitude = this->Magnitude();
 
     if (magnitude == 0)
     {
@@ -89,7 +89,7 @@ void Vector3::Normalize()
     this->z /= magnitude;
 }
 
-void Vector3::Set(float x, float y, float z)
+void Vector3::Set(GLfloat x, GLfloat y, GLfloat z)
 {
     this->x = x;
     this->y = y;

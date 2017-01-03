@@ -3,3 +3,5 @@
 12/26/2016|1.5|Finished color class and started work on the transform class.
 12/27/2016|5|Worked on transform class and finished material class. Learning modern OpenGL stuff.
 12/29/2016|2.5|Learning more of the modern OpenGL stuff and creating a simple shader class.
+12/31/2016|1|Learning about how transformations work in modern OpenGL
+1/2/2017|7|Working on learning how to render multiple objects and setting up more of the classes for the project.

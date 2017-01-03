@@ -31,20 +31,20 @@ class Transform
          * Public Functions *
          ********************/
         void Translate(const Vector3& translation);
-        void Translate(float x, float y, float z);
+        void Translate(GLfloat x, GLfloat y, GLfloat z);
         void Rotate(const Vector3& rotation);
-        void Rotate(float x, float y, float z);
+        void Rotate(GLfloat x, GLfloat y, GLfloat z);
         void Scale(const Vector3& scale);
-        void Scale(float x, float y, flaot z);
+        void Scale(GLfloat x, GLfloat y, flaot z);
         
         void SetPosition(const Vector3& position);
-        void SetPosition(float x, float y, float z);
+        void SetPosition(GLfloat x, GLfloat y, GLfloat z);
         void SetRotation(const Vector3& rotation);
-        void SetRotation(float x, float y, float z);
+        void SetRotation(GLfloat x, GLfloat y, GLfloat z);
         void SetScale(const Vector3& scale);
-        void SetScale(float x, float y, float z);
+        void SetScale(GLfloat x, GLfloat y, GLfloat z);
 
-        void Rotate(float angle, const Vector3& axis);
+        void Rotate(GLfloat angle, const Vector3& axis);
 
         std::ostream& operator<<(std::ostream& out, const Transform& t);
 

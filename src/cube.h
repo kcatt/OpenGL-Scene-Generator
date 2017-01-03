@@ -15,4 +15,7 @@ class Cube : public SceneObject
          * Overloaded Function *
          ***********************/
         void Draw();
-}
+    
+    private:
+        static GLfloat indexArr[36];
+    }
