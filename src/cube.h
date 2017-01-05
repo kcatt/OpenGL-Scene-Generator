@@ -18,4 +18,10 @@ class Cube : public SceneObject
     
     private:
         static GLfloat indexArr[36];
-    }
+        static bool    cubeSetUp;
+        static GLuint  cubeVBO, cubeVAO, cubeEBO;
+
+        void SetUpCube();
+};
+
+#endif

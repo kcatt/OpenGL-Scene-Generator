@@ -6,6 +6,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <memory>
 #include "transform.h"
 #include "material.h"
 #include "color3.h"
@@ -60,9 +61,9 @@ class Scene
         GLfloat minTransparency;
         Transform   currTransform;
         Material    currMaterial;
-        vector<SceneObject*> objects;
-        std::ifstream*       inFile;
-        std::stringstream*   fileStream;
+        vector<SceneObject*>                  objects;
+        std::unique_ptr<std::ifstream>        inFile;
+        std::unique_ptr<std::stringstream>    fileStream;
         
         /*********************
          * Private Functions *

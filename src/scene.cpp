@@ -143,7 +143,7 @@ void Scene::IsIdentifier(const std::string& keyword)
 
 void Scene::ReadFile(const std::string& fileName)
 {
-    inFile = new std::ifstream(fileName.c_str());
+    inFile = std::make_unique<ifstream>(fileName.c_str());
 
     if (!(*inFile))
     {
@@ -151,7 +151,7 @@ void Scene::ReadFile(const std::string& fileName)
         return false;
     }
 
-    fileStream = new std::stringstream();
+    fileStream = std::make_unique<stringstream>();
     currLine = nextLine = 1;
     char nextChar;
     FreeScene();
@@ -167,9 +167,6 @@ void Scene::ReadFile(const std::string& fileName)
 
     // Close the file object and delete the allocated memory
     inFile->close();
-
-    delete inFile;
-    delete fileStream;
 
     return true;
 }
@@ -446,14 +443,14 @@ bool Scene::GetObject(void)
                         return false;
                     }
                 }
-                // common things to do to all Shapes
+                // common things to do to all Shape
                 ((SceneObject*)newShape)->mat.set(currMtrl);
                 // load transform and its inverse
                 ((SceneObject*)newShape)->transform = this->currTransform;
                 ((SceneObject*)newShape)->transf.set(affStk.tos[0].affn);
                 ((SceneObject*)newShape)->invTransf.set(affStk.tos[0].invAffn);
                 
-                obj.push_back(newShape);
+                obj.push_back(newObject);
                 
                 return true;
             }

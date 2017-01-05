@@ -15,8 +15,16 @@ GLfloat Cube::indexArr[36] = {
     4, 1, 0
 };
 
+bool    Cube::cubeSetUp = false;
+GLuint  Cube::cubeVBO = 0;
+GLuint  Cube::cubeVAO = 0;
+GLuint  Cube::cubeEBO = 0;
+
 Cube::Cube()
 {
+    if (!cubeSetUp)
+        SetUpCube();
+
     //define the 8 vertices that make up a cube
     objectVerts = new GLfloat[24] {
         -1.0f, -1.0f,  1.0f, // front bottom left  0
@@ -32,6 +40,30 @@ Cube::Cube()
 
 void Cube::Draw()
 {
-    glBufferData(GL_ARRAY_BUFFER, sizeof(objVerts), objVerts, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENET_ARRAY_BUFFER, sizeof(indexArr), indexArr, GL_STATIC_DRAW);
+    glBindVertexArray(cubeVAO);
+    glDrawElements(GL_TRIANGLES,  36, GL_UNSIGNED_INT, 0);   
+    glBindVertexArray(0);
+}
+
+
+void Cube::SetUpCube()
+{
+    cubeSetUp = true;
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &cubeVBO);
+    glGenBuffers(1, &cubeEBO);
+
+    glBindVertexArray(cubeVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(objectVerts) objectVerts, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexArr), indexArr, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
