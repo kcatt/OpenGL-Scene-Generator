@@ -13,6 +13,17 @@ Vector3 operator*(const Vector3& lhs, GLfloat scalar)
     return retVal;
 }
 
+Vector3 operator*(GLfloat scalar, const Vector3& rhs)
+{
+    Vector3 retVal(rhs);
+
+    retVal.x *= scalar;
+    retVal.y *= scalar;
+    retVal.z *= scalar;
+
+    return retVal;
+}
+
 Vector3 operator+(const Vector3& lhs, const Vector3& rhs)
 {
     Vector3 retVal(lhs);
