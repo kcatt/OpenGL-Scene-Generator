@@ -449,6 +449,7 @@ bool Scene::GetObject(void)
                 ((SceneObject*)newShape)->transform = this->currTransform;
                 ((SceneObject*)newShape)->transf.set(affStk.tos[0].affn);
                 ((SceneObject*)newShape)->invTransf.set(affStk.tos[0].invAffn);
+                ((SceneObject*)newShape)->SetModelMatrixLoc(modelMatrixLoc);
                 
                 obj.push_back(newObject);
                 
@@ -462,4 +463,9 @@ bool Scene::GetObject(void)
 void Scene::SetBackground(const Color3& color)
 {
     background.set(color);
+}
+
+void Scene::SetModelMatrixLoc(GLuint location)
+{
+    modelMatrixLoc = location;
 }

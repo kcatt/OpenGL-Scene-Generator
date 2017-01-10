@@ -23,11 +23,22 @@ class SceneObject
          **************/
         ~SceneObject();
 
+        /********************
+         * Public Functions *
+         ********************/
+        void SetModelMatrixLoc(GLuint location);
+
         /*********************
          * Virtual Functions *
          *********************/
         virtual void Draw();
         virtual void TellMaterials();
+    
+    protected:
+        /***********************
+         * Protected Variables *
+         ***********************/
+        GLuint modelMatrixLoc;
 };
 
 #endif

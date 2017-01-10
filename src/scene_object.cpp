@@ -17,3 +17,8 @@ void SceneObject::TellMaterials()
     material.emissive.Build4Tuple(emiss);
     
 }
+
+void SceneObject::SetModelMatrixLoc(GLuint location)
+{
+    modelMatrixLoc = location;
+}

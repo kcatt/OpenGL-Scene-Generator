@@ -21,6 +21,9 @@ class Transform
         Vector3 rotation;
         Vector3 scale;
 
+        Mat4x4  affine;
+        Mat4x4  invAffine;
+
         /****************
          * Constructors *
          ****************/
@@ -52,9 +55,6 @@ class Transform
         /*********************
          * Private Variables *
          *********************/
-        Mat4x4 affine;
-        Mat4x4 invAffine;
-
         // define rotation matrices to use to find rotations
         Mat4x4 rotationMat;
         Mat4x4 invRotation;

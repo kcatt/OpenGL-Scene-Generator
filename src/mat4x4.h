@@ -26,6 +26,7 @@ class Mat4x4
         void    Set(const Mat4x4& mat);
         void    Set(const GLfloat mat[4][4]);
         Mat4x4  Transpose();
+        void    ConvertToOpenGLMatrix(GLfloat matrix[16]); 
 
         // operator= cannot be defined using friend
         inline Mat4x4& operator=(const Mat4x4& rhs)

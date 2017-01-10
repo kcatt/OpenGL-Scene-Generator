@@ -27,20 +27,26 @@ Cube::Cube()
 
     //define the 8 vertices that make up a cube
     objectVerts = new GLfloat[24] {
-        -1.0f, -1.0f,  1.0f, // front bottom left  0
-         1.0f, -1.0f,  1.0f, // front bottom right 1
-         1.0f,  1.0f,  1.0f, // front top right    2
-        -1.0f,  1.0f,  1.0f, // front top left     3
-        -1.0f, -1.0f, -1.0f, // back bottom left   4
-         1.0f, -1.0f, -1.0f, // back bottom right  5
-         1.0f,  1.0f, -1.0f, // back top right     6
-        -1.0f,  1.0f, -1.0f  // back top left      7
+        -0.5f, -0.5f,  0.5f, // front bottom left  0
+         0.5f, -0.5f,  0.5f, // front bottom right 1
+         0.5f,  0.5f,  0.5f, // front top right    2
+        -0.5f,  0.5f,  0.5f, // front top left     3
+        -0.5f, -0.5f, -0.5f, // back bottom left   4
+         0.5f, -0.5f, -0.5f, // back bottom right  5
+         0.5f,  0.5f, -0.5f, // back top right     6
+        -0.5f,  0.5f, -0.5f  // back top left      7
     };
 }
 
 void Cube::Draw()
 {
     glBindVertexArray(cubeVAO);
+
+    GLuint modelMatrix[16];
+    transform.affine.ConvertToOpenGLMatrix(modelMatrix);
+
+    glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
+    
     glDrawElements(GL_TRIANGLES,  36, GL_UNSIGNED_INT, 0);   
     glBindVertexArray(0);
 }

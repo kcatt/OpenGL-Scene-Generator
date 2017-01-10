@@ -47,6 +47,7 @@ class Scene
         void FreeScene(void);
         void MakeLights(void);
         void ReadFile(const std::string& fileName);
+        void SetModelMatrixLoc(GLuint location);
 
     private:
         /*********************
@@ -59,6 +60,7 @@ class Scene
         int     maxRecursionDepth;
         GLfloat minReflectivity;
         GLfloat minTransparency;
+        GLuint  modelMatrixLoc;
         Transform   currTransform;
         Material    currMaterial;
         vector<SceneObject*>                  objects;

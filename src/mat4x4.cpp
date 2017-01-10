@@ -89,3 +89,15 @@ Mat4x4 Mat4x4::Transpose()
 
     return retVal;
 }
+
+// Converts the internal matrix into the column-major 1D array that OpenGL expects
+void Mat4x4::ConvertToOpenGLMatrix(GLfloat matrix[16])
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            matrix[i + j * 4] = this->matrix[i][j];
+        }
+    }
+}
