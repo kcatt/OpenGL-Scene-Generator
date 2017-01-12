@@ -2,6 +2,7 @@
 #define __MAT_4X4__H_
 
 #include <iostream>
+#include <GL/glew.h>
 
 class Mat4x4
 {

@@ -1,25 +1,28 @@
-Color3 operator*(const GLfloat& scalar)
+#include <iostream>
+#include "color3.h"
+
+std::ostream& operator<<(std::ostream& out, const Color3& c)
+{
+    out << c.r << " " << c.g << " " << c.b;
+    return out;
+}
+
+Color3 Color3::operator*(GLfloat scalar) const
 {
     Color3 temp(*this);
-    temp.r *= value;
-    temp.g *= value;
-    temp.b *= value;
+    temp.r *= scalar;
+    temp.g *= scalar;
+    temp.b *= scalar;
     return temp;
 }
 
-Color3 operator*(const Color3& color)
+Color3 Color3::operator*(const Color3& color) const
 {
     Color3 temp(*this);
     temp.r *= color.r;
     temp.g *= color.g;
     temp.b *= color.b;
     return temp;
-}
-
-std::ostream& operator<<(std::ostream& out, const Color3& c)
-{
-    out << c.r << " " << c.g << " " << c.b;
-    return out;
 }
 
 Color3::Color3(GLfloat r, GLfloat g, GLfloat b)

@@ -11,6 +11,7 @@ using reduced vector and index array, create VBO, VAO, and EBO
 
 #include <algorithm>
 #include <iterator>
+#include "sphere.h"
 
 std::vector<GLuint>  Sphere::indexVector;
 std::vector<Vector3> Sphere::vertVector;
@@ -24,7 +25,7 @@ GLuint               Sphere::sphereEBO = 0;
 Sphere::Sphere()
 {
     if (!sphereSetUp)
-        SetupSphere();
+        SetUpSphere();
 }
 
 void Sphere::Draw()
@@ -67,7 +68,7 @@ void Sphere::SubdivideTriangles(Vector3 vert1, Vector3 vert2, Vector3 vert3, int
 
 void Sphere::ReduceVertexVector()
 {
-    for (int i = 0; i < vertVector.size(); i++)
+    for (size_t i = 0; i < vertVector.size(); i++)
     {
         if (std::find(reducedVertVector.begin(), reducedVertVector.end(), vertVector[i]) != reducedVertVector.end())
             reducedVertVector.push_back(vertVector[i]);
@@ -76,7 +77,7 @@ void Sphere::ReduceVertexVector()
 
 void Sphere::GenerateIndexVector()
 {
-    for (int i = 0; i < vertVector.sizE(); i++)
+    for (size_t i = 0; i < vertVector.size(); i++)
     {
         auto vertPosIt = std::find(reducedVertVector.begin(), reducedVertVector.end(), vertVector[i]);
         size_t vertIndex = std::distance(reducedVertVector.begin(), vertPosIt);
@@ -87,7 +88,7 @@ void Sphere::GenerateIndexVector()
 
 void Sphere::ConvertVectorToGLArray()
 {
-    for (int i = 0; i < reducedVertVector.size(); i++)
+    for (size_t i = 0; i < reducedVertVector.size(); i++)
     {
         reducedVertArray.push_back(reducedVertVector[i].x);
         reducedVertArray.push_back(reducedVertVector[i].y);

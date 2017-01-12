@@ -1,37 +1,80 @@
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <iostream>
-#include "mat4x4.h"
-#include "vector3.h"
+#include <fstream>
+#include <string>
+
+#include "shader.h"
+#include "cube.h"
+#include "camera.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    float a[4][4] = { {1, 2, 3, 4}, 
-                      {5, 6, 7, 8},
-                      {9, 10 , 11, 12},
-                      {13, 14, 15, 16} };
-    
-    float b[4][4] = { {1, 5, 9, 13},
-                      {2, 6, 10, 14},
-                      {3, 7, 11, 15},
-                      {4, 8, 12, 16} };
-    Mat4x4 m1;
-    Mat4x4 m2;
-    m1.Set(a);
-    m2.Set(b);
-
-    m2 = m2.Transpose();
-    
-    m1.Set(m2);
-
-    for (int i = 0; i < 4; i++)
+    if (argc != 3)
     {
-        for (int j = 0; j < 4; j++)
-        {
-            cout << m1.matrix[i][j] << " ";
-        }
-        cout << endl;
+        cout << "Incorrect number of arguments!" << endl;
+        cout << "Usage: [executable] vertexShader fragmentShader" << endl;
+        return -1;
     }
 
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Scene Description Language Generator", nullptr, nullptr);
+    if (window == nullptr)
+    {
+        std::cout << "Failed to create the GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK)
+    {
+        std::cout << "Failed to initialize GLEW" << std::endl;
+        return -1;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    
+    glViewport(0, 0, width, height);
+
+    Shader shader(argv[1], argv[2]);
+
+    Cube c;
+
+    GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
+    GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
+    GLuint projectMat = glGetUniformLocation(shader.GetProgram(), "projection");
+
+    c.SetModelMatrixLoc(modelMat);
+    
+    Camera cam(viewMat, projectMat);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        shader.Use();
+        c.Draw();
+
+        glfwSwapBuffers(window);
+    }
+
+    glfwTerminate();
     return 0;
 }

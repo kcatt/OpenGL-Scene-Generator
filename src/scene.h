@@ -46,7 +46,7 @@ class Scene
         void SetBackground(const Color3& color);
         void FreeScene(void);
         void MakeLights(void);
-        void ReadFile(const std::string& fileName);
+        bool ReadFile(const std::string& fileName);
         void SetModelMatrixLoc(GLuint location);
 
     private:
@@ -55,7 +55,7 @@ class Scene
          *********************/
         int currLine;
         int nextLine;
-        Color3  backgroudColor; 
+        Color3  backgroundColor; 
         Color3  ambientColor;
         int     maxRecursionDepth;
         GLfloat minReflectivity;
@@ -63,7 +63,7 @@ class Scene
         GLuint  modelMatrixLoc;
         Transform   currTransform;
         Material    currMaterial;
-        vector<SceneObject*>                  objects;
+        std::vector<SceneObject*>             objects;
         std::unique_ptr<std::ifstream>        inFile;
         std::unique_ptr<std::stringstream>    fileStream;
         
@@ -75,7 +75,7 @@ class Scene
         bool        IsIdentifier(const std::string& keyword);
         void        CleanUp(void);
         mTokenType  WhichToken(const std::string& keyword);
-        void        GetObject(void);
+        bool        GetObject(void);
 };
 
 #endif

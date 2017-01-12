@@ -9,3 +9,4 @@
 1/4/2017|2.5|Setting up cube to be able to be drawn and researching how to generate sphere.
 1/5/2017|2|Working on generating a sphere.
 1/9/2016|3|Working on camera and some of the shader stuff.
+1/11/2016|3|Trying to get something to display.

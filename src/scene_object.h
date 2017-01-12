@@ -10,6 +10,8 @@
 class SceneObject
 {
     public:
+        SceneObject() {};
+
         /********************
          * Public Variables *
          ********************/

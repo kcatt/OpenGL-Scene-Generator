@@ -4,8 +4,8 @@
 
 Scene::Scene() {
     currMaterial.SetDefault();
-    background.Set(.8,.3,0.6f);
-    ambient.Set(0.1f,0.1f,0.1f);
+    backgroundColor.Set(.8,.3,0.6f);
+    ambientColor.Set(0.1f,0.1f,0.1f);
     minReflectivity = 0.5;
     minTransparency = 0.5;
     maxRecursionDepth = 3;
@@ -13,7 +13,7 @@ Scene::Scene() {
 
 Scene::Scene(const std::string& fileName) {
     Scene();
-    Read(fileName);
+    ReadFile(fileName);
 }
 
 Scene::~Scene() {
@@ -48,7 +48,7 @@ std::string Scene::NextToken(void)
             case '\f':
             case '\r': 
             {
-                if (lastchar == 0) 
+                if (lastChar == 0) 
                 {
                     return token;
                 }
@@ -78,7 +78,7 @@ std::string Scene::NextToken(void)
                 if ((fileStream->peek() == '{') ||
                     (fileStream->peek() == '}')) 
                 {
-                    if (lastChar == 0  
+                    if (lastChar == 0)  
                     {
                         return token;
                     } 
@@ -101,7 +101,7 @@ void Scene::FreeScene(void)
     objects.clear();
 }
 
-void Scene::GetFloat(void)
+GLfloat Scene::GetFloat(void)
 {
     std::stringstream temp;
     GLfloat number;
@@ -127,23 +127,23 @@ void Scene::GetFloat(void)
     return number;
 }
 
-void Scene::IsIdentifier(const std::string& keyword)
+bool Scene::IsIdentifier(const std::string& keyword)
 {
     if (!isalpha(keyword[0]))
         return false;
     
-    for (int count = 1; cout < keyword.length(); count++)
+    for (size_t count = 1; count < keyword.length(); count++)
     {
-        if ((!isalnum(keyword[count])) && (temp[count] != '.'))
+        if ((!isalnum(keyword[count])) && (keyword[count] != '.'))
             return false;
     }
 
     return true;
 }
 
-void Scene::ReadFile(const std::string& fileName)
+bool Scene::ReadFile(const std::string& fileName)
 {
-    inFile = std::make_unique<ifstream>(fileName.c_str());
+    inFile = std::make_unique<std::ifstream>(fileName.c_str());
 
     if (!(*inFile))
     {
@@ -151,15 +151,15 @@ void Scene::ReadFile(const std::string& fileName)
         return false;
     }
 
-    fileStream = std::make_unique<stringstream>();
+    fileStream = std::make_unique<std::stringstream>();
     currLine = nextLine = 1;
     char nextChar;
     FreeScene();
 
     // Read the whole file
-    while (inFile->get(ch)) 
+    while (inFile->get(nextChar)) 
     {
-        *fileStream << ch;
+        *fileStream << nextChar;
     }
 
     // Read the file stream and get all of the objects
@@ -258,8 +258,8 @@ mTokenType Scene::WhichToken(const std::string& keyword)
 
 void Scene::DrawScene(void)
 {
-    for (int i = 0; i < obj.size(); i++)
-        obj[i]->Draw();
+    for (size_t i = 0; i < objects.size(); i++)
+        objects[i]->Draw();
 }
 
 bool Scene::GetObject(void)
@@ -268,18 +268,18 @@ bool Scene::GetObject(void)
     SceneObject *newObject;
     mTokenType   type;
 
-    while ((typ = (whichtoken(s = nexttoken()))) != T_NULL) {
+    /*while ((typ = (whichtoken(s = nexttoken()))) != T_NULL) {
         switch(typ) {
-            case LIGHT: 
+            /*case LIGHT: 
             {
                 Point3 p;
                 Color3 c;
-                p.x = getFloat();
-                p.y = getFloat();
-                p.z = getFloat();
-                c.red = getFloat();
-                c.green = getFloat();
-                c.blue = getFloat();
+                p.x = GetFloat();
+                p.y = GetFloat();
+                p.z = GetFloat();
+                c.red = GetFloat();
+                c.green = GetFloat();
+                c.blue = GetFloat();
                 Light l;
                 l.setPosition(p);
                 l.setColor(c);
@@ -290,28 +290,28 @@ bool Scene::GetObject(void)
             {
                 float angle;
                 Vector3 u;
-                angle = getFloat();
-                u.x = getFloat();
-                u.y = getFloat();
-                u.z = getFloat();
+                angle = GetFloat();
+                u.x = GetFloat();
+                u.y = GetFloat();
+                u.z = GetFloat();
                 affStk.rotate(angle,u);
                 break;
             }
             case TRANSLATE: 
             {
                 Vector3 d;
-                d.x = getFloat();
-                d.y = getFloat();
-                d.z = getFloat();
+                d.x = GetFloat();
+                d.y = GetFloat();
+                d.z = GetFloat();
                 affStk.translate(d);
                 break;
             }
             case SCALE: 
             {
                 float sx, sy, sz;
-                sx = getFloat();
-                sy = getFloat();
-                sz = getFloat();
+                sx = GetFloat();
+                sy = GetFloat();
+                sz = GetFloat();
                 affStk.scale(sx, sy, sz);
                 break;
             }
@@ -327,85 +327,85 @@ bool Scene::GetObject(void)
             case AMBIENT: 
             {
                 float dr, dg, db;
-                dr = getFloat();
-                dg = getFloat();
-                db = getFloat();
+                dr = GetFloat();
+                dg = GetFloat();
+                db = GetFloat();
                 currMtrl.ambient.Set(dr,dg,db);
                 break;
             }
             case DIFFUSE: 
             {
                 float dr,dg,db;
-                dr = getFloat();
-                dg = getFloat();
-                db = getFloat();
+                dr = GetFloat();
+                dg = GetFloat();
+                db = GetFloat();
                 currMtrl.diffuse.Set(dr,dg,db);
                 break;
             }
             case SPECULAR:
             {
                 float dr,dg,db;
-                dr = getFloat();
-                dg = getFloat();
-                db = getFloat();
+                dr = GetFloat();
+                dg = GetFloat();
+                db = GetFloat();
                 currMtrl.specular.Set(dr,dg,db);
                 break;
             }
             case EMISSIVE: 
             {
                 float dr,dg,db;
-                dr = getFloat();
-                dg = getFloat();
-                db = getFloat();
+                dr = GetFloat();
+                dg = GetFloat();
+                db = GetFloat();
                 currMtrl.emissive.Set(dr,dg,db);
                 break;
             }
             case PARAMETERS: 
             {
-                currMtrl.numParams = (int)getFloat();
+                currMtrl.numParams = (int)GetFloat();
                 for(int i = 0; i < currMtrl.numParams; i++)
-                    currMtrl.params[i] = getFloat();
+                    currMtrl.params[i] = GetFloat();
                 break;
             }
             case SPECULARFRACTION:
-                currMtrl.specularFraction = getFloat();
+                currMtrl.specularFraction = GetFloat();
                 break;
             case SURFACEROUGHNESS:
-                currMtrl.surfaceRoughness = getFloat();
+                currMtrl.surfaceRoughness = GetFloat();
                 break;
             case DEFAULTMATERIALS:
                 currMtrl.setDefault();
                 break;
             case SPEEDOFLIGHT:
-                currMtrl.speedOfLight = getFloat();
+                currMtrl.speedOfLight = GetFloat();
                 break;
             case SPECULAREXPONENT:
-                currMtrl.specularExponent = getFloat();
+                currMtrl.specularExponent = GetFloat();
                 break;
             case TRANSPARENCY:
-                currMtrl.transparency = getFloat();
+                currMtrl.transparency = GetFloat();
                 break;
             case REFLECTIVITY:
-                currMtrl.reflectivity = getFloat();
+                currMtrl.reflectivity = GetFloat();
                 break;
             case GLOBALAMBIENT:
-                ambient.r = getFloat();
-                ambient.g = getFloat();
-                ambient.b = getFloat();
+                ambient.r = GetFloat();
+                ambient.g = GetFloat();
+                ambient.b = GetFloat();
                 break;
             case BACKGROUND:
-                background.r = getFloat();
-                background.g = getFloat();
-                background.b = getFloat();
+                background.r = GetFloat();
+                background.g = GetFloat();
+                background.b = GetFloat();
                 break;
             case MINREFLECTIVITY:
-                minReflectivity = getFloat();
+                minReflectivity = GetFloat();
                 break;
             case MINTRANSPARENCY:
-                minTransparency = getFloat();
+                minTransparency = GetFloat();
                 break;
             case MAXRECURSIONDEPTH:
-                maxRecursionDepth = getFloat();
+                maxRecursionDepth = GetFloat();
                 break;
             case T_NULL:
                 break; // The null token represents end-of-file
@@ -422,7 +422,7 @@ bool Scene::GetObject(void)
                         break;
                     case TAPEREDCYLINDER:
                         newShape = new TaperedCylinder;
-                        ((TaperedCylinder*)newShape)->smallRadius = getFloat();
+                        ((TaperedCylinder*)newShape)->smallRadius = GetFloat();
                         break;
                     case TEAPOT:
                         newShape = new Teapot;
@@ -435,7 +435,7 @@ bool Scene::GetObject(void)
                         string fname = nexttoken();
                         newShape = new Mesh(fname);
                         break;
-                    }// end of case: MESH*/
+                    }// end of case: MESH
                     default: 
                     {
                         cerr << "Line " << nextline
@@ -456,13 +456,13 @@ bool Scene::GetObject(void)
                 return true;
             }
         }
-    }
+    }*/
     return false;
 }
 
 void Scene::SetBackground(const Color3& color)
 {
-    background.set(color);
+    backgroundColor.Set(color);
 }
 
 void Scene::SetModelMatrixLoc(GLuint location)

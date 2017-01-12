@@ -1,5 +1,6 @@
 #include "cube.h"
 
+#include <iostream>
 GLfloat Cube::indexArr[36] = {
     0, 1, 2, // front face
     0, 2, 3,
@@ -42,18 +43,20 @@ void Cube::Draw()
 {
     glBindVertexArray(cubeVAO);
 
-    GLuint modelMatrix[16];
+    GLfloat modelMatrix[16];
     transform.affine.ConvertToOpenGLMatrix(modelMatrix);
 
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
     
-    glDrawElements(GL_TRIANGLES,  36, GL_UNSIGNED_INT, 0);   
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);   
     glBindVertexArray(0);
 }
 
 
 void Cube::SetUpCube()
 {
+    std::cout << "SETTING UP CUBE" << std::endl;
+
     cubeSetUp = true;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);

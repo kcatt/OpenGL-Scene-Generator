@@ -18,10 +18,10 @@ void Material::SetDefault()
     speedOfLight = specularExponent = .5;
     specularFraction = 0.0;
     surfaceRoughness = 1.0;
-    ambient.set(0.1 ,0.1, 0.1);
-    diffuse.set(0.8, 0.8, 0.8);
-    specular.set(0, 0, 0);
-    emissive.set(0, 0, 0);
+    ambient.Set(0.1 ,0.1, 0.1);
+    diffuse.Set(0.8, 0.8, 0.8);
+    specular.Set(0, 0, 0);
+    emissive.Set(0, 0, 0);
 }
 
 void Material::Set(const Material& mat)
@@ -36,8 +36,8 @@ void Material::Set(const Material& mat)
     specularExponent = mat.specularExponent;
     specularFraction = mat.specularFraction;
     surfaceRoughness = mat.surfaceRoughness;
-    ambient.set(mat.ambient);
-    diffuse.set(mat.diffuse);
-    specular.set(mat.specular);
-    emissive.set(mat.emissive);  
+    ambient.Set(mat.ambient);
+    diffuse.Set(mat.diffuse);
+    specular.Set(mat.specular);
+    emissive.Set(mat.emissive);  
 }

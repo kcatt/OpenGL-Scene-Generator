@@ -9,10 +9,11 @@
 class Camera
 {
     public:
-        /***************
-         * Constructor *
-         ***************/
+        /****************
+         * Constructors *
+         ****************/
         Camera();
+        Camera(GLuint viewMatLoc, GLuint projectMatLoc);
 
         /********************
          * Public Functions *

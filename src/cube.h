@@ -9,7 +9,7 @@ class Cube : public SceneObject
         /***************
          * Constructor *
          ***************/
-        Cube() {};
+        Cube();
 
         /***********************
          * Overloaded Function *

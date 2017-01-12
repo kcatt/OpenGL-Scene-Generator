@@ -10,13 +10,20 @@ std::ostream& operator<<(std::ostream& out, const Transform& t)
 Transform::Transform(const Vector3& position, const Vector3& rotation, const Vector3& scale)
 {
     this->position = position;   
-    this->rotaiton = rotation;
+    this->rotation = rotation;
     this->scale = scale;
 }
 
-Trasnform::Transform(const Transform& transform)
+Transform::Transform(const Transform& transform)
 {
     Transform(transform.position, transform.rotation, transform.scale);
+}
+
+Transform::Transform()
+{
+    this->position = Vector3(0, 0, 0);
+    this->rotation = Vector3(0, 0, 0);
+    this->scale = Vector3(1, 1, 1);
 }
 
 void Transform::Translate(const Vector3& translation)
@@ -53,7 +60,7 @@ void Transform::Scale(const Vector3& scale)
     Scale(scale.x, scale.y, scale.z);
 }
 
-void Transform::Scale(GLfloat x, GLfloat y, flaot z)
+void Transform::Scale(GLfloat x, GLfloat y, GLfloat z)
 {
     scale.x += x;
     scale.y += y;
@@ -107,7 +114,7 @@ void Transform::Rotate(GLfloat angle, const Vector3& axis)
 {
     Mat4x4 rm;
     Mat4x4 invRm;
-    axis.Normalize();
+    Vector3 nAxis = Vector3::Normalize(axis);
     GLfloat radians = angle * 3.14159/180;
     GLfloat c = cos(radians);
     GLfloat s = sin(radians);
@@ -174,7 +181,7 @@ void Transform::ApplyTransform()
     scaleMat.matrix[2][2] = scale.z;
 
     if(fabs(scale.x) < sEps || fabs(scale.z) < sEps || fabs(scale.z) < sEps) {
-        cerr << "Degenerate scaling transformation!\n";
+        std::cerr << "Degenerate scaling transformation!\n";
     }
 
     invScale.matrix[0][0] = 1/scale.x;

@@ -10,7 +10,7 @@ class Sphere : public SceneObject
         /***************
          * Constructor *
          ***************/
-        Sphere() {};
+        Sphere();
 
         /***********************
          * Overloaded Function *
@@ -29,7 +29,8 @@ class Sphere : public SceneObject
         void SetUpSphere();
         void SubdivideTriangles(Vector3 vert1, Vector3 vert2, Vector3 vert3, int level);
         void ReduceVertexVector();
-        void ConvertVectorsToGLArrays();
+        void ConvertVectorToGLArray();
+        void GenerateIndexVector();
 };
 
 #endif

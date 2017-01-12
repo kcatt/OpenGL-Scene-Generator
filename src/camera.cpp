@@ -1,9 +1,19 @@
+#include <cmath>
 #include "camera.h"
-
+#include <iostream>
 Camera::Camera()
 {
-    SetShape(45.0f, 640.0f/480.0f, 0.1f, 200.0f);
-    Set(Vector3(5, 5, 5), Vector3(0, 0, 0), Vector3(0, 1, ));
+    SetShape(45.0f, 800.0f/600.0f, 0.1f, 200.0f);
+    Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+}
+
+Camera::Camera(GLuint viewMatLoc, GLuint projectMatLoc)
+{
+    SetProjectionMatrixLoc(projectMatLoc);
+    SetViewMatrixLoc(viewMatLoc);
+
+    SetShape(45.0f, 800.0f/600.0f, 0.1f, 200.0f);
+    Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
 void Camera::Set(Vector3 eye, Vector3 look, Vector3 up)
@@ -12,7 +22,7 @@ void Camera::Set(Vector3 eye, Vector3 look, Vector3 up)
     this->look.Set(look);
 
     n.Set(eye.x - look.x, eye.y - look.y, eye.z - look.z);
-    u.set(Vector3::Cross(up, n));
+    u.Set(Vector3::Cross(up, n));
     n.Normalize();
     u.Normalize();
     v.Set(Vector3::Cross(n, u));
@@ -116,7 +126,14 @@ void Camera::SetViewMatrix()
 
     GLfloat viewMatrix[16];
     mat.ConvertToOpenGLMatrix(viewMatrix);
+    
+    std::cout << "view: ";
+    for (int i = 0 ; i < 16; i++)
+    {
+        std::cout << viewMatrix[i] << " ";
+    }
 
+    std::cout << std::endl;
     glUniformMatrix4fv(viewUniformLoc, 1, GL_FALSE, viewMatrix);
 }
 
@@ -137,6 +154,14 @@ void Camera::SetProjectionMatrix()
     GLfloat projectMatrix[16];
 
     mat.ConvertToOpenGLMatrix(projectMatrix);
+
+    std::cout << "projection: ";
+    for (int i = 0 ; i < 16; i++)
+    {
+        std::cout << projectMatrix[i] << " ";
+    }
+
+    std::cout << std::endl;
 
     glUniformMatrix4fv(projectionUniformLoc, 1, GL_FALSE, projectMatrix);
 }

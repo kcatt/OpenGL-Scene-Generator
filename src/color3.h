@@ -29,18 +29,18 @@ class Color3
         void Set(GLfloat r, GLfloat g, GLfloat b);
         void Set(const Color3& color);
         void Build4Tuple(GLfloat v[]);
+        Color3 operator*(GLfloat scalar) const;
+        Color3 operator*(const Color3& color) const;
 
         /********************
          * Friend Functions *
          ********************/
-        friend Color3 operator*(const GLfloat& scalar);
-        friend Color3 operator*(const Color3& color);
         friend std::ostream& operator<<(std::ostream& out, const Color3& c);
         
         inline Color3 operator=(const Color3& v) {
-            red = v.red;
-            green = v.green;
-            blue = v.blue;
+            this->r = v.r;
+            this->g = v.g;
+            this->b = v.b;
             return *this;
         }
 };

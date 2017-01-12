@@ -1,6 +1,7 @@
 #ifndef __VECTOR_3__H_
 #define __VECTOR_3__H_
 
+#include <GL/glew.h>
 #include <iostream>
 
 class Vector3
@@ -35,6 +36,7 @@ class Vector3
          * Static Functions *
          ********************/
         static Vector3 Cross(const Vector3& lhs, const Vector3& rhs);
+        static Vector3 Normalize(const Vector3& vecToNormalize);
 
         /********************
          * Friend Functions *
@@ -43,6 +45,7 @@ class Vector3
         friend Vector3 operator*(GLfloat scalar, const Vector3& rhs);
         friend Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
         friend std::ostream& operator<<(std::ostream& out, const Vector3& v);
+        friend bool operator==(const Vector3& lhs, const Vector3& rhs);
 
         // operator= cannot be defined using friend
         inline Vector3& operator=(const Vector3& rhs)

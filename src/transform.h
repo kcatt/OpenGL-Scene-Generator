@@ -29,6 +29,7 @@ class Transform
          ****************/
         Transform(const Vector3& position, const Vector3& rotation, const Vector3& scale);
         Transform(const Transform& transform);
+        Transform();
 
         /********************
          * Public Functions *
@@ -38,7 +39,7 @@ class Transform
         void Rotate(const Vector3& rotation);
         void Rotate(GLfloat x, GLfloat y, GLfloat z);
         void Scale(const Vector3& scale);
-        void Scale(GLfloat x, GLfloat y, flaot z);
+        void Scale(GLfloat x, GLfloat y, GLfloat z);
         
         void SetPosition(const Vector3& position);
         void SetPosition(GLfloat x, GLfloat y, GLfloat z);
@@ -49,7 +50,7 @@ class Transform
 
         void Rotate(GLfloat angle, const Vector3& axis);
 
-        std::ostream& operator<<(std::ostream& out, const Transform& t);
+        friend std::ostream& operator<<(std::ostream& out, const Transform& t);
 
     private:
         /*********************

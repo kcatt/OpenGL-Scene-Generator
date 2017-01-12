@@ -21,17 +21,17 @@ OBJ        := $(patsubst src/%.cpp, build/%.o, $(SRC))
 
 BACKUPS    := *~ src/*~
 EXECUTABLE := test
-FLAGS      := -std=c++11 -c -Wall -g
-INCLUDES   := $(addprefix -I,$(SRC_DIR))
-INCDIR     := /usr/X11R6/include/GL -I/usr/X11R6/include
-XLIBS      := -std=c++11
+FLAGS      := -std=c++14 -c -Wall -g
+INCLUDES   := $(addprefix -I,$(SRC_DIR)) -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl
+INCDIR     := 
+XLIBS      := -std=c++14
 CC         := g++
 
 vpath %.cpp $(SRC_DIR)
 
 define make-goal
 $1/%.o: %.cpp
-	$(CC) $(INCLUDES) $(FLAGS) $$< -o $$@
+	$(CC) $$< -o $$@ $(INCLUDES) $(FLAGS) 
 endef
 
 .PHONY: all checkdirs clean
@@ -39,7 +39,7 @@ endef
 all: checkdirs $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ)
-	$(CC) -o $@ -I$(INCDIR) $(XLIBS) $^
+	$(CC) $^ -o $@ -I$(INCDIR) $(INCLUDES) $(XLIBS) 
 
 $(OBJDIR)/%.o: %.cpp %.h
 	$(CC) $(FLAGS) $< -o $@

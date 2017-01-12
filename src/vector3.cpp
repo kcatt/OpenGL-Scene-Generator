@@ -35,6 +35,11 @@ Vector3 operator+(const Vector3& lhs, const Vector3& rhs)
     return retVal;
 }
 
+bool operator==(const Vector3& lhs, const Vector3& rhs)
+{
+    return ((lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z));
+}
+
 std::ostream& operator<<(std::ostream& out, const Vector3& v)
 {
     out << v.x << " " << v.y << " " << v.z;
@@ -119,4 +124,12 @@ Vector3 Vector3::Cross(const Vector3& lhs, const Vector3& rhs)
     return Vector3(lhs.y*rhs.z - lhs.z*rhs.y,
             lhs.z*rhs.x - lhs.x*rhs.z,
             lhs.x*rhs.y - lhs.y*rhs.x);
+}
+
+Vector3 Vector3::Normalize(const Vector3& vecToNormalize)
+{
+    Vector3 retVal(vecToNormalize);
+    retVal.Normalize();
+
+    return retVal;
 }
