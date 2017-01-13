@@ -55,12 +55,8 @@ int main(int argc, char* argv[])
     Cube c;
 
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
-    GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
-    GLuint projectMat = glGetUniformLocation(shader.GetProgram(), "projection");
 
     c.SetModelMatrixLoc(modelMat);
-    
-    Camera cam(viewMat, projectMat);
 
     while (!glfwWindowShouldClose(window))
     {

@@ -3,17 +3,17 @@
 #include <iostream>
 GLfloat Cube::indexArr[36] = {
     0, 1, 2, // front face
-    0, 2, 3,
-    4, 0, 3, // left face
-    4, 3, 7,
-    4, 5, 6, // back face
-    4, 6, 7,
-    1, 5, 6, // right face
-    1, 6, 2,
-    3, 2, 6, // top face
-    3, 6, 7,
-    4, 5, 1, // bottome face
-    4, 1, 0
+    2, 3, 1,
+    4, 5, 6,
+    6, 7, 4,
+    7, 3, 0,
+    0, 4, 7,
+    6, 2, 1,
+    1, 5, 6,
+    0, 1, 5,
+    5, 4, 0,
+    3, 2, 6,
+    6, 7, 3
 };
 
 bool    Cube::cubeSetUp = false;
@@ -28,14 +28,14 @@ Cube::Cube()
 
     //define the 8 vertices that make up a cube
     objectVerts = new GLfloat[24] {
-        -0.5f, -0.5f,  0.5f, // front bottom left  0
-         0.5f, -0.5f,  0.5f, // front bottom right 1
-         0.5f,  0.5f,  0.5f, // front top right    2
-        -0.5f,  0.5f,  0.5f, // front top left     3
-        -0.5f, -0.5f, -0.5f, // back bottom left   4
-         0.5f, -0.5f, -0.5f, // back bottom right  5
-         0.5f,  0.5f, -0.5f, // back top right     6
-        -0.5f,  0.5f, -0.5f  // back top left      7
+        -0.5f, -0.5f, -0.5f, // front bottom left  0
+         0.5f, -0.5f, -0.5f, // front bottom right 1
+         0.5f,  0.5f, -0.5f, // front top right    2
+        -0.5f,  0.5f, -0.5f, // front top left     3
+        -0.5f, -0.5f, 0.5f, // back bottom left   4
+         0.5f, -0.5f, 0.5f, // back bottom right  5
+         0.5f,  0.5f, 0.5f, // back top right     6
+        -0.5f,  0.5f, 0.5f  // back top left      7
     };
 }
 

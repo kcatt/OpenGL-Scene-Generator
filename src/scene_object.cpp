@@ -1,5 +1,7 @@
 #include "scene_object.h"
 
+#include <iostream>
+
 SceneObject::~SceneObject()
 {
     if (objectVerts != NULL)

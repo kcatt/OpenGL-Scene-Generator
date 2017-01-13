@@ -17,7 +17,7 @@ class Cube : public SceneObject
         void Draw();
     
     private:
-        static GLfloat indexArr[36];
+        static GLuint  indexArr[36];
         static bool    cubeSetUp;
         static GLuint  cubeVBO, cubeVAO, cubeEBO;
 
