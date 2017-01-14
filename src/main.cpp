@@ -7,7 +7,7 @@
 #include <string>
 
 #include "shader.h"
-#include "cube.h"
+#include "sphere.h"
 #include "camera.h"
 #include "vector3.h"
 
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
         glfwTerminate();
         return -1;
     }
-
+    
     glfwMakeContextCurrent(window);
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
@@ -46,6 +46,8 @@ int main(int argc, char* argv[])
 
     glEnable(GL_DEPTH_TEST);
     
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     
@@ -53,13 +55,14 @@ int main(int argc, char* argv[])
 
     Shader shader(argv[1], argv[2]);
 
-    Cube c;
+    Sphere c;
 
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
     GLuint projectionMat = glGetUniformLocation(shader.GetProgram(), "projection");
 
-    Camera cam(viewMat, projectionMat);;
+    Camera cam(viewMat, projectionMat);
+    //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
     c.SetModelMatrixLoc(modelMat);
     

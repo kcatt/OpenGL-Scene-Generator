@@ -114,7 +114,7 @@ void Transform::Rotate(GLfloat angle, const Vector3& axis)
 {
     Mat4x4 rm;
     Mat4x4 invRm;
-    Vector3 nAxis = Vector3::Normalize(axis);
+
     GLfloat radians = angle * 3.14159/180;
     GLfloat c = cos(radians);
     GLfloat s = sin(radians);

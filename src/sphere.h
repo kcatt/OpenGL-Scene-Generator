@@ -29,8 +29,9 @@ class Sphere : public SceneObject
         void SetUpSphere();
         void SubdivideTriangles(Vector3 vert1, Vector3 vert2, Vector3 vert3, int level);
         void ReduceVertexVector();
-        void ConvertVectorToGLArray();
+        void ConvertVectorToGLArrayVector();
         void GenerateIndexVector();
+        void NormalizePoint(Vector3& p, GLfloat length);
 };
 
 #endif

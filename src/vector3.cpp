@@ -35,6 +35,17 @@ Vector3 operator+(const Vector3& lhs, const Vector3& rhs)
     return retVal;
 }
 
+Vector3 operator-(const Vector3& lhs, const Vector3& rhs)
+{
+    Vector3 retVal(lhs);
+
+    retVal.x -= rhs.x;
+    retVal.y -= rhs.y;
+    retVal.z -= rhs.z;
+
+    return retVal;
+}
+
 bool operator==(const Vector3& lhs, const Vector3& rhs)
 {
     return ((lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z));
