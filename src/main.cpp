@@ -9,6 +9,7 @@
 #include "shader.h"
 #include "cube.h"
 #include "camera.h"
+#include "vector3.h"
 
 using namespace std;
 
@@ -44,7 +45,7 @@ int main(int argc, char* argv[])
     }
 
     glEnable(GL_DEPTH_TEST);
-
+    
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     
@@ -55,9 +56,13 @@ int main(int argc, char* argv[])
     Cube c;
 
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
+    GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
+    GLuint projectionMat = glGetUniformLocation(shader.GetProgram(), "projection");
+
+    Camera cam(viewMat, projectionMat);;
 
     c.SetModelMatrixLoc(modelMat);
-
+    
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -66,6 +71,7 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.Use();
+        cam.UpdateMatrices();
         c.Draw();
 
         glfwSwapBuffers(window);

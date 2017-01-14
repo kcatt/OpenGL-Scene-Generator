@@ -27,6 +27,7 @@ class Camera
         void GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GLfloat& farDist);
         void SetViewMatrixLoc(GLuint location);
         void SetProjectionMatrixLoc(GLuint location);
+        void UpdateMatrices();
 
     private:
         /*********************
@@ -36,6 +37,7 @@ class Camera
         Vector3 u, v, n;
         GLfloat viewAngle, aspect, nearDist, farDist;
         GLuint  viewUniformLoc, projectionUniformLoc;
+        bool    updateViewMatrix, updateProjectionMatrix;
 
         /********************
          * Private Function *

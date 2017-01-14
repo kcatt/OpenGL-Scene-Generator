@@ -1,7 +1,7 @@
 #include "cube.h"
 
 #include <iostream>
-GLfloat Cube::indexArr[36] = {
+GLuint Cube::indexArr[36] = {
     0, 1, 2, // front face
     2, 3, 1,
     4, 5, 6,
@@ -23,9 +23,6 @@ GLuint  Cube::cubeEBO = 0;
 
 Cube::Cube()
 {
-    if (!cubeSetUp)
-        SetUpCube();
-
     //define the 8 vertices that make up a cube
     objectVerts = new GLfloat[24] {
         -0.5f, -0.5f, -0.5f, // front bottom left  0
@@ -37,6 +34,9 @@ Cube::Cube()
          0.5f,  0.5f, 0.5f, // back top right     6
         -0.5f,  0.5f, 0.5f  // back top left      7
     };
+
+    if (!cubeSetUp)
+        SetUpCube();
 }
 
 void Cube::Draw()
@@ -65,7 +65,7 @@ void Cube::SetUpCube()
     glBindVertexArray(cubeVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(objectVerts), objectVerts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(GLfloat), objectVerts, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeEBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexArr), indexArr, GL_STATIC_DRAW);

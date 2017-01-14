@@ -11,3 +11,4 @@
 1/9/2017|3|Working on camera and some of the shader stuff.
 1/11/2017|3|Trying to get something to display.
 1/12/2017|1.5|Trying different ways to get a cube to display.
+1/13/2017|3|Got a cube to display properly.
