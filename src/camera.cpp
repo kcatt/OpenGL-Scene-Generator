@@ -42,6 +42,7 @@ void Camera::Set(Vector3 eye, Vector3 look, Vector3 up)
     updateViewMatrix = true;
 }
 
+/* Rotate the camera about the Z-axis */
 void Camera::Roll(GLfloat angle)
 {
     GLfloat c = cos(3.14159/180 * angle);
@@ -51,23 +52,23 @@ void Camera::Roll(GLfloat angle)
 
     u.Set(c*temp.x - s*v.x, c*temp.y - s*v.y, c*temp.z - s*v.z);
     v.Set(s*temp.x + c*v.x, s*temp.y + c*v.y, s*temp.z + c*v.z);
-    
+
     updateViewMatrix = true;
 }
 
+/* Rotate the camera about the X-axis */
 void Camera::Pitch(GLfloat angle)
 {
     GLfloat c = cos(3.14159/180 * angle);
     GLfloat s = sin(3.14158/180 * angle);
-
-    Vector3 temp(v);
-
-    v.Set(c*temp.x - s*n.x, c*temp.y - s*n.y, c*temp.z - s*n.z); 
-    n.Set(s*temp.x - c*n.x, s*temp.y + c*n.y, s*temp.z + c*n.z);
     
+    n.Set(n * c + v * s);
+    v.Set(Vector3::Cross(u, n));  
+
     updateViewMatrix = true;
 }
 
+/* Rotate the camera about the Y-axis */
 void Camera::Yaw(GLfloat angle)
 {
     GLfloat c = cos (3.14159/180 * angle);
@@ -76,15 +77,21 @@ void Camera::Yaw(GLfloat angle)
     Vector3 temp (n);
     n.Set(c*temp.x - s*u.x, c*temp.y - s*u.y, c*temp.z - s*u.z);
     u.Set(s*temp.x + c*u.x, s*temp.y + c*u.y, s*temp.z + c*u.z);
+
     updateViewMatrix = true;
 }
 
+/* Function to translate the camera in a direction
+ * Params: delU - Change in x direction,
+           delV - Change in y direction,
+           delN - Change in z direction */
 void Camera::Slide(GLfloat delU, GLfloat delV, GLfloat delN)
 {
     GLfloat delX = delU*u.x + delV*v.x + delN*n.x;
     GLfloat delY = delU*u.y + delV*v.y + delN*n.y;
     GLfloat delZ = delU*u.z + delV*v.z + delN*n.z;
     eye.Set(eye.x+delX, eye.y+delY, eye.z+delZ);
+    
     updateViewMatrix = true;
 }
 

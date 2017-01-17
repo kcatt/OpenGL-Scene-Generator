@@ -13,3 +13,4 @@
 1/12/2017|1.5|Trying different ways to get a cube to display.
 1/13/2017|3|Got a cube to display properly.
 1/14/2017|1.5|Got a sphere object working.
+1/16/2017|2|Got the camera functionality with the mouse working.
