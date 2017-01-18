@@ -7,7 +7,7 @@
 #include <string>
 
 #include "shader.h"
-#include "sphere.h"
+#include "cube.h"
 #include "camera.h"
 #include "vector3.h"
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 
     Shader shader(argv[1], argv[2]);
 
-    Sphere c;
+    Cube c;
 
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
     c.SetModelMatrixLoc(modelMat);
-    
+
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -136,8 +136,6 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
     // If the camera has not been set yet, do nothing
     if (cam == NULL)
         return;
-
-    std::cout << "RIGHT HELD: " << rightHeld << std::endl;
     
     if (button == GLFW_MOUSE_BUTTON_RIGHT)
     {
@@ -183,7 +181,6 @@ void HandleMouseMovement()
     }
     else if (middleHeld)
     {
-        cout << mousePosition.currX - mousePosition.lastX  << " " << mousePosition.currY - mousePosition.lastY<< endl;
         cam->Slide(-(mousePosition.currX - mousePosition.lastX) * 0.005, (mousePosition.currY - mousePosition.lastY) * 0.005, 0);
     }
 }   

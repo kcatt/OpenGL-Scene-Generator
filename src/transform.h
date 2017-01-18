@@ -38,17 +38,16 @@ class Transform
         void Translate(GLfloat x, GLfloat y, GLfloat z);
         void Rotate(const Vector3& rotation);
         void Rotate(GLfloat x, GLfloat y, GLfloat z);
-        void Scale(const Vector3& scale);
-        void Scale(GLfloat x, GLfloat y, GLfloat z);
+        void IncreaseScale(const Vector3& scale);
+        void IncreaseScale(GLfloat x, GLfloat y, GLfloat z);
         
         void SetPosition(const Vector3& position);
         void SetPosition(GLfloat x, GLfloat y, GLfloat z);
         void SetRotation(const Vector3& rotation);
         void SetRotation(GLfloat x, GLfloat y, GLfloat z);
+        void SetRotation(GLfloat angle, const Vector3& axis);
         void SetScale(const Vector3& scale);
         void SetScale(GLfloat x, GLfloat y, GLfloat z);
-
-        void Rotate(GLfloat angle, const Vector3& axis);
 
         friend std::ostream& operator<<(std::ostream& out, const Transform& t);
 
@@ -66,6 +65,7 @@ class Transform
         void ApplyTransform();
         void CheckRotation();
         void ResetRotationMatrices();
+        void Rotate(GLfloat angle, const Vector3& axis);
 };
 
 #endif

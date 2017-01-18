@@ -14,3 +14,4 @@
 1/13/2017|3|Got a cube to display properly.
 1/14/2017|1.5|Got a sphere object working.
 1/16/2017|2|Got the camera functionality with the mouse working.
+1/17/2017|1.5|Finished the transform class and started to get ready to add lighting and materials.

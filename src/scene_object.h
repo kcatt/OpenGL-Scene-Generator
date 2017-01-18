@@ -41,6 +41,11 @@ class SceneObject
          * Protected Variables *
          ***********************/
         GLuint modelMatrixLoc;
+
+        /***********************
+         * Protected Functions *
+         ***********************/
+        Vector3 CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, const Vector3& vert3);
 };
 
 #endif
