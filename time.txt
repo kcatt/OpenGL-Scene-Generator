@@ -16,3 +16,4 @@
 1/16/2017|2|Got the camera functionality with the mouse working.
 1/17/2017|1.5|Finished the transform class and started to get ready to add lighting and materials.
 1/20/2017|4|Working on mesh class.
+1/21/2017|2|Update cube to use the new mesh class. Did some testing with camera.
