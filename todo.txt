@@ -1,0 +1,2 @@
+1. Improve efficiency of model-view-projection matrix by doing the multiplication outside shader
+2. 
