@@ -2,7 +2,7 @@
 #define __CUBE__H_
 
 #include "scene_object.h"
-
+#include "mesh.h"
 class Cube : public SceneObject
 {
     public:
@@ -22,6 +22,8 @@ class Cube : public SceneObject
         static GLuint  cubeVBO, cubeVAO, cubeEBO;
 
         void SetUpCube();
+
+        Mesh* m;
 };
 
 #endif

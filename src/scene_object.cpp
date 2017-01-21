@@ -25,7 +25,7 @@ void SceneObject::SetModelMatrixLoc(GLuint location)
     modelMatrixLoc = location;
 }
 
-void SceneObject::Vector3 CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, const Vector3& vert3)
+Vector3 SceneObject::CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, const Vector3& vert3)
 {
     Vector3 line1 = vert2 - vert1;
     Vector3 line2 = vert3 - vert1;

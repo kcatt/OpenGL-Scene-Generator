@@ -62,8 +62,9 @@ void Camera::Pitch(GLfloat angle)
     GLfloat c = cos(3.14159/180 * angle);
     GLfloat s = sin(3.14158/180 * angle);
     
-    n.Set(n * c + v * s);
-    v.Set(Vector3::Cross(u, n));  
+    Vector3 temp(v);
+    v.Set(c*temp.x - s*n.x, c*temp.y - s*n.y, c*temp.z - s*n.z);
+    n.Set(s*temp.x + c*n.x, s*temp.y + c*n.y, s*temp.z + c*n.z);
 
     updateViewMatrix = true;
 }

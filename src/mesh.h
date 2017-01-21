@@ -62,7 +62,7 @@ class Mesh : public SceneObject
          * Constructors *
          ****************/
         Mesh();
-        Mesh(const string & fileName);
+        Mesh(const std::string & fileName);
         Mesh(const std::vector<Vector3>& vertexVector);
 
         /********************
@@ -75,22 +75,22 @@ class Mesh : public SceneObject
         void    FreeMesh();
         bool    IsEmpty()   const;
         void    MakeEmpty();
-        void    ReadMesh(const string& fileName);
+        void    ReadMesh(const std::string& fileName);
         void    SetRenderMode(RenderMode m );
         Vector3 Newell4(int indx[]);
 
         /*******************
          * Public Variable *
          *******************/
-        string fileName;
+        std::string fileName;
 
     private:
         /*********************
          * Private Variables *
          *********************/
         size_t numVerts, numNorms, numFaces;
-        Vector3*   vertices;
-        Vector3*   normals;
+        std::vector<Vector3>   vertices;
+        std::vector<Vector3>   normals;
         Face*      faces;
         RenderMode mode;
 

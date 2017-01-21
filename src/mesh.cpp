@@ -1,20 +1,32 @@
 #include "mesh.h"
 #include <iterator>
+#include <algorithm>
+#include <iostream>
+
+Face::Face()
+{
+
+}
+
+Face::~Face()
+{
+
+}
 
 Mesh::Mesh()
 {
     numVerts = numFaces = numNorms = 0;
-    points   = NULL;
-    normals  =  NULL;
+    //vertices   = NULL;
+    //normals  =  NULL;
     faces    = NULL;
     mode     = MODE_SOLID; // Default is to make solid mesh
 }
 
-Mesh::Mesh(const string& fileName)
+Mesh::Mesh(const std::string& fileName)
 {
     numVerts = numFaces = numNorms = 0;
-    points   = NULL;
-    normals  =  NULL;
+    //vertices   = NULL;
+    //normals  =  NULL;
     faces    = NULL;
     mode     = MODE_SOLID; // Default is to make solid mesh
     ReadMesh(fileName);
@@ -22,18 +34,26 @@ Mesh::Mesh(const string& fileName)
 
 Mesh::Mesh(const std::vector<Vector3>& vertexVector)
 {
-    points = new Vector3[vertexVector.size()];
-    normals = new Vector3[vertexVector.size()];
+    vertices.resize(vertexVector.size());// = new Vector3[vertexVector.size()];
+    normals.resize(vertexVector.size());// = new Vector3[vertexVector.size()];
     numVerts = vertexVector.size();
     numNorms = vertexVector.size();
     // The number of faces is the vertex vector size divided by 3 because
     // each face is one triangle, and the vertices are given in triangular form
     numFaces = vertexVector.size()/3;
 
-    std::copy(vertexVector.begin(), vertexVector.end(), std::begin(points));
+    std::copy(vertexVector.begin(), vertexVector.end(), std::begin(vertices));
     
+    for (int i = 0; i < vertices.size(); i++)
+    {
+        std::cout << vertices[i] << std::endl;
+    }
+
     faces = new Face[numFaces];
     GenerateNormals();
+    ReduceArrays();
+    GenerateIndexVector();
+    CreateGLArrays();
 }
 
 void Mesh::DrawEdges() const
@@ -48,14 +68,14 @@ void Mesh::DrawFaces() const
 
 void Mesh::Draw()
 {
-    glBindVertexArray(cubeVAO);
+    glBindVertexArray(meshVAO);
 
     GLfloat modelMatrix[16];
     transform.affine.ConvertToOpenGLMatrix(modelMatrix);
 
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
-    
-    glDrawElements(GL_TRIANGLES, reducedVerts.size() * 2, GL_UNSIGNED_INT, 0);   
+
+    glDrawElements(GL_TRIANGLES, indexVec.size(), GL_UNSIGNED_INT, 0);   
     glBindVertexArray(0);
 }
 
@@ -66,17 +86,15 @@ void Mesh::SetUpGL()
     glGenBuffers(1, &meshEBO);
 
     glBindVertexArray(meshVAO);
-reducedVertArray.size() * sizeof(GLfloat), &reducedVertArray[0], GL_STATIC_DRAW);
-
 
     glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
-    glBufferData(GL_ARRAY_BUFFER, reducedVerts.size() * sizeof(GLfloat), &reducedVerts[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, reducedGLArray.size() * sizeof(GLfloat), &reducedGLArray[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexVec.size() * sizeof(GLfloat), &indexVec[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexVec.size() * sizeof(GLuint), &indexVec[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
@@ -100,7 +118,7 @@ void Mesh::MakeEmpty()
 
 }
 
-void Mesh::ReadMesh(const string& file)
+void Mesh::ReadMesh(const std::string& file)
 {
 
 }
@@ -115,7 +133,7 @@ void Mesh::GenerateNormals()
     for (int i = 0; i < numVerts; i += 3)
     {
         // Calculate the face normal
-        Vector3 normal = CalculateFaceNormal(points[i], points[i+1], points[i+2]);
+        Vector3 normal = CalculateFaceNormal(vertices[i], vertices[i+1], vertices[i+2]);
 
         normals[i]   = normal;
         normals[i+1] = normal;
@@ -144,15 +162,24 @@ void Mesh::ReduceArrays()
 
 void Mesh::GenerateIndexVector()
 {
+    indexVec.resize(numVerts*2);
+
+    int index = 0;
+
     for (int i = 0; i < numVerts; i++)
     {
         auto vertPosIt = std::find(reducedVerts.begin(), reducedVerts.end(), vertices[i]);
         size_t vertIndex = std::distance(reducedVerts.begin(), vertPosIt);
 
-        // The vertices are all on the even indices and the corresponding normals
-        // are on the next index
-        indexVec.push_back(vertIndex*2);
-        indexVec.push_back(vertIndex*2 + 1);
+        // The indices for the normals and the vertices are the same because OpenGL
+        // views the lists of the two as their own separate lists
+        indexVec[index] = vertIndex;
+        indexVec[index+3] = vertIndex;
+
+        if (((index+1) % 3) == 0 && (((index+4) % 6) == 0))
+            index += 4;
+        else
+            index++;
     }
 }
 

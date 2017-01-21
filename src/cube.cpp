@@ -35,13 +35,61 @@ Cube::Cube()
         -0.5f,  0.5f, 0.5f  // back top left      7
     };
 
-    if (!cubeSetUp)
-        SetUpCube();
+    std::vector<Vector3> vec {
+        Vector3(-0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f,  0.5f, -0.5f),
+        Vector3( 0.5f,  0.5f, -0.5f),
+        Vector3(-0.5f,  0.5f, -0.5f),
+        Vector3(-0.5f, -0.5f, -0.5f),
+
+        Vector3(-0.5f, -0.5f,  0.5f),
+        Vector3( 0.5f, -0.5f,  0.5f),
+        Vector3( 0.5f,  0.5f,  0.5f),
+        Vector3( 0.5f,  0.5f,  0.5f),
+        Vector3(-0.5f,  0.5f,  0.5f),
+        Vector3(-0.5f, -0.5f,  0.5f),
+
+        Vector3(-0.5f,  0.5f,  0.5f),
+        Vector3(-0.5f,  0.5f, -0.5f),
+        Vector3(-0.5f, -0.5f, -0.5f),
+        Vector3(-0.5f, -0.5f, -0.5f),
+        Vector3(-0.5f, -0.5f,  0.5f),
+        Vector3(-0.5f,  0.5f,  0.5f),
+
+        Vector3( 0.5f,  0.5f,  0.5f),
+        Vector3( 0.5f,  0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f,  0.5f),
+        Vector3( 0.5f,  0.5f,  0.5f),
+
+        Vector3(-0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f, -0.5f),
+        Vector3( 0.5f, -0.5f,  0.5f),
+        Vector3( 0.5f, -0.5f,  0.5f),
+        Vector3(-0.5f, -0.5f,  0.5f),
+        Vector3(-0.5f, -0.5f, -0.5f),
+
+        Vector3(-0.5f,  0.5f, -0.5f),
+        Vector3( 0.5f,  0.5f, -0.5f),
+        Vector3( 0.5f,  0.5f,  0.5f),
+        Vector3( 0.5f,  0.5f,  0.5f),
+        Vector3(-0.5f,  0.5f,  0.5f),
+        Vector3(-0.5f,  0.5f, -0.5f)
+    };
+
+    m = new Mesh(vec);
+    m->SetUpGL();
+    m->SetModelMatrixLoc(modelMatrixLoc);
+    //if (!cubeSetUp)
+    //    SetUpCube();
 }
 
 void Cube::Draw()
 {
-    glBindVertexArray(cubeVAO);
+    m->Draw();
+    /*glBindVertexArray(cubeVAO);
 
     GLfloat modelMatrix[16];
     transform.affine.ConvertToOpenGLMatrix(modelMatrix);
@@ -49,7 +97,7 @@ void Cube::Draw()
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
     
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);   
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
 }
 
 
