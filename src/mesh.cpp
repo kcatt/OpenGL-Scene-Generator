@@ -3,80 +3,67 @@
 #include <algorithm>
 #include <iostream>
 
-Face::Face()
-{
-
-}
-
-Face::~Face()
-{
-
-}
-
 Mesh::Mesh()
 {
-    numVerts = numFaces = numNorms = 0;
-    //vertices   = NULL;
-    //normals  =  NULL;
-    faces    = NULL;
-    mode     = MODE_SOLID; // Default is to make solid mesh
-}
-
-Mesh::Mesh(const std::string& fileName)
-{
-    numVerts = numFaces = numNorms = 0;
-    //vertices   = NULL;
-    //normals  =  NULL;
-    faces    = NULL;
-    mode     = MODE_SOLID; // Default is to make solid mesh
-    ReadMesh(fileName);
+    mode = MODE_SOLID; // Default is to make solid mesh
 }
 
 Mesh::Mesh(const std::vector<Vector3>& vertexVector)
 {
-    vertices.resize(vertexVector.size());// = new Vector3[vertexVector.size()];
-    normals.resize(vertexVector.size());// = new Vector3[vertexVector.size()];
-    numVerts = vertexVector.size();
-    numNorms = vertexVector.size();
-    // The number of faces is the vertex vector size divided by 3 because
-    // each face is one triangle, and the vertices are given in triangular form
-    numFaces = vertexVector.size()/3;
+    Create(vertexVector);
 
-    std::copy(vertexVector.begin(), vertexVector.end(), std::begin(vertices));
-    
-    for (int i = 0; i < vertices.size(); i++)
-    {
-        std::cout << vertices[i] << std::endl;
-    }
+    mode = MODE_SOLID; // Default is to make solid mesh
+}
 
-    faces = new Face[numFaces];
+void Mesh::Create(const std::vector<Vector3>& vertexVector)
+{
+    vertices.resize(vertexVector.size());
+    normals.resize(vertexVector.size());
+
+    std::copy(vertexVector.begin(), vertexVector.end(), vertices.begin());
+
     GenerateNormals();
     ReduceArrays();
     GenerateIndexVector();
     CreateGLArrays();
 }
 
+void Mesh::DrawGL() const
+{
+    glBindVertexArray(meshVAO);
+    glDrawElements(GL_TRIANGLES, indexVec.size(), GL_UNSIGNED_INT, 0);   
+    glBindVertexArray(0);
+}
+
 void Mesh::DrawEdges() const
 {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    DrawGL();
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Mesh::DrawFaces() const
 {
-
+    DrawGL();
 }
 
 void Mesh::Draw()
 {
-    glBindVertexArray(meshVAO);
-
-    GLfloat modelMatrix[16];
-    transform.affine.ConvertToOpenGLMatrix(modelMatrix);
-
-    glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
-
-    glDrawElements(GL_TRIANGLES, indexVec.size(), GL_UNSIGNED_INT, 0);   
-    glBindVertexArray(0);
+    switch (mode)
+    {
+        case MODE_WIRE:
+            DrawEdges();
+            break;
+        case MODE_SOLID:
+            DrawFaces();
+            break;
+        default:
+            DrawFaces();
+            DrawEdges();
+            break;
+    }
 }
 
 void Mesh::SetUpGL()
@@ -103,34 +90,14 @@ void Mesh::SetUpGL()
     glBindVertexArray(0);
 }
 
-void Mesh::FreeMesh()
-{
-
-}
-
-bool Mesh::IsEmpty() const
-{
-
-}
-
-void Mesh::MakeEmpty()
-{
-
-}
-
-void Mesh::ReadMesh(const std::string& file)
-{
-
-}
-
 void Mesh::SetRenderMode(RenderMode m )
 {
-
+    mode = m;
 }
 
 void Mesh::GenerateNormals()
 {
-    for (int i = 0; i < numVerts; i += 3)
+    for (size_t i = 0; i < vertices.size(); i += 3)
     {
         // Calculate the face normal
         Vector3 normal = CalculateFaceNormal(vertices[i], vertices[i+1], vertices[i+2]);
@@ -143,7 +110,7 @@ void Mesh::GenerateNormals()
 
 void Mesh::ReduceArrays()
 {
-    for (size_t i = 0; i < numVerts; i++)
+    for (size_t i = 0; i < vertices.size(); i++)
     {
         auto vertPosIt = std::find(reducedVerts.begin(), reducedVerts.end(), vertices[i]);
         
@@ -162,11 +129,11 @@ void Mesh::ReduceArrays()
 
 void Mesh::GenerateIndexVector()
 {
-    indexVec.resize(numVerts*2);
+    indexVec.resize(vertices.size()*2);
 
     int index = 0;
 
-    for (int i = 0; i < numVerts; i++)
+    for (size_t i = 0; i < vertices.size(); i++)
     {
         auto vertPosIt = std::find(reducedVerts.begin(), reducedVerts.end(), vertices[i]);
         size_t vertIndex = std::distance(reducedVerts.begin(), vertPosIt);
@@ -195,4 +162,20 @@ void Mesh::CreateGLArrays()
         reducedGLArray.push_back(reducedNorms[i].y);
         reducedGLArray.push_back(reducedNorms[i].z);
     }
+}
+
+Vector3 Mesh::CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, const Vector3& vert3)
+{
+    Vector3 line1 = vert2 - vert1;
+    Vector3 line2 = vert3 - vert1;
+
+    Vector3 normal = Vector3::Cross(line1, line2);
+
+    // if the normal is pointing inward, invert it to be pointing outward
+    if (normal.Dot(vert1 - Vector3(0, 0, 0)) < 0)
+        normal.Scale(-1);
+    
+    normal.Normalize();
+
+    return normal;
 }

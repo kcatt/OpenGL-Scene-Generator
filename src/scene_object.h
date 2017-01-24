@@ -6,6 +6,7 @@
 #include "transform.h"
 #include "material.h"
 #include "vector3.h"
+#include "mesh.h"
 
 class SceneObject
 {
@@ -19,6 +20,7 @@ class SceneObject
         Material  material;
 
         GLfloat* objectVerts = NULL;
+        Mesh     mesh;
 
         /**************
          * Destructor *
@@ -41,11 +43,6 @@ class SceneObject
          * Protected Variables *
          ***********************/
         GLuint modelMatrixLoc;
-
-        /***********************
-         * Protected Functions *
-         ***********************/
-        Vector3 CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, const Vector3& vert3);
 };
 
 #endif

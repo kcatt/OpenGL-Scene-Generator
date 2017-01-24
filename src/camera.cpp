@@ -189,3 +189,8 @@ void Camera::UpdateMatrices()
         updateProjectionMatrix = false;
     }
 }
+
+Vector3 Camera::GetPosition()
+{
+    return eye;
+}

@@ -28,6 +28,7 @@ class Camera
         void SetViewMatrixLoc(GLuint location);
         void SetProjectionMatrixLoc(GLuint location);
         void UpdateMatrices();
+        Vector3 GetPosition();
 
     private:
         /*********************

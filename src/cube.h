@@ -15,15 +15,6 @@ class Cube : public SceneObject
          * Overloaded Function *
          ***********************/
         void Draw();
-    
-    private:
-        static GLuint  indexArr[36];
-        static bool    cubeSetUp;
-        static GLuint  cubeVBO, cubeVAO, cubeEBO;
-
-        void SetUpCube();
-
-        Mesh* m;
 };
 
 #endif

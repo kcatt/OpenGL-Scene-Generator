@@ -8,8 +8,10 @@
 
 #include "shader.h"
 #include "cube.h"
+#include "sphere.h"
 #include "camera.h"
 #include "vector3.h"
+#include "light.h"
 
 using namespace std;
 
@@ -70,22 +72,38 @@ int main(int argc, char* argv[])
 
     glEnable(GL_DEPTH_TEST);
     glfwSetMouseButtonCallback(window, MouseButtonCallback);
-    //glfwSetCursorPosCallback(window, MouseCallback);
     glfwSetScrollCallback(window, ScrollCallback);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+    
     Shader shader(argv[1], argv[2]);
-
+    
     Cube c;
-
+    Sphere s;
+    Light l(Vector3(0, 10, -3), Color3(1, 1, 1));
+    
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
     GLuint projectionMat = glGetUniformLocation(shader.GetProgram(), "projection");
+    GLuint objectColor = glGetUniformLocation(shader.GetProgram(), "objectColor");
+    GLuint lightColor = glGetUniformLocation(shader.GetProgram(), "lightColor");
+    GLuint lightPos = glGetUniformLocation(shader.GetProgram(), "lightPos");
+    GLuint viewPos = glGetUniformLocation(shader.GetProgram(), "viewPos");
+
+    
+
+    Color3 lColor = l.GetColor();
+    Vector3 lPos = l.GetPosition();
 
     cam = new Camera(viewMat, projectionMat);
+    Vector3 cPos = cam->GetPosition();
     //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
     c.SetModelMatrixLoc(modelMat);
+    s.SetModelMatrixLoc(modelMat);
+
+    c.transform.SetPosition(Vector3(0, 0, -3));
+    s.transform.SetPosition(Vector3(1, 0, 0));
+
+    
 
     while (!glfwWindowShouldClose(window))
     {
@@ -97,8 +115,18 @@ int main(int argc, char* argv[])
 
         shader.Use();
         cam->UpdateMatrices();
-        c.Draw();
+        cPos = cam->GetPosition();
 
+        
+
+        glUniform3f(objectColor, 1.0f, 0.5f, 0.5f);
+        glUniform3f(lightColor, lColor.r, lColor.g, lColor.b);
+        glUniform3f(lightPos, lPos.x, lPos.y, lPos.z);
+        glUniform3f(viewPos, cPos.x, cPos.y, cPos.z);
+
+        c.Draw();
+        s.Draw();
+        
         glfwSwapBuffers(window);
     }
 
@@ -176,8 +204,8 @@ void HandleMouseMovement()
 
     if (rightHeld)
     {
-        cam->Yaw(-(mousePosition.currX - mousePosition.lastX) * 0.05);
-        cam->Pitch(-(mousePosition.currY - mousePosition.lastY) * 0.05);
+        cam->Yaw((mousePosition.currX - mousePosition.lastX) * 0.05);
+        cam->Pitch((mousePosition.currY - mousePosition.lastY) * 0.05);
     }
     else if (middleHeld)
     {

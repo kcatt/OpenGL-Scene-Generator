@@ -10,7 +10,7 @@
         },
         {
             "name": "Linux",
-            "includePath": ["/usr/include", "/home/SenProj/src"],
+            "includePath": ["/usr/include", "/home/SenProj/src", "/usr/local/include"],
             "browse" : {
                 "limitSymbolsToIncludedHeaders" : true,
                 "databaseFilename" : ""
