@@ -10,12 +10,11 @@ class Material
         /********************
          * Public Variables *
          ********************/
-        Color3   ambient, diffuse, specular, emissive;
-        int      numParams;
-        GLdouble params[10];
-        int      textureType;
-        GLfloat  specularExponent, reflectivity, transparency, speedOfLight;
-        GLfloat  specularFraction, surfaceRoughness;
+        Color3   ambient;
+        Color3   diffuse;
+        Color3   specular;
+        Color3   emissive;
+        GLfloat  specularExponent;
 
         /****************
          * Constructors *

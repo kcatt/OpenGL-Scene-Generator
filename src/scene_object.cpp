@@ -23,7 +23,12 @@ void SceneObject::TellMaterials()
     
 }
 
-void SceneObject::SetModelMatrixLoc(GLuint location)
+void SceneObject::SetUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent)
 {
-    modelMatrixLoc = location;
+    modelMatrixLoc = model;
+    matAmbientLoc = ambient;
+    matDiffuseLoc = diffuse;
+    matSpecularLoc = specular;
+    matEmissiveLoc = emissive;
+    matSpecExponentLoc = specExponent;
 }

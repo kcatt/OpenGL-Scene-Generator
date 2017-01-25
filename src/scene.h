@@ -11,17 +11,16 @@
 #include "material.h"
 #include "color3.h"
 #include "scene_object.h"
+#include "light.h"
 
 // Enums for the tokens of the sdl file
 enum mTokenType {
     IDENT, LIGHT, ROTATE, TRANSLATE,
     SCALE, PUSH, POP, IDENTITYAFFINE,
-    GLOBALAMBIENT, BACKGROUND, MINREFLECTIVITY,
-    MINTRANSPARENCY, MAXRECURSIONDEPTH, MAKEPIXMAP, CUBE,
+    GLOBALAMBIENT, BACKGROUND, CUBE,
     SPHERE, TORUS, PLANE, SQUARE, TAPEREDCYLINDER, TEAPOT,
-    MESH, DEFAULTMATERIALS, AMBIENT, DIFFUSE,SPECULAR,
-    SPECULARFRACTION, SURFACEROUGHNESS,EMISSIVE, SPECULAREXPONENT,
-    SPEEDOFLIGHT, TRANSPARENCY,REFLECTIVITY, PARAMETERS, TEXTURE,
+    MESH, DEFAULTMATERIALS, AMBIENT, DIFFUSE, SPECULAR,
+    SURFACEROUGHNESS, EMISSIVE, SPECULAREXPONENT,
     LFTCURLY, RGHTCURLY, DEF, USE, T_NULL, F_EOF, UNKNOWN
 };
 
@@ -45,9 +44,10 @@ class Scene
         void DrawScene(void);
         void SetBackground(const Color3& color);
         void FreeScene(void);
-        void MakeLights(void);
         bool ReadFile(const std::string& fileName);
-        void SetModelMatrixLoc(GLuint location);
+        void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
+        void SetLightUnfiformLocations(GLuint position, GLuint color, GLuint ambient);
+
 
     private:
         /*********************
@@ -55,18 +55,25 @@ class Scene
          *********************/
         int currLine;
         int nextLine;
+        Light   light;
         Color3  backgroundColor; 
         Color3  ambientColor;
-        int     maxRecursionDepth;
-        GLfloat minReflectivity;
-        GLfloat minTransparency;
-        GLuint  modelMatrixLoc;
         Transform   currTransform;
         Material    currMaterial;
         std::vector<SceneObject*>             objects;
         std::unique_ptr<std::ifstream>        inFile;
         std::unique_ptr<std::stringstream>    fileStream;
         
+        GLuint modelMatrixLoc;
+        GLuint matAmbientLoc;
+        GLuint matDiffuseLoc;
+        GLuint matSpecularLoc;
+        GLuint matEmissiveLoc;
+        GLuint matSpecExponentLoc;
+        GLuint lightPositionLoc;
+        GLuint lightColorLoc;
+        GLuint lightAmbientLoc;
+
         /*********************
          * Private Functions *
          *********************/
@@ -76,6 +83,7 @@ class Scene
         void        CleanUp(void);
         mTokenType  WhichToken(const std::string& keyword);
         bool        GetObject(void);
+        void        SetUpLight(void);
 };
 
 #endif

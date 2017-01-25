@@ -30,7 +30,7 @@ class SceneObject
         /********************
          * Public Functions *
          ********************/
-        void SetModelMatrixLoc(GLuint location);
+        void SetUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
 
         /*********************
          * Virtual Functions *
@@ -43,6 +43,11 @@ class SceneObject
          * Protected Variables *
          ***********************/
         GLuint modelMatrixLoc;
+        GLuint matAmbientLoc;
+        GLuint matDiffuseLoc;
+        GLuint matSpecularLoc;
+        GLuint matEmissiveLoc;
+        GLuint matSpecExponentLoc;
 };
 
 #endif

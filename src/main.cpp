@@ -83,12 +83,15 @@ int main(int argc, char* argv[])
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
     GLuint projectionMat = glGetUniformLocation(shader.GetProgram(), "projection");
-    GLuint objectColor = glGetUniformLocation(shader.GetProgram(), "objectColor");
-    GLuint lightColor = glGetUniformLocation(shader.GetProgram(), "lightColor");
-    GLuint lightPos = glGetUniformLocation(shader.GetProgram(), "lightPos");
+    GLuint lightColor = glGetUniformLocation(shader.GetProgram(), "light.color");
+    GLuint lightPos = glGetUniformLocation(shader.GetProgram(), "light.position");
+    GLuint lightAmbient = glGetUniformLocation(shader.GetProgram(), "light.ambient");
     GLuint viewPos = glGetUniformLocation(shader.GetProgram(), "viewPos");
-
-    
+    GLuint matAmbient = glGetUniformLocation(shader.GetProgram(), "material.ambient");
+    GLuint matDiffuse = glGetUniformLocation(shader.GetProgram(), "material.diffuse");
+    GLuint matSpecular = glGetUniformLocation(shader.GetProgram(), "material.specular");
+    GLuint matEmissive = glGetUniformLocation(shader.GetProgram(), "material.emissive");
+    GLuint matSpecExponent = glGetUniformLocation(shader.GetProgram(), "material.shininess");
 
     Color3 lColor = l.GetColor();
     Vector3 lPos = l.GetPosition();
@@ -97,8 +100,8 @@ int main(int argc, char* argv[])
     Vector3 cPos = cam->GetPosition();
     //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-    c.SetModelMatrixLoc(modelMat);
-    s.SetModelMatrixLoc(modelMat);
+    c.SetUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
+    s.SetUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
 
     c.transform.SetPosition(Vector3(0, 0, -3));
     s.transform.SetPosition(Vector3(1, 0, 0));
@@ -117,12 +120,10 @@ int main(int argc, char* argv[])
         cam->UpdateMatrices();
         cPos = cam->GetPosition();
 
-        
-
-        glUniform3f(objectColor, 1.0f, 0.5f, 0.5f);
         glUniform3f(lightColor, lColor.r, lColor.g, lColor.b);
         glUniform3f(lightPos, lPos.x, lPos.y, lPos.z);
         glUniform3f(viewPos, cPos.x, cPos.y, cPos.z);
+        glUniform3f(lightAmbient, 0.1f, 0.1f, 0.1f);
 
         c.Draw();
         s.Draw();

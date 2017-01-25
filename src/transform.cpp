@@ -24,9 +24,7 @@ Transform::Transform(const Transform& transform)
 
 Transform::Transform()
 {
-    this->position = Vector3(0, 0, 0);
-    this->rotation = Vector3(0, 0, 0);
-    this->scale = Vector3(1, 1, 1);
+    SetDefault();
 }
 
 void Transform::Translate(const Vector3& translation)
@@ -133,8 +131,40 @@ void Transform::SetRotation(GLfloat angle, const Vector3& axis)
     
     CheckRotation();
     ApplyTransform();
+}
 
-    std::cout << rotation << std::endl;
+/* Converts the rotation from an axis representation to a euler representation */
+void Transform::RotateAxis(GLfloat angle, const Vector3& axis)
+{
+    angle = angle * (PI/180);
+
+    GLfloat s = sin(angle);
+    GLfloat c = cos(angle);
+    GLfloat t = 1-c;
+
+    Vector3 nAxis = Vector3::Normalize(axis);
+
+    if ((nAxis.x*nAxis.y*t + nAxis.z*s) > 0.998)
+    {
+        rotation.x += 0;
+        rotation.y += 2 * atan2(nAxis.x * sin(angle/2), cos(angle/2)) * 180/PI;
+        rotation.z += 90;
+    }
+    else if ((nAxis.x*nAxis.y*t + nAxis.z*s) < -0.998)
+    {
+        rotation.x += 0;
+        rotation.y += -2 * atan2(nAxis.x * sin(angle/2), cos(angle/2)) * 180/PI;
+        rotation.z += -90;
+    }
+    else
+    {
+        rotation.x += atan2(nAxis.x * s - nAxis.y * nAxis.z * t, 1 - (nAxis.x * nAxis.x + nAxis.z * nAxis.z) * t) * 180/PI;
+        rotation.y += atan2(nAxis.y * s - nAxis.x * nAxis.z * t, 1 - (nAxis.y * nAxis.y + nAxis.z * nAxis.z) * t) * 180/PI;
+        rotation.z += asin(nAxis.x * nAxis.y * t + nAxis.z * s) * 180/PI;
+    }
+    
+    CheckRotation();
+    ApplyTransform();
 }
 
 void Transform::SetScale(const Vector3& scale)
@@ -183,6 +213,13 @@ void Transform::Rotate(GLfloat angle, const Vector3& axis)
 
     rotationMat.PreMultiply(rm);
     invRotation.PostMultiply(invRm);    
+}
+
+void Transform::SetDefault()
+{
+    this->position = Vector3(0, 0, 0);
+    this->rotation = Vector3(0, 0, 0);
+    this->scale    = Vector3(1, 1, 1);
 }
 
 void Transform::ApplyTransform()

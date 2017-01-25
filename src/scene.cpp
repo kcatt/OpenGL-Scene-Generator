@@ -1,14 +1,13 @@
 #include "scene.h"
 #include <cstdlib>
 #include <iostream>
+#include "cube.h"
+#include "sphere.h"
 
 Scene::Scene() {
     currMaterial.SetDefault();
     backgroundColor.Set(.8,.3,0.6f);
     ambientColor.Set(0.1f,0.1f,0.1f);
-    minReflectivity = 0.5;
-    minTransparency = 0.5;
-    maxRecursionDepth = 3;
 }
 
 Scene::Scene(const std::string& fileName) {
@@ -173,8 +172,6 @@ bool Scene::ReadFile(const std::string& fileName)
 
 mTokenType Scene::WhichToken(const std::string& keyword)
 {
-     if (keyword == "makePixmap")
-        return MAKEPIXMAP;
     if (keyword == "light" )
         return LIGHT;
     if (keyword == "rotate" )
@@ -211,32 +208,12 @@ mTokenType Scene::WhichToken(const std::string& keyword)
         return DIFFUSE;
     if (keyword == "specular")
         return SPECULAR;
-    if (keyword == "specularFraction")
-        return SPECULARFRACTION;
-    if (keyword == "surfaceRoughness")
-        return SURFACEROUGHNESS;
     if (keyword == "emissive")
         return EMISSIVE;
     if (keyword == "specularExponent")
         return SPECULAREXPONENT;
-    if (keyword == "speedOfLight")
-        return SPEEDOFLIGHT;
-    if (keyword == "transparency")
-        return TRANSPARENCY;
-    if (keyword == "reflectivity")
-        return REFLECTIVITY;
-    if (keyword == "parameters")
-        return PARAMETERS;
-    if (keyword == "texture")
-        return TEXTURE;
     if (keyword == "globalAmbient")
         return GLOBALAMBIENT;
-    if (keyword == "minReflectivity")
-        return MINREFLECTIVITY;
-    if (keyword == "minTransparency")
-        return MINTRANSPARENCY;
-    if (keyword == "maxRecursionDepth")
-        return MAXRECURSIONDEPTH;
     if (keyword == "background")
         return BACKGROUND;
     if (keyword == "{")
@@ -268,195 +245,161 @@ bool Scene::GetObject(void)
     SceneObject *newObject;
     mTokenType   type;
 
-    /*while ((typ = (whichtoken(s = nexttoken()))) != T_NULL) {
-        switch(typ) {
-            /*case LIGHT: 
+    while ((type = (WhichToken(nextStr = NextToken()))) != T_NULL) {
+        switch(type) {
+            case LIGHT: 
             {
-                Point3 p;
-                Color3 c;
-                p.x = GetFloat();
-                p.y = GetFloat();
-                p.z = GetFloat();
-                c.red = GetFloat();
-                c.green = GetFloat();
-                c.blue = GetFloat();
-                Light l;
-                l.setPosition(p);
-                l.setColor(c);
-                light.insert(light.begin(), l);
+                Vector3 position;
+                Color3  color;
+                position.x = GetFloat();
+                position.y = GetFloat();
+                position.z = GetFloat();
+                color.r = GetFloat();
+                color.g = GetFloat();
+                color.b = GetFloat();
+                light.SetPosition(position);
+                light.SetColor(color);
                 break;
             }
             case ROTATE: 
             {
                 float angle;
-                Vector3 u;
+                Vector3 axis;
                 angle = GetFloat();
-                u.x = GetFloat();
-                u.y = GetFloat();
-                u.z = GetFloat();
-                affStk.rotate(angle,u);
+                axis.x = GetFloat();
+                axis.y = GetFloat();
+                axis.z = GetFloat();
+                currTransform.RotateAxis(angle, axis);
                 break;
             }
             case TRANSLATE: 
             {
-                Vector3 d;
-                d.x = GetFloat();
-                d.y = GetFloat();
-                d.z = GetFloat();
-                affStk.translate(d);
+                Vector3 translation;
+                translation.x = GetFloat();
+                translation.y = GetFloat();
+                translation.z = GetFloat();
+                currTransform.Translate(translation);
                 break;
             }
             case SCALE: 
             {
-                float sx, sy, sz;
-                sx = GetFloat();
-                sy = GetFloat();
-                sz = GetFloat();
-                affStk.scale(sx, sy, sz);
+                Vector3 scale;
+                scale.x = GetFloat();
+                scale.y = GetFloat();
+                scale.z = GetFloat();
+                currTransform.SetScale(scale);
                 break;
             }
             case PUSH:
-                affStk.duplicate();
+                currTransform.SetDefault();
                 break;
             case POP:
-                affStk.popAndDrop();
+                currTransform.SetDefault();
                 break;
             case IDENTITYAFFINE:
-                affStk.setIdentity();
+                currTransform.SetDefault();
                 break;
             case AMBIENT: 
             {
-                float dr, dg, db;
-                dr = GetFloat();
-                dg = GetFloat();
-                db = GetFloat();
-                currMtrl.ambient.Set(dr,dg,db);
+                Color3 ambient;
+                ambient.r = GetFloat();
+                ambient.g = GetFloat();
+                ambient.b = GetFloat();
+                currMaterial.ambient.Set(ambient);
                 break;
             }
             case DIFFUSE: 
             {
-                float dr,dg,db;
-                dr = GetFloat();
-                dg = GetFloat();
-                db = GetFloat();
-                currMtrl.diffuse.Set(dr,dg,db);
+                Color3 diffuse;
+                diffuse.r = GetFloat();
+                diffuse.g = GetFloat();
+                diffuse.b = GetFloat();
+                currMaterial.diffuse.Set(diffuse);
                 break;
             }
             case SPECULAR:
             {
-                float dr,dg,db;
-                dr = GetFloat();
-                dg = GetFloat();
-                db = GetFloat();
-                currMtrl.specular.Set(dr,dg,db);
+                Color3 specular;
+                specular.r = GetFloat();
+                specular.g = GetFloat();
+                specular.b = GetFloat();
+                currMaterial.specular.Set(specular);
                 break;
             }
             case EMISSIVE: 
             {
-                float dr,dg,db;
-                dr = GetFloat();
-                dg = GetFloat();
-                db = GetFloat();
-                currMtrl.emissive.Set(dr,dg,db);
+                Color3 emissive;
+                emissive.r = GetFloat();
+                emissive.g = GetFloat();
+                emissive.b = GetFloat();
+                currMaterial.emissive.Set(emissive);
                 break;
             }
-            case PARAMETERS: 
-            {
-                currMtrl.numParams = (int)GetFloat();
-                for(int i = 0; i < currMtrl.numParams; i++)
-                    currMtrl.params[i] = GetFloat();
-                break;
-            }
-            case SPECULARFRACTION:
-                currMtrl.specularFraction = GetFloat();
-                break;
-            case SURFACEROUGHNESS:
-                currMtrl.surfaceRoughness = GetFloat();
-                break;
+            
             case DEFAULTMATERIALS:
-                currMtrl.setDefault();
-                break;
-            case SPEEDOFLIGHT:
-                currMtrl.speedOfLight = GetFloat();
+                currMaterial.SetDefault();
                 break;
             case SPECULAREXPONENT:
-                currMtrl.specularExponent = GetFloat();
-                break;
-            case TRANSPARENCY:
-                currMtrl.transparency = GetFloat();
-                break;
-            case REFLECTIVITY:
-                currMtrl.reflectivity = GetFloat();
+                currMaterial.specularExponent = GetFloat();
                 break;
             case GLOBALAMBIENT:
-                ambient.r = GetFloat();
-                ambient.g = GetFloat();
-                ambient.b = GetFloat();
+                ambientColor.r = GetFloat();
+                ambientColor.g = GetFloat();
+                ambientColor.b = GetFloat();
                 break;
             case BACKGROUND:
-                background.r = GetFloat();
-                background.g = GetFloat();
-                background.b = GetFloat();
-                break;
-            case MINREFLECTIVITY:
-                minReflectivity = GetFloat();
-                break;
-            case MINTRANSPARENCY:
-                minTransparency = GetFloat();
-                break;
-            case MAXRECURSIONDEPTH:
-                maxRecursionDepth = GetFloat();
+                backgroundColor.r = GetFloat();
+                backgroundColor.g = GetFloat();
+                backgroundColor.b = GetFloat();
                 break;
             case T_NULL:
                 break; // The null token represents end-of-file
             default:  {
-                switch(typ) {
+                switch(type) {
                     case CUBE:
-                        newShape = new Cube;
+                        newObject = new Cube;
                         break;
                     case SPHERE:
-                        newShape = new Sphere;
+                        newObject = new Sphere;
                         break;
                     /*case TORUS:
-                        newShape = new Torus;
+                        newObject = new Torus;
                         break;
                     case TAPEREDCYLINDER:
-                        newShape = new TaperedCylinder;
-                        ((TaperedCylinder*)newShape)->smallRadius = GetFloat();
+                        newObject = new TaperedCylinder;
+                        ((TaperedCylinder*)newObject)->smallRadius = GetFloat();
                         break;
                     case TEAPOT:
-                        newShape = new Teapot;
+                        newObject = new Teapot;
                         break;
                     case SQUARE:
-                        newShape = new Square;
+                        newObject = new Square;
                         break;
                     case MESH: 
                     {
                         string fname = nexttoken();
-                        newShape = new Mesh(fname);
+                        newObject = new Mesh(fname);
                         break;
-                    }// end of case: MESH
+                    }// end of case: MESH*/
                     default: 
                     {
-                        cerr << "Line " << nextline
-                            << ": unknown keyword " << s << endl;
+                        std::cerr << "Line " << nextLine
+                            << ": unknown keyword " << nextStr << std::endl;
                         return false;
                     }
                 }
                 // common things to do to all Shape
-                ((SceneObject*)newShape)->mat.set(currMtrl);
-                // load transform and its inverse
-                ((SceneObject*)newShape)->transform = this->currTransform;
-                ((SceneObject*)newShape)->transf.set(affStk.tos[0].affn);
-                ((SceneObject*)newShape)->invTransf.set(affStk.tos[0].invAffn);
-                ((SceneObject*)newShape)->SetModelMatrixLoc(modelMatrixLoc);
+                ((SceneObject*)newObject)->material.Set(currMaterial);
+                // load transform
+                ((SceneObject*)newObject)->transform = this->currTransform;
+                ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
                 
-                obj.push_back(newObject);
+                objects.push_back(newObject);
                 
                 return true;
             }
         }
-    }*/
+    }
     return false;
 }
 
@@ -465,7 +408,29 @@ void Scene::SetBackground(const Color3& color)
     backgroundColor.Set(color);
 }
 
-void Scene::SetModelMatrixLoc(GLuint location)
+void Scene::SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent)
 {
-    modelMatrixLoc = location;
+    modelMatrixLoc = model;
+    matAmbientLoc = ambient;
+    matDiffuseLoc = diffuse;
+    matSpecularLoc = specular;
+    matEmissiveLoc = emissive;
+    matSpecExponentLoc = specExponent;
+}
+
+void Scene::SetLightUnfiformLocations(GLuint position, GLuint color, GLuint ambient)
+{
+    lightPositionLoc = position;
+    lightColorLoc    = color;
+    lightAmbientLoc  = ambient;
+}
+
+void Scene::SetUpLight()
+{
+    Color3 color = light.GetColor();
+    Vector3 position = light.GetPosition();
+
+    glUniform3f(lightColorLoc, color.r, color.g, color.b);
+    glUniform3f(lightPositionLoc, position.x, position.y, position.z);
+    glUniform3f(lightAmbientLoc, ambientColor.r, ambientColor.g, ambientColor.b);
 }

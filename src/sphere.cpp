@@ -15,6 +15,12 @@ void Sphere::Draw()
 
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
 
+    glUniform3f(matAmbientLoc,  material.ambient.r, material.ambient.g, material.ambient.b);
+    glUniform3f(matDiffuseLoc,  material.diffuse.r, material.diffuse.g, material.diffuse.b);
+    glUniform3f(matSpecularLoc, material.specular.r, material.specular.g, material.specular.b);
+    glUniform3f(matEmissiveLoc, material.emissive.r, material.emissive.g, material.emissive.b);
+    glUniform1f(matSpecExponentLoc, material.specularExponent);
+
     mesh.Draw();
 }
 

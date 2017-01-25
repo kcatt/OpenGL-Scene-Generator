@@ -46,8 +46,11 @@ class Transform
         void SetRotation(const Vector3& rotation);
         void SetRotation(GLfloat x, GLfloat y, GLfloat z);
         void SetRotation(GLfloat angle, const Vector3& axis);
+        void RotateAxis(GLfloat angle, const Vector3& axis);
         void SetScale(const Vector3& scale);
         void SetScale(GLfloat x, GLfloat y, GLfloat z);
+
+        void SetDefault();
 
         friend std::ostream& operator<<(std::ostream& out, const Transform& t);
 
