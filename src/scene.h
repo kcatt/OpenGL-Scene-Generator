@@ -46,7 +46,7 @@ class Scene
         void FreeScene(void);
         bool ReadFile(const std::string& fileName);
         void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
-        void SetLightUnfiformLocations(GLuint position, GLuint color, GLuint ambient);
+        void SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient);
 
 
     private:
@@ -60,6 +60,7 @@ class Scene
         Color3  ambientColor;
         Transform   currTransform;
         Material    currMaterial;
+        std::vector<std::string>              comments;
         std::vector<SceneObject*>             objects;
         std::unique_ptr<std::ifstream>        inFile;
         std::unique_ptr<std::stringstream>    fileStream;

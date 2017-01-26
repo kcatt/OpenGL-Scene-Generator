@@ -63,9 +63,15 @@ std::string Scene::NextToken(void)
                 token = nextChar;
                 return token;
             }
-            case '!': {
+            case '!': 
+            {
+                string comment = "";
                 // This is a comment. Read the rest of the line and discard
-                while (nextChar != '\n' && fileStream->get(nextChar));
+                while (nextChar != '\n' && fileStream->get(nextChar))
+                {   
+                    comment += nextChar;
+                }
+                comments.push_back(comment);
                 nextLine++;
                 break;
             }
@@ -92,11 +98,19 @@ std::string Scene::NextToken(void)
             }
         }
     }
+
+    return " ";
 }
 
 // Clear the vectors in the scene
 void Scene::FreeScene(void)
 {
+    for (int i = 0; i < objects.size(); i++)
+    {
+        if (objects[i] != NULL)
+            delete objects[i];
+    }
+
     objects.clear();
 }
 
@@ -172,6 +186,7 @@ bool Scene::ReadFile(const std::string& fileName)
 
 mTokenType Scene::WhichToken(const std::string& keyword)
 {
+    std::cout << keyword << std::endl;
     if (keyword == "light" )
         return LIGHT;
     if (keyword == "rotate" )
@@ -235,6 +250,8 @@ mTokenType Scene::WhichToken(const std::string& keyword)
 
 void Scene::DrawScene(void)
 {
+    SetUpLight();
+
     for (size_t i = 0; i < objects.size(); i++)
         objects[i]->Draw();
 }
@@ -418,7 +435,7 @@ void Scene::SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffus
     matSpecExponentLoc = specExponent;
 }
 
-void Scene::SetLightUnfiformLocations(GLuint position, GLuint color, GLuint ambient)
+void Scene::SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient)
 {
     lightPositionLoc = position;
     lightColorLoc    = color;

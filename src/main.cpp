@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "vector3.h"
 #include "light.h"
+#include "scene.h"
 
 using namespace std;
 
@@ -75,10 +76,9 @@ int main(int argc, char* argv[])
     glfwSetScrollCallback(window, ScrollCallback);
     
     Shader shader(argv[1], argv[2]);
-    
-    Cube c;
-    Sphere s;
-    Light l(Vector3(0, 10, -3), Color3(1, 1, 1));
+    Scene  scene;
+
+    scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
@@ -93,20 +93,14 @@ int main(int argc, char* argv[])
     GLuint matEmissive = glGetUniformLocation(shader.GetProgram(), "material.emissive");
     GLuint matSpecExponent = glGetUniformLocation(shader.GetProgram(), "material.shininess");
 
-    Color3 lColor = l.GetColor();
-    Vector3 lPos = l.GetPosition();
+    scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
+    scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
+
+    scene.ReadFile("scene.txt");
 
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
     //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
-    c.SetUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
-    s.SetUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
-
-    c.transform.SetPosition(Vector3(0, 0, -3));
-    s.transform.SetPosition(Vector3(1, 0, 0));
-
-    
 
     while (!glfwWindowShouldClose(window))
     {
@@ -120,13 +114,9 @@ int main(int argc, char* argv[])
         cam->UpdateMatrices();
         cPos = cam->GetPosition();
 
-        glUniform3f(lightColor, lColor.r, lColor.g, lColor.b);
-        glUniform3f(lightPos, lPos.x, lPos.y, lPos.z);
         glUniform3f(viewPos, cPos.x, cPos.y, cPos.z);
-        glUniform3f(lightAmbient, 0.1f, 0.1f, 0.1f);
 
-        c.Draw();
-        s.Draw();
+        scene.DrawScene();
         
         glfwSwapBuffers(window);
     }

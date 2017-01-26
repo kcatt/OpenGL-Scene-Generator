@@ -19,3 +19,4 @@
 1/21/2017|2|Update cube to use the new mesh class. Did some testing with camera.
 1/23/2017|3|Met with Dr. Morse to update him on project status. Implemented a basic lighting set up.
 1/24/2017|4|Added materials.
+1/25/2017|1.5|Completed the inputting of SDL file.

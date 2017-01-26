@@ -54,6 +54,20 @@ class Transform
 
         friend std::ostream& operator<<(std::ostream& out, const Transform& t);
 
+        // operator= cannot be defined using friend
+        inline Transform& operator=(const Transform& rhs)
+        {
+            position = rhs.position;
+            rotation = rhs.rotation;
+            scale = rhs.scale;
+            affine = rhs.affine;
+            invAffine = rhs.invAffine;
+            rotationMat = rhs.rotationMat;
+            invRotation = rhs.invRotation;
+
+            return *this;
+        }
+
     private:
         /*********************
          * Private Variables *

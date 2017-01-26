@@ -1,0 +1,7 @@
+light 0 0 10 .2 .7 .3
+ambient .329 .224 .027
+diffuse .780 .569 .113
+specular .992 .941 .808
+specularExponent 1
+
+push translate 1 0 0 cube pop
