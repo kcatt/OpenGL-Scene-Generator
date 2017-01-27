@@ -2,15 +2,6 @@
 
 #include <iostream>
 
-SceneObject::~SceneObject()
-{
-    if (objectVerts != NULL)
-        delete[] objectVerts;
-    
-    /*if (mesh != NULL)
-       delete mesh;*/
-}
-
 void SceneObject::Draw() { }
 
 void SceneObject::TellMaterials()

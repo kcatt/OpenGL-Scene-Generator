@@ -12,6 +12,11 @@ class Sphere : public SceneObject
          ***************/
         Sphere();
 
+        /**************
+         * Destructor *
+         **************/
+        ~Sphere() { }
+
         /***********************
          * Overloaded Function *
          ***********************/

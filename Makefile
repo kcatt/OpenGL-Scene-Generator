@@ -14,8 +14,8 @@
 # University of Evansville                                              #
 #########################################################################
 
-SRC_DIR    := src
-BUILD_DIR  := build
+SRC_DIR    := src src/objects src/utils
+BUILD_DIR  := build build/objects build/utils
 SRC        := $(foreach sdir, $(SRC_DIR), $(wildcard $(sdir)/*.cpp))
 OBJ        := $(patsubst src/%.cpp, build/%.o, $(SRC))
 

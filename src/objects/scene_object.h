@@ -19,13 +19,12 @@ class SceneObject
         Transform transform;
         Material  material;
 
-        GLfloat* objectVerts = NULL;
         Mesh     mesh;
 
         /**************
          * Destructor *
          **************/
-        ~SceneObject();
+        virtual ~SceneObject() { }
 
         /********************
          * Public Functions *

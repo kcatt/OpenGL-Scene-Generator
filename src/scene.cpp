@@ -65,7 +65,7 @@ std::string Scene::NextToken(void)
             }
             case '!': 
             {
-                string comment = "";
+                std::string comment = "";
                 // This is a comment. Read the rest of the line and discard
                 while (nextChar != '\n' && fileStream->get(nextChar))
                 {   
@@ -105,7 +105,7 @@ std::string Scene::NextToken(void)
 // Clear the vectors in the scene
 void Scene::FreeScene(void)
 {
-    for (int i = 0; i < objects.size(); i++)
+    for (size_t i = 0; i < objects.size(); i++)
     {
         if (objects[i] != NULL)
             delete objects[i];

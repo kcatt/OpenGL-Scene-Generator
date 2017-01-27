@@ -11,6 +11,12 @@ class Cube : public SceneObject
          ***************/
         Cube();
 
+        /**************
+         * Destructor *
+         **************/
+        ~Cube() { }
+
+
         /***********************
          * Overloaded Function *
          ***********************/
