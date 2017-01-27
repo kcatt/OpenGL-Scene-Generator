@@ -6,10 +6,7 @@
 # of files in a project that can be in any directory within the         #
 # base project directory. Specify the directories that the source       #
 # files are contained using the SRC_DIR variable and you can change     #
-# the location the object files are placed with the BUILD_DIR variable. #
-#                                                                       #
-# CS 455 Computer Graphics                                              #
-# Spring 2016                                                           #
+# the location the object files are placed with the BUILD_DIR variable. #                                                   
 #                                                                       #
 # University of Evansville                                              #
 #########################################################################

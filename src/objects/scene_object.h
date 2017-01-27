@@ -11,7 +11,7 @@
 class SceneObject
 {
     public:
-        SceneObject() {};
+        SceneObject() {}
 
         /********************
          * Public Variables *
@@ -24,7 +24,7 @@ class SceneObject
         /**************
          * Destructor *
          **************/
-        virtual ~SceneObject() { }
+        virtual ~SceneObject() {}
 
         /********************
          * Public Functions *

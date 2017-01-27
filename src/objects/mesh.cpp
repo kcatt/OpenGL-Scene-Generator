@@ -175,7 +175,8 @@ Vector3 Mesh::CalculateFaceNormal(const Vector3& vert1, const Vector3& vert2, co
     if (normal.Dot(vert1 - Vector3(0, 0, 0)) < 0)
         normal.Scale(-1);
     
-    normal.Normalize();
+    if (normal.Magnitude() != 0)
+        normal.Normalize();
 
     return normal;
 }

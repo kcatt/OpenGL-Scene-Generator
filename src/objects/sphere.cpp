@@ -43,10 +43,10 @@ void Sphere::SubdivideTriangles(Vector3 vert1, Vector3 vert2, Vector3 vert3, int
 {
     if (level == 0)
     {
-        // Normalize the point so that the radius will be 0.5
-        NormalizePoint(vert1, 0.5f);
-        NormalizePoint(vert2, 0.5f);
-        NormalizePoint(vert3, 0.5f);
+        // Normalize the point so that the radius will be 1.0
+        NormalizePoint(vert1, 1.0f);
+        NormalizePoint(vert2, 1.0f);
+        NormalizePoint(vert3, 1.0f);
         
         vertVector.push_back(vert1);
         vertVector.push_back(vert2);

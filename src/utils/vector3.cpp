@@ -107,7 +107,7 @@ void Vector3::Normalize()
 
     if (magnitude == 0)
     {
-        std::cerr << "\nCannot normalize vector <0,0,0>!" << std::endl;
+        std::cerr << "Cannot normalize vector <0,0,0>!" << std::endl;
         return;
     }
 

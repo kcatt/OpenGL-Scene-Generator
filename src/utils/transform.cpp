@@ -220,6 +220,10 @@ void Transform::SetDefault()
     this->position = Vector3(0, 0, 0);
     this->rotation = Vector3(0, 0, 0);
     this->scale    = Vector3(1, 1, 1);
+
+    affine.SetIdentity();
+    invAffine.SetIdentity();
+    ResetRotationMatrices();
 }
 
 void Transform::ApplyTransform()

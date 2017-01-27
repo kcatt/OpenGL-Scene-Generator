@@ -3,6 +3,7 @@
 #include <iostream>
 #include "cube.h"
 #include "sphere.h"
+#include "tapered_cylinder.h"
 
 Scene::Scene() {
     currMaterial.SetDefault();
@@ -186,7 +187,6 @@ bool Scene::ReadFile(const std::string& fileName)
 
 mTokenType Scene::WhichToken(const std::string& keyword)
 {
-    std::cout << keyword << std::endl;
     if (keyword == "light" )
         return LIGHT;
     if (keyword == "rotate" )
@@ -381,12 +381,13 @@ bool Scene::GetObject(void)
                         break;
                     /*case TORUS:
                         newObject = new Torus;
-                        break;
+                        break;*/
                     case TAPEREDCYLINDER:
                         newObject = new TaperedCylinder;
-                        ((TaperedCylinder*)newObject)->smallRadius = GetFloat();
+                        ((TaperedCylinder*)newObject)->SetTopRadius(GetFloat());
+                        ((TaperedCylinder*)newObject)->Generate();
                         break;
-                    case TEAPOT:
+                    /*case TEAPOT:
                         newObject = new Teapot;
                         break;
                     case SQUARE:
