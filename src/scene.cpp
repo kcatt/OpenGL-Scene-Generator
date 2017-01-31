@@ -1,6 +1,7 @@
 #include "scene.h"
 #include <cstdlib>
 #include <iostream>
+#include <chrono>
 #include "cube.h"
 #include "sphere.h"
 #include "tapered_cylinder.h"
@@ -419,6 +420,50 @@ bool Scene::GetObject(void)
         }
     }
     return false;
+}
+
+void Scene::SetExportFileName(const std::string& fileName)
+{
+    exportFileName = fileName;
+}
+
+void Scene::Export()
+{
+    std::string fileName = exportFileName;
+
+    if (exportFileName == "")
+    {
+        fileName = "autosave_scene.txt";
+    }
+
+    std::ofstream outFile(fileName.c_str());
+
+    outFile << "light " << light.GetPosition() << " " << light.GetColor() << std::endl;
+    outFile << "globalAmbient " << ambientColor << std::endl;
+    outFile << "background " << backgroundColor << std::endl;
+
+    for (size_t i = 0; i < objects.size(); i++)
+    {
+        outFile << "push ";
+        outFile << "rotate "    << objects[i]->transform.rotation.x << " 1 0 0 ";
+        outFile << "rotate "    << objects[i]->transform.rotation.y << " 0 1 0 ";
+        outFile << "rotate "    << objects[i]->transform.rotation.z << " 0 0 1 ";
+        outFile << "scale "     << objects[i]->transform.scale      << " ";
+        outFile << "translate " << objects[i]->transform.position   << " ";
+        outFile << "ambient "   << objects[i]->material.ambient     << " ";
+        outFile << "diffuse "   << objects[i]->material.diffuse     << " ";
+        outFile << "specular "  << objects[i]->material.specular    << " ";
+        outFile << "emissive "  << objects[i]->material.emissive    << " ";
+        outFile << "specularExponent " << objects[i]->material.specularExponent << " ";
+        outFile << objects[i]->type << " ";
+        outFile << "pop" << std::endl;
+    }
+
+    // Print out the comments at the end of the file
+    for (size_t i = 0; i < comments.size(); i++)
+    {
+        outFile << "!" << comments[i] << std::endl;
+    }
 }
 
 void Scene::SetBackground(const Color3& color)

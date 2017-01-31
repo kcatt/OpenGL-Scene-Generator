@@ -81,7 +81,7 @@ class Transform
          *********************/
         void ApplyTransform();
         void CheckRotation();
-        void ResetRotationMatrices();
+        void ResetMatrices();
         void Rotate(GLfloat angle, const Vector3& axis);
 };
 

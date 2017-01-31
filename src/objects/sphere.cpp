@@ -6,6 +6,8 @@
 Sphere::Sphere()
 {
     SetUpSphere();
+
+    type = "sphere";
 }
 
 void Sphere::Draw()

@@ -96,8 +96,8 @@ int main(int argc, char* argv[])
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
 
-    scene.ReadFile("scene.txt");
-
+    scene.ReadFile("autosave_scene.txt");
+    scene.Export();
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
     //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -120,6 +120,8 @@ int main(int argc, char* argv[])
         
         glfwSwapBuffers(window);
     }
+
+    
 
     delete cam;
     glfwTerminate();

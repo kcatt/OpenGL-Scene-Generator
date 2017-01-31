@@ -47,7 +47,8 @@ class Scene
         bool ReadFile(const std::string& fileName);
         void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
         void SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient);
-
+        void SetExportFileName(const std::string& fileName);
+        void Export();
 
     private:
         /*********************
@@ -60,6 +61,7 @@ class Scene
         Color3  ambientColor;
         Transform   currTransform;
         Material    currMaterial;
+        std::string exportFileName;
         std::vector<std::string>              comments;
         std::vector<SceneObject*>             objects;
         std::unique_ptr<std::ifstream>        inFile;

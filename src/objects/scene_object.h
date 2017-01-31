@@ -21,6 +21,8 @@ class SceneObject
 
         Mesh     mesh;
 
+        std::string type;
+
         /**************
          * Destructor *
          **************/

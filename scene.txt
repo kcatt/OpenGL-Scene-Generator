@@ -5,4 +5,4 @@ specular .992 .941 .808
 specularExponent 1
 
 push translate 1 0 0 cube pop
-push rotate -90 1 0 0 taperedCylinder 0 pop
+push rotate 100 0 0 1 rotate -90 1 0 0 taperedCylinder 0 pop

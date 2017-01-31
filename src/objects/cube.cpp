@@ -49,6 +49,8 @@ Cube::Cube()
 
     mesh.Create(vertVec);
     mesh.SetUpGL();
+
+    type = "cube";
 }
 
 void Cube::Draw()

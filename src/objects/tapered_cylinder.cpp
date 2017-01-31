@@ -9,6 +9,7 @@ TaperedCylinder::TaperedCylinder()
 {
     topRadius = 1.0f;
     generated = false;
+    type = "taperedCylinder 1";
 }
 
 void TaperedCylinder::Draw()
@@ -34,9 +35,17 @@ void TaperedCylinder::Draw()
 
 void TaperedCylinder::SetTopRadius(GLfloat radius)
 {
+    if (radius < 0)
+    {
+        std::cerr << "Negative radius for taperedCylinder is not valid. Using 0 as radius." << std::endl;
+        radius = 0;
+    }
+    
     // If the radius is set to zero, set it to an indistinguishably small number to 
     // allow for proper lighting
     topRadius = (radius == 0 ? 0.0001f : radius);
+
+    type = "taperedCylinder " + std::to_string(radius); 
 }
 
 void TaperedCylinder::Generate()

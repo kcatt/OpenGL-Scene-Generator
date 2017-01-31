@@ -221,14 +221,12 @@ void Transform::SetDefault()
     this->rotation = Vector3(0, 0, 0);
     this->scale    = Vector3(1, 1, 1);
 
-    affine.SetIdentity();
-    invAffine.SetIdentity();
-    ResetRotationMatrices();
+    ResetMatrices();
 }
 
 void Transform::ApplyTransform()
 {
-    ResetRotationMatrices();
+    ResetMatrices();
 
     Vector3 xAxis(1, 0, 0);
     Vector3 yAxis(0, 1, 0);
@@ -292,8 +290,10 @@ void Transform::CheckRotation()
         rotation.z = rotation.z + 360;
 }
 
-void Transform::ResetRotationMatrices()
+void Transform::ResetMatrices()
 {
+    affine.SetIdentity();
+    invAffine.SetIdentity();
     rotationMat.SetIdentity();
     invRotation.SetIdentity();
 }
