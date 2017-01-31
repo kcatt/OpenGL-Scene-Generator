@@ -21,3 +21,4 @@
 1/24/2017|4|Added materials.
 1/25/2017|1.5|Completed the inputting of SDL file.
 1/26/2017|3.5|Added the tapered cylinder object to the project.
+1/30/2017|3|Added export functionality and started work on dialogs.
