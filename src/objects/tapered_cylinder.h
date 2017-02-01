@@ -1,7 +1,6 @@
 #ifndef __TAPERED_CYLINDER__H_
 #define __TAPERED_CYLINDER__H_
 
-#include <GL/glew.h>
 #include <vector>
 #include "scene_object.h"
 #include "vector3.h"

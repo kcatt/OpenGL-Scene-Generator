@@ -5,9 +5,6 @@
 #include <sstream>
 #include <iostream>
 
-// Included to get all of the required OpenGL headers
-#include <GL/glew.h>
-
 Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 {
     std::string vertexCode;

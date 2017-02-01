@@ -2,8 +2,9 @@
 #define __SHADER_H_
 
 // Included to get all of the required OpenGL headers
-#include <GL/glew.h>
-
+#ifndef __gl_h_
+    #include <glad/glad.h>
+#endif
 #include <string>
 
 class Shader

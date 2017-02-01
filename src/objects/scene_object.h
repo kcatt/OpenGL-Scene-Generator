@@ -2,7 +2,9 @@
 #define __SCENE_OBJECT__H_
 
 // Included to get all of the required OpenGL headers
-#include <GL/glew.h>
+#ifndef __gl_h_
+    #include <glad/glad.h>
+#endif
 #include "transform.h"
 #include "material.h"
 #include "vector3.h"

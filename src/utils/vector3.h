@@ -1,7 +1,9 @@
 #ifndef __VECTOR_3__H_
 #define __VECTOR_3__H_
 
-#include <GL/glew.h>
+#ifndef __gl_h_
+    #include <glad/glad.h>
+#endif
 #include <iostream>
 
 class Vector3

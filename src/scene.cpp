@@ -427,15 +427,8 @@ void Scene::SetExportFileName(const std::string& fileName)
     exportFileName = fileName;
 }
 
-void Scene::Export()
+void Scene::Export(const std::string& fileName)
 {
-    std::string fileName = exportFileName;
-
-    if (exportFileName == "")
-    {
-        fileName = "autosave_scene.txt";
-    }
-
     std::ofstream outFile(fileName.c_str());
 
     outFile << "light " << light.GetPosition() << " " << light.GetColor() << std::endl;
@@ -455,7 +448,7 @@ void Scene::Export()
         outFile << "specular "  << objects[i]->material.specular    << " ";
         outFile << "emissive "  << objects[i]->material.emissive    << " ";
         outFile << "specularExponent " << objects[i]->material.specularExponent << " ";
-        outFile << objects[i]->type << " ";
+        outFile << objects[i]->type    << " ";
         outFile << "pop" << std::endl;
     }
 
@@ -464,6 +457,18 @@ void Scene::Export()
     {
         outFile << "!" << comments[i] << std::endl;
     }
+}
+
+void Scene::Export()
+{
+    std::string fileName = exportFileName;
+
+    if (fileName == "")
+    {
+        fileName = "autosave_scene.txt";
+    }
+
+    Export(fileName);
 }
 
 void Scene::SetBackground(const Color3& color)

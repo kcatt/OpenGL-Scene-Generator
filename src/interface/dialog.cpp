@@ -1,15 +1,15 @@
 #include "dialog.h"
 
-Dialog::Dialog()
+Dialog::Dialog(const std::string& barName)
 {
-
+    
 }
 
 Dialog::~Dialog()
 {
     
 }
-
+/*
 void Dialog::AddButton(const std::string& name, TwButtonCallback callback, void* data, const std::string def)
 {
 
@@ -25,12 +25,7 @@ void Dialog::AddROVariable(const std::string& name, TwType type, const void* var
 
 }
 
-void Dialog::AddRWVariable(const std::string& name, TwType type, void* var, const std::String& def)
+void Dialog::AddRWVariable(const std::string& name, TwType type, void* var, const std::string& def)
 {
 
-}
-
-void Dialog::Display()
-{
-
-}
+}*/

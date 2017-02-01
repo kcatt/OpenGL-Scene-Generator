@@ -1,7 +1,9 @@
 #ifndef __SCENE__H_
 #define __SCENE__H_
 
-#include <GL/glew.h>
+#ifndef __gl_h_
+    #include <glad/glad.h>
+#endif
 #include <string>
 #include <vector>
 #include <fstream>
@@ -48,6 +50,7 @@ class Scene
         void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
         void SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient);
         void SetExportFileName(const std::string& fileName);
+        void Export(const std::string& fileName);
         void Export();
 
     private:

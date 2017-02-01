@@ -11,15 +11,15 @@
 # University of Evansville                                              #
 #########################################################################
 
-SRC_DIR    := src src/objects src/utils
-BUILD_DIR  := build build/objects build/utils
+SRC_DIR    := src src/objects src/utils src/include src/interface src/ext/glad
+BUILD_DIR  := build build/objects build/utils build/include build/interface build/ext/glad
 SRC        := $(foreach sdir, $(SRC_DIR), $(wildcard $(sdir)/*.cpp))
 OBJ        := $(patsubst src/%.cpp, build/%.o, $(SRC))
 
 BACKUPS    := *~ src/*~
 EXECUTABLE := test
 FLAGS      := -std=c++14 -c -Wall -g
-INCLUDES   := $(addprefix -I,$(SRC_DIR)) -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl -lAntTweakBar -L/usr/local/lib/AntTweakBar/ -lAntTweakBar
+INCLUDES   := $(addprefix -I,$(SRC_DIR)) -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl
 INCDIR     := 
 XLIBS      := -std=c++14
 CC         := g++

@@ -2,9 +2,9 @@
 #define __INTERFACE__H_
 
 #include <vector>
-#include <AntTweakBar.h>
 #include "dialog.h"
 #include "main_dialog.h"
+#include <nanogui/nanogui.h>
 
 class Interface 
 {
@@ -14,7 +14,15 @@ class Interface
          ***************/
         Interface();
 
+        /*******************
+         * Public Function *
+         *******************/
+        MainDialog* GetMainDialog();
+
     private:
+        /*********************
+         * Private Variables *
+         *********************/
         MainDialog mainDialog;
         std::vector<Dialog> dialogs;
 };

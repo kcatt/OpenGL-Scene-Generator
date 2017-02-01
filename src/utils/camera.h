@@ -2,7 +2,9 @@
 #define __CAMERA__H_
 
 // Included to get all of the required OpenGL headers
-#include <GL/glew.h>
+#ifndef __gl_h_
+    #include <glad/glad.h>
+#endif
 #include "vector3.h"
 #include "mat4x4.h"
 

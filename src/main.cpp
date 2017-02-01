@@ -1,14 +1,12 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <nanogui/nanogui.h>
 
 #include <iostream>
 #include <fstream>
 #include <string>
 
 #include "shader.h"
-#include "cube.h"
-#include "sphere.h"
 #include "camera.h"
 #include "vector3.h"
 #include "light.h"
@@ -21,6 +19,7 @@ void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers);
 void HandleMouseMovement();
+void ResizeCallback(GLFWwindow* window, int width, int height);
 
 struct MousePositionSave
 {
@@ -60,10 +59,10 @@ int main(int argc, char* argv[])
     }
     
     glfwMakeContextCurrent(window);
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
+    
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLEW" << std::endl;
+        std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
@@ -71,10 +70,13 @@ int main(int argc, char* argv[])
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
     glEnable(GL_DEPTH_TEST);
     glfwSetMouseButtonCallback(window, MouseButtonCallback);
     glfwSetScrollCallback(window, ScrollCallback);
-    
+    glfwSetWindowSizeCallback(window, ResizeCallback);
+
     Shader shader(argv[1], argv[2]);
     Scene  scene;
 
@@ -100,8 +102,7 @@ int main(int argc, char* argv[])
     scene.Export();
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
-    //cam.Set(Vector3(3, 0, 0), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
+    
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -121,30 +122,9 @@ int main(int argc, char* argv[])
         glfwSwapBuffers(window);
     }
 
-    
-
     delete cam;
     glfwTerminate();
     return 0;
-}
-
-void MouseCallback(GLFWwindow* window, double xPos, double yPos)
-{
-    if (mousePosition.firstPos)
-    {
-        mousePosition.lastX = mousePosition.currX = xPos;
-        mousePosition.lastY = mousePosition.currY = yPos;
-
-        mousePosition.firstPos = false;
-    }
-    else
-    {
-        mousePosition.lastX = mousePosition.currX;
-        mousePosition.lastY = mousePosition.currY;
-
-        mousePosition.currX = xPos;
-        mousePosition.currY = yPos;
-    }
 }
 
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
@@ -205,3 +185,8 @@ void HandleMouseMovement()
         cam->Slide(-(mousePosition.currX - mousePosition.lastX) * 0.005, (mousePosition.currY - mousePosition.lastY) * 0.005, 0);
     }
 }   
+
+void ResizeCallback(GLFWwindow* window, int width, int height)
+{
+    
+}

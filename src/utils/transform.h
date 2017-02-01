@@ -1,13 +1,6 @@
 #ifndef __TRANSFORM__H_
 #define __TRANSFORM__H_
 
-/*                                                             
-*                                                              * 
-* NEED TO DO CALCULATIONS TO TURN AXIS ROTATIONS INTO EULER    *
-* ANGLES. Wikipedia: Rotation formalisms in three dimensions.  *
-*                                                              *
-*/
-
 #include "mat4x4.h"
 #include "vector3.h"
 
