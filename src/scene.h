@@ -14,6 +14,7 @@
 #include "color3.h"
 #include "scene_object.h"
 #include "light.h"
+#include "interface.h"
 
 // Enums for the tokens of the sdl file
 enum mTokenType {
@@ -52,6 +53,13 @@ class Scene
         void SetExportFileName(const std::string& fileName);
         void Export(const std::string& fileName);
         void Export();
+        void SetUpMainDialog();
+        static void ReadFunctionForwarder(void* context, const std::string& fileName);
+
+        /*******************
+         * Public Variable *
+         *******************/
+        Interface* interface = NULL;
 
     private:
         /*********************

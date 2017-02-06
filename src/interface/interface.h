@@ -13,17 +13,28 @@ class Interface
          * Constructor *
          ***************/
         Interface();
+        Interface(nanogui::Screen* screen);
+
+        /**************
+         * Destructor *
+         **************/
+        ~Interface();
 
         /*******************
          * Public Function *
          *******************/
         MainDialog* GetMainDialog();
 
+        /********************
+         * Public Variables *
+         ********************/
+        nanogui::Screen* screen;
+
     private:
         /*********************
          * Private Variables *
          *********************/
-        MainDialog mainDialog;
+        MainDialog* mainDialog;
         std::vector<Dialog> dialogs;
 };
 

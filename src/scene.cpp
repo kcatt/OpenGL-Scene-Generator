@@ -10,6 +10,8 @@ Scene::Scene() {
     currMaterial.SetDefault();
     backgroundColor.Set(.8,.3,0.6f);
     ambientColor.Set(0.1f,0.1f,0.1f);
+
+    SetUpMainDialog();
 }
 
 Scene::Scene(const std::string& fileName) {
@@ -158,6 +160,11 @@ bool Scene::IsIdentifier(const std::string& keyword)
 
 bool Scene::ReadFile(const std::string& fileName)
 {
+    currMaterial.SetDefault();
+    backgroundColor.Set(.8,.3,0.6f);
+    ambientColor.Set(0.1f,0.1f,0.1f);
+    FreeScene();
+
     inFile = std::make_unique<std::ifstream>(fileName.c_str());
 
     if (!(*inFile))
@@ -469,6 +476,20 @@ void Scene::Export()
     }
 
     Export(fileName);
+}
+
+void Scene::SetUpMainDialog()
+{
+    if (interface == NULL)
+        return;
+     
+    interface->GetMainDialog()->SetSceneContext(this);
+    interface->GetMainDialog()->SetLoadCallback(ReadFunctionForwarder);
+}
+
+void Scene::ReadFunctionForwarder(void* context, const std::string& fileName)
+{
+    static_cast<Scene*>(context)->ReadFile(fileName);
 }
 
 void Scene::SetBackground(const Color3& color)

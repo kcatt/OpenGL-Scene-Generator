@@ -2,10 +2,21 @@
 
 Interface::Interface()
 {
+    mainDialog = new MainDialog(screen, 10, 10);
+}
 
+Interface::Interface(nanogui::Screen* screen)
+{
+    this->screen = screen;
+    mainDialog = new MainDialog(screen, 10, 10);
+}
+
+Interface::~Interface()
+{
+    delete mainDialog;
 }
 
 MainDialog* Interface::GetMainDialog()
 {
-    return &mainDialog;
+    return mainDialog;
 }

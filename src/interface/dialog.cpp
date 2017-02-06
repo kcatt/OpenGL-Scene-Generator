@@ -1,31 +1,41 @@
 #include "dialog.h"
 
-Dialog::Dialog(const std::string& barName)
+Dialog::Dialog(nanogui::Screen* screen, const std::string& windowLabel, int posX, int posY)
 {
-    
+    SetScreen(screen);
+
+    gui = new nanogui::FormHelper(screen);
+    window = gui->addWindow(Eigen::Vector2i(posX, posY), windowLabel);
 }
 
 Dialog::~Dialog()
 {
-    
-}
-/*
-void Dialog::AddButton(const std::string& name, TwButtonCallback callback, void* data, const std::string def)
-{
-
+    if (gui != NULL)
+        delete gui;
 }
 
-void Dialog::AddVariable(const std::string& name, TwType type, TwSetVarCallback setCallback, TwGetVarCallback getCallback, void* data, const std::string& def)
+void Dialog::SetScreen(nanogui::Screen* screen)
 {
-
+    this->screen = screen;
 }
 
-void Dialog::AddROVariable(const std::string& name, TwType type, const void* var, const std::string& def)
+// These are just wrapper functions provided to simplify the creation of dialogs
+void Dialog::AddGroup(const std::string& caption)
 {
-
+    gui->addGroup(caption);
 }
 
-void Dialog::AddRWVariable(const std::string& name, TwType type, void* var, const std::string& def)
+void Dialog::AddButton(const std::string& label, const std::function<void()>& callback)
 {
+    gui->addButton(label, callback);
+}
 
-}*/
+void Dialog::AddVariable(const std::string& label, const std::function<void(const GLfloat&)>& setter, const std::function<GLfloat()>& getter)
+{
+    gui->addVariable(label, setter, getter, true);
+}
+
+void Dialog::AddVariable(const std::string& label, GLfloat& value)
+{
+    gui->addVariable(label, value, true);
+}

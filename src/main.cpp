@@ -12,7 +12,10 @@
 #include "light.h"
 #include "scene.h"
 
+#include "main_dialog.h"
+
 using namespace std;
+using namespace nanogui;
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
@@ -30,6 +33,7 @@ struct MousePositionSave
 struct MousePositionSave mousePosition;
 Camera* cam = NULL;
 GLFWwindow* window = NULL;
+Screen* screen = NULL;
 
 // Variables needed to remember state of mouse buttons being held
 bool rightHeld = false;
@@ -73,13 +77,49 @@ int main(int argc, char* argv[])
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     glEnable(GL_DEPTH_TEST);
+
+    screen = new Screen();
+    screen->initialize(window, true);
+
     glfwSetMouseButtonCallback(window, MouseButtonCallback);
     glfwSetScrollCallback(window, ScrollCallback);
     glfwSetWindowSizeCallback(window, ResizeCallback);
 
+    glfwSetCursorPosCallback(window,
+            [](GLFWwindow *, double x, double y) {
+            screen->cursorPosCallbackEvent(x, y);
+        }
+    );
+
+    glfwSetKeyCallback(window,
+        [](GLFWwindow *, int key, int scancode, int action, int mods) {
+            screen->keyCallbackEvent(key, scancode, action, mods);
+        }
+    );
+
+    glfwSetCharCallback(window,
+        [](GLFWwindow *, unsigned int codepoint) {
+            screen->charCallbackEvent(codepoint);
+        }
+    );
+
+    glfwSetDropCallback(window,
+        [](GLFWwindow *, int count, const char **filenames) {
+            screen->dropCallbackEvent(count, filenames);
+        }
+    );
+
+    glfwSetFramebufferSizeCallback(window,
+        [](GLFWwindow *, int width, int height) {
+            screen->resizeCallbackEvent(width, height);
+        }
+    );
+
     Shader shader(argv[1], argv[2]);
     Scene  scene;
 
+    scene.interface = new Interface(screen);
+    scene.SetUpMainDialog();
     scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
@@ -98,13 +138,15 @@ int main(int argc, char* argv[])
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
 
-    scene.ReadFile("autosave_scene.txt");
-    scene.Export();
+    //scene.ReadFile("autosave_scene.txt");
+    //scene.Export();
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
     
     while (!glfwWindowShouldClose(window))
     {
+        glEnable(GL_DEPTH_TEST);
+
         glfwPollEvents();
         HandleMouseMovement();
 
@@ -118,7 +160,13 @@ int main(int argc, char* argv[])
         glUniform3f(viewPos, cPos.x, cPos.y, cPos.z);
 
         scene.DrawScene();
-        
+
+        screen->setVisible(true);
+        screen->performLayout();
+
+        screen->drawContents();
+        screen->drawWidgets();
+
         glfwSwapBuffers(window);
     }
 
@@ -130,6 +178,8 @@ int main(int argc, char* argv[])
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
     cam->Slide(0, 0, -yOffset * 0.05);
+
+    screen->scrollCallbackEvent(xOffset, yOffset);
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers)
@@ -152,6 +202,8 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
         else if (action == GLFW_RELEASE)
             middleHeld = false;
     }
+
+    screen->mouseButtonCallbackEvent(button, action, modifiers);
 }
 
 void HandleMouseMovement()

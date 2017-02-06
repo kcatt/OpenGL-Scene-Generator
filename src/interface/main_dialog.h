@@ -2,7 +2,6 @@
 #define __MAIN_DIALOG__H_
 
 #include "dialog.h"
-#include "scene.h"
 
 class MainDialog : public Dialog
 {
@@ -10,7 +9,7 @@ class MainDialog : public Dialog
         /***************
          * Constructor *
          ***************/
-        MainDialog();
+        MainDialog(nanogui::Screen* screen, int posX, int posY);
 
         /**************
          * Destructor *
@@ -20,18 +19,21 @@ class MainDialog : public Dialog
         /********************
          * Public Functions *
          ********************/
-        void SetScene(Scene* scene);
+        void SetSceneContext(void* context);
+        void SetLoadCallback(void (*callback)(void* context, const std::string& fileName));
 
     private:
         /*********************
          * Private Variables *
          *********************/
-        Scene* scene;
+        void (*loadCallback)(void* context, const std::string& fileName);
+        void* sceneContext;
 
         /*********************
          * Private Functions *
          *********************/
         void Create();
+        void OpenLoadDialog();
 };
 
 #endif
