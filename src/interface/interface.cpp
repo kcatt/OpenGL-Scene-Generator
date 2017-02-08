@@ -13,7 +13,8 @@ Interface::Interface(nanogui::Screen* screen)
 
 Interface::~Interface()
 {
-    delete mainDialog;
+    if (mainDialog != NULL)
+        delete mainDialog;
 }
 
 MainDialog* Interface::GetMainDialog()

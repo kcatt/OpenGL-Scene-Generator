@@ -53,8 +53,15 @@ class Scene
         void SetExportFileName(const std::string& fileName);
         void Export(const std::string& fileName);
         void Export();
+        void Insert(SceneObject* newObject);
         void SetUpMainDialog();
+
+        /********************
+         * Static Functions *
+         ********************/
         static void ReadFunctionForwarder(void* context, const std::string& fileName);
+        static void ExportFunctionForwarder(void* context, const std::string& fileName);
+        static void InsertFunctionForwarder(void* context, SceneObject* newObject);
 
         /*******************
          * Public Variable *

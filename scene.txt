@@ -4,5 +4,6 @@ diffuse .780 .569 .113
 specular .992 .941 .808
 specularExponent 1
 
-push translate 1 0 0 cube pop
-push rotate 100 0 0 1 rotate -90 1 0 0 taperedCylinder 0 pop
+!push translate 1 0 0 cube pop
+!push rotate 100 0 0 1 rotate -90 1 0 0 taperedCylinder 0 pop
+!push scale .02 .05 .02 mesh dome1.3vn pop

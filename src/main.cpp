@@ -9,10 +9,7 @@
 #include "shader.h"
 #include "camera.h"
 #include "vector3.h"
-#include "light.h"
 #include "scene.h"
-
-#include "main_dialog.h"
 
 using namespace std;
 using namespace nanogui;
@@ -138,8 +135,6 @@ int main(int argc, char* argv[])
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
 
-    //scene.ReadFile("autosave_scene.txt");
-    //scene.Export();
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
     
@@ -171,6 +166,10 @@ int main(int argc, char* argv[])
     }
 
     delete cam;
+    delete screen;
+
+    nanogui::shutdown();
+
     glfwTerminate();
     return 0;
 }

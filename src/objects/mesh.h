@@ -30,7 +30,9 @@ class Mesh
         void Create(const std::vector<Vector3>& vertexVector);
         void Draw();
         void SetUpGL();
-        void SetRenderMode(RenderMode m );
+        void SetRenderMode(RenderMode m);
+        void SetGLArrays(Vector3* vertices, Vector3* normals, size_t numVerts, size_t numNorms,
+                         const std::vector<int>& vertIndices, const std::vector<int>& normIndices);
 
     private:
         /*********************

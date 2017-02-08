@@ -3,6 +3,7 @@
 
 #include "scene_object.h"
 #include "mesh.h"
+
 class Cube : public SceneObject
 {
     public:

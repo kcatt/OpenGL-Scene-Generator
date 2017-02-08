@@ -5,6 +5,7 @@
 #include "cube.h"
 #include "sphere.h"
 #include "tapered_cylinder.h"
+#include "mesh_3vn.h"
 
 Scene::Scene() {
     currMaterial.SetDefault();
@@ -400,13 +401,13 @@ bool Scene::GetObject(void)
                         break;
                     case SQUARE:
                         newObject = new Square;
-                        break;
+                        break;*/
                     case MESH: 
                     {
-                        string fname = nexttoken();
-                        newObject = new Mesh(fname);
+                        std::string fname = NextToken();
+                        newObject = new Mesh3VN(fname);
                         break;
-                    }// end of case: MESH*/
+                    }// end of case: MESH
                     default: 
                     {
                         std::cerr << "Line " << nextLine
@@ -478,6 +479,20 @@ void Scene::Export()
     Export(fileName);
 }
 
+void Scene::Insert(SceneObject* newObject)
+{
+    Material  newMat;
+    Transform newTransf;
+
+    // common things to do to all Shape
+    ((SceneObject*)newObject)->material.Set(newMat);
+    // load transform
+    ((SceneObject*)newObject)->transform = newTransf;
+    ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
+    
+    objects.push_back(newObject);
+}
+
 void Scene::SetUpMainDialog()
 {
     if (interface == NULL)
@@ -485,11 +500,23 @@ void Scene::SetUpMainDialog()
      
     interface->GetMainDialog()->SetSceneContext(this);
     interface->GetMainDialog()->SetLoadCallback(ReadFunctionForwarder);
+    interface->GetMainDialog()->SetSaveCallback(ExportFunctionForwarder);
+    interface->GetMainDialog()->SetInsertCallback(InsertFunctionForwarder);
 }
 
 void Scene::ReadFunctionForwarder(void* context, const std::string& fileName)
 {
     static_cast<Scene*>(context)->ReadFile(fileName);
+}
+
+void Scene::ExportFunctionForwarder(void* context, const std::string& fileName)
+{
+    static_cast<Scene*>(context)->Export(fileName);
+}
+
+void Scene::InsertFunctionForwarder(void* context, SceneObject* newObject)
+{
+    static_cast<Scene*>(context)->Insert(newObject);
 }
 
 void Scene::SetBackground(const Color3& color)

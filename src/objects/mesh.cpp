@@ -90,9 +90,32 @@ void Mesh::SetUpGL()
     glBindVertexArray(0);
 }
 
-void Mesh::SetRenderMode(RenderMode m )
+void Mesh::SetRenderMode(RenderMode m)
 {
     mode = m;
+}
+
+void Mesh::SetGLArrays(Vector3* vertices, Vector3* normals, size_t numVerts, size_t numNorms,
+                         const std::vector<int>& vertIndices, const std::vector<int>& normIndices)
+{
+    for (size_t i = 0; i < numVerts; i++)
+    {
+        reducedGLArray.push_back(vertices[i].x);
+        reducedGLArray.push_back(vertices[i].y);
+        reducedGLArray.push_back(vertices[i].z);
+
+        reducedGLArray.push_back(normals[i].x);
+        reducedGLArray.push_back(normals[i].y);
+        reducedGLArray.push_back(normals[i].z);
+    }
+
+    indexVec.resize(vertIndices.size() * 2);
+
+    for (size_t i = 0; i < vertIndices.size(); i++)
+    {
+        indexVec[i]   = vertIndices[i];
+        indexVec[i+3] = normIndices[i];
+    }   
 }
 
 void Mesh::GenerateNormals()
