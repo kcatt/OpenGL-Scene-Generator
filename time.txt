@@ -25,3 +25,4 @@
 1/31/2017|6|Continued work on adding dialogs. Had to change the library being used and change from using GLEW to GLAD.
 2/5/2017|6|Added in native file dialog support and worked on getting function callbacks figured out.
 2/7/2017|5|Added support for 3vn (mesh) files and mostly finished main dialog.
+2/18/2017|3|Added in tapered cylinder dialog and began work on attributes dialog.

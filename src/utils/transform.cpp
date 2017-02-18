@@ -238,19 +238,6 @@ void Transform::ApplyTransform()
     affine.PreMultiply(rotationMat);
     invAffine.PostMultiply(invRotation);
 
-    Mat4x4 translate;
-    Mat4x4 invTrans;
-    translate.matrix[0][3] = position.x;
-    translate.matrix[1][3] = position.y;
-    translate.matrix[2][3] = position.z;
-
-    invTrans.matrix[0][3] = -position.x;
-    invTrans.matrix[1][3] = -position.y;
-    invTrans.matrix[2][3] = -position.z;
-
-    affine.PreMultiply(translate);
-    invAffine.PostMultiply(invTrans);
-
     Mat4x4 scaleMat;
     Mat4x4 invScale;
     
@@ -270,6 +257,19 @@ void Transform::ApplyTransform()
 
     affine.PreMultiply(scaleMat);
     invAffine.PostMultiply(invScale);
+
+    Mat4x4 translate;
+    Mat4x4 invTrans;
+    translate.matrix[0][3] = position.x;
+    translate.matrix[1][3] = position.y;
+    translate.matrix[2][3] = position.z;
+
+    invTrans.matrix[0][3] = -position.x;
+    invTrans.matrix[1][3] = -position.y;
+    invTrans.matrix[2][3] = -position.z;
+
+    affine.PreMultiply(translate);
+    invAffine.PostMultiply(invTrans);
 }
 
 void Transform::CheckRotation()

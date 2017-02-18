@@ -12,7 +12,6 @@ class Interface
         /***************
          * Constructor *
          ***************/
-        Interface();
         Interface(nanogui::Screen* screen);
 
         /**************
@@ -36,6 +35,7 @@ class Interface
          *********************/
         MainDialog* mainDialog;
         std::vector<Dialog> dialogs;
+        nanogui::FormHelper* formHelper;
 };
 
 #endif

@@ -8,9 +8,12 @@
 #include "tapered_cylinder.h"
 #include "mesh_3vn.h"
 
-MainDialog::MainDialog(nanogui::Screen* screen, int posX, int posY) : Dialog(screen, "Main", posX, posY)
+MainDialog::MainDialog(nanogui::FormHelper* formHelper, int posX, int posY) : Dialog(formHelper, "Main", posX, posY)
 {
     Create();
+
+    taperedCylinderDialog = new TaperedCylinderDialog(formHelper, [this]{ Insert("TaperedCylinder"); });
+    taperedCylinderDialog->Hide();
 }
 
 MainDialog::~MainDialog()
@@ -26,7 +29,7 @@ void MainDialog::Create()
     AddGroup("Insert");
     AddButton("Cube", [this]{ Insert("Cube"); });
     AddButton("Sphere", [this]{ Insert("Sphere"); });
-    AddButton("Tapered Cylinder", [this]{ Insert("TaperedCylinder"); });
+    AddButton("Tapered Cylinder", [this]{ Insert("Cylinder"); });
     AddButton("Import 3VN Mesh", [this]{ Insert("Mesh"); });
 }
 
@@ -96,11 +99,17 @@ void MainDialog::Insert(const std::string& objType)
     {
         newObject = new Sphere;
     }
+    else if (objType == "Cylinder")
+    {
+        taperedCylinderDialog->Show();
+        return;
+    }
     else if (objType == "TaperedCylinder")
     {
-        //newObject = new TaperedCylinder;
-
-        /* TODO Add special dialog */
+        newObject = new TaperedCylinder;
+        ((TaperedCylinder*)newObject)->SetTopRadius(taperedCylinderDialog->cylinderRadius);
+        ((TaperedCylinder*)newObject)->Generate();
+        taperedCylinderDialog->Hide();
     }
     else if (objType == "Mesh")
     {

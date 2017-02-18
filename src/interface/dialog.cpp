@@ -1,41 +1,50 @@
 #include "dialog.h"
 
-Dialog::Dialog(nanogui::Screen* screen, const std::string& windowLabel, int posX, int posY)
+Dialog::Dialog(nanogui::FormHelper* helper, const std::string& windowLabel, int posX, int posY)
 {
-    SetScreen(screen);
+    formHelper = helper;
+    window = formHelper->addWindow(Eigen::Vector2i(posX, posY), windowLabel);
+}
 
-    gui = new nanogui::FormHelper(screen);
-    window = gui->addWindow(Eigen::Vector2i(posX, posY), windowLabel);
+Dialog::Dialog(nanogui::FormHelper* helper, const std::string& windowLabel)
+{
+    formHelper = helper;
+    window = formHelper->addWindow(Eigen::Vector2i(0, 0), windowLabel);
+    window->center();
 }
 
 Dialog::~Dialog()
 {
-    if (gui != NULL)
-        delete gui;
-}
-
-void Dialog::SetScreen(nanogui::Screen* screen)
-{
-    this->screen = screen;
+    
 }
 
 // These are just wrapper functions provided to simplify the creation of dialogs
 void Dialog::AddGroup(const std::string& caption)
 {
-    gui->addGroup(caption);
+    formHelper->addGroup(caption);
 }
 
 void Dialog::AddButton(const std::string& label, const std::function<void()>& callback)
 {
-    gui->addButton(label, callback);
+    formHelper->addButton(label, callback);
 }
 
 void Dialog::AddVariable(const std::string& label, const std::function<void(const GLfloat&)>& setter, const std::function<GLfloat()>& getter)
 {
-    gui->addVariable(label, setter, getter, true);
+    formHelper->addVariable(label, setter, getter, true);
 }
 
 void Dialog::AddVariable(const std::string& label, GLfloat& value)
 {
-    gui->addVariable(label, value, true);
+    formHelper->addVariable(label, value, true);
+}
+
+void Dialog::Hide()
+{
+    window->setVisible(false);
+}
+
+void Dialog::Show()
+{
+    window->setVisible(true);
 }
