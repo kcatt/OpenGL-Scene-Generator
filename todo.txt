@@ -1,2 +1,7 @@
 1. Improve efficiency of model-view-projection matrix by doing the multiplication outside shader
-2. 
+   a. Use observer pattern.
+2. Find a way to make the camera not roll when moving around with mouse.
+3. Add in support for 'def { }' and 'use' in the SDL file.
+4. Documentation
+5. Insert objects some distance immediately in front of the camera
+6. 
