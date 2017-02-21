@@ -4,6 +4,7 @@
 #include <vector>
 #include "dialog.h"
 #include "main_dialog.h"
+#include "attributes_dialog.h"
 #include <nanogui/nanogui.h>
 
 class Interface 
@@ -23,6 +24,8 @@ class Interface
          * Public Function *
          *******************/
         MainDialog* GetMainDialog();
+        void Disable();
+        void Enable();
 
         /********************
          * Public Variables *
@@ -36,6 +39,7 @@ class Interface
         MainDialog* mainDialog;
         std::vector<Dialog> dialogs;
         nanogui::FormHelper* formHelper;
+        bool enabled = true;
 };
 
 #endif

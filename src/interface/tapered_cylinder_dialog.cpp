@@ -1,7 +1,7 @@
 #include "tapered_cylinder_dialog.h"
 #include <iostream>
 
-TaperedCylinderDialog::TaperedCylinderDialog(nanogui::FormHelper* formHelper, const std::function<void()>& callback) : Dialog(formHelper, "Tapered Cylinder Insert")
+TaperedCylinderDialog::TaperedCylinderDialog(nanogui::Screen* screen, const std::function<void()>& callback) : Dialog(screen, "Tapered Cylinder Insert")
 {
     cylinderRadius = 1;
     Create(callback);

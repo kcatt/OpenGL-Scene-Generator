@@ -67,6 +67,7 @@ class Scene
          * Public Variable *
          *******************/
         Interface* interface = NULL;
+        Color3     backgroundColor; 
 
     private:
         /*********************
@@ -75,7 +76,6 @@ class Scene
         int currLine;
         int nextLine;
         Light   light;
-        Color3  backgroundColor; 
         Color3  ambientColor;
         Transform   currTransform;
         Material    currMaterial;

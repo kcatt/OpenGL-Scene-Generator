@@ -6,6 +6,7 @@
 #include "sphere.h"
 #include "tapered_cylinder.h"
 #include "mesh_3vn.h"
+#include "main_dialog.h"
 
 Scene::Scene() {
     currMaterial.SetDefault();
@@ -498,10 +499,12 @@ void Scene::SetUpMainDialog()
     if (interface == NULL)
         return;
      
-    interface->GetMainDialog()->SetSceneContext(this);
-    interface->GetMainDialog()->SetLoadCallback(ReadFunctionForwarder);
-    interface->GetMainDialog()->SetSaveCallback(ExportFunctionForwarder);
-    interface->GetMainDialog()->SetInsertCallback(InsertFunctionForwarder);
+    MainDialog* mainDialog = interface->GetMainDialog();
+    mainDialog->SetSceneContext(this);
+    mainDialog->SetLoadCallback(ReadFunctionForwarder);
+    mainDialog->SetSaveCallback(ExportFunctionForwarder);
+    mainDialog->SetInsertCallback(InsertFunctionForwarder);
+    mainDialog->SetAttributesPointers(&(light.GetPosition()), &(light.GetColor()), &ambientColor, &backgroundColor);
 }
 
 void Scene::ReadFunctionForwarder(void* context, const std::string& fileName)

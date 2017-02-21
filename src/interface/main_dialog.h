@@ -5,6 +5,9 @@
 #include "dialog.h"
 #include "scene_object.h"
 #include "tapered_cylinder_dialog.h"
+#include "attributes_dialog.h"
+#include "vector3.h"
+#include "color3.h"
 
 class MainDialog : public Dialog
 {
@@ -12,7 +15,7 @@ class MainDialog : public Dialog
         /***************
          * Constructor *
          ***************/
-        MainDialog(nanogui::FormHelper* formHelper, int posX, int posY);
+        MainDialog(nanogui::Screen* screen, int posX, int posY);
 
         /**************
          * Destructor *
@@ -26,6 +29,7 @@ class MainDialog : public Dialog
         void SetLoadCallback   (void (*callback)(void* context, const std::string& fileName));
         void SetSaveCallback   (void (*callback)(void* context, const std::string& fileName));
         void SetInsertCallback (void (*callback)(void* context, SceneObject* newObject));
+        void SetAttributesPointers(Vector3* lightPosition, Color3* lightColor, Color3* ambientColor, Color3* backgroundColor);
 
     private:
         /*********************
@@ -36,6 +40,7 @@ class MainDialog : public Dialog
         void (*insertCallback)(void* context, SceneObject* newObject);
         void* sceneContext;
         TaperedCylinderDialog* taperedCylinderDialog;
+        AttributesDialog* attributesDialog;
 
         /*********************
          * Private Functions *

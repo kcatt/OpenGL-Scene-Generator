@@ -115,8 +115,6 @@ int main(int argc, char* argv[])
     Shader shader(argv[1], argv[2]);
     Scene  scene;
 
-    scene.interface = new Interface(screen);
-    scene.SetUpMainDialog();
     scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
@@ -135,6 +133,9 @@ int main(int argc, char* argv[])
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
 
+    scene.interface = new Interface(screen);
+    scene.SetUpMainDialog();
+
     cam = new Camera(viewMat, projectionMat);
     Vector3 cPos = cam->GetPosition();
     
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
         glfwPollEvents();
         HandleMouseMovement();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1);
+        glClearColor(scene.backgroundColor.r, scene.backgroundColor.g, scene.backgroundColor.b, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.Use();

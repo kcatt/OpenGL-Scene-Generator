@@ -1,16 +1,19 @@
 #include "dialog.h"
 
-Dialog::Dialog(nanogui::FormHelper* helper, const std::string& windowLabel, int posX, int posY)
+Dialog::Dialog(nanogui::Screen* screen, const std::string& windowLabel, int posX, int posY)
 {
-    formHelper = helper;
-    window = formHelper->addWindow(Eigen::Vector2i(posX, posY), windowLabel);
+    window = new nanogui::Window(screen, windowLabel);
+    window->setPosition(Eigen::Vector2i(posX, posY));
+    window->setLayout(new nanogui::GroupLayout());
+    layoutWidget = window;
 }
 
-Dialog::Dialog(nanogui::FormHelper* helper, const std::string& windowLabel)
+Dialog::Dialog(nanogui::Screen* screen, const std::string& windowLabel)
 {
-    formHelper = helper;
-    window = formHelper->addWindow(Eigen::Vector2i(0, 0), windowLabel);
+    window = new nanogui::Window(screen, windowLabel);
+    window->setLayout(new nanogui::GroupLayout());
     window->center();
+    layoutWidget = window;
 }
 
 Dialog::~Dialog()
@@ -21,22 +24,54 @@ Dialog::~Dialog()
 // These are just wrapper functions provided to simplify the creation of dialogs
 void Dialog::AddGroup(const std::string& caption)
 {
-    formHelper->addGroup(caption);
+    // The pointer doesn't need to be stored because it will be automatically freed at
+    // the deletion of the parent window
+    new nanogui::Label(window, caption, "sans-bold");
+    layoutWidget = window;
 }
 
 void Dialog::AddButton(const std::string& label, const std::function<void()>& callback)
 {
-    formHelper->addButton(label, callback);
+    nanogui::Button* button = new nanogui::Button(layoutWidget, label);
+    button->setCallback(callback);
+    button->setFixedHeight(25);
+    button->setFontSize(18);
 }
 
 void Dialog::AddVariable(const std::string& label, const std::function<void(const GLfloat&)>& setter, const std::function<GLfloat()>& getter)
 {
-    formHelper->addVariable(label, setter, getter, true);
+    new nanogui::Label(layoutWidget, label);
+    nanogui::FloatBox<GLfloat>* variableBox = new nanogui::FloatBox<GLfloat>(layoutWidget);
+    
+    auto refresh = [variableBox, getter] {
+        GLfloat value = getter();
+        GLfloat current = variableBox->value();
+        if (value != current)
+            variableBox->setValue(value);
+    };
+    refresh();
+
+    refreshCallbacks.push_back(refresh);
+
+    variableBox->setCallback(setter);
+    variableBox->setEditable(true);
 }
 
 void Dialog::AddVariable(const std::string& label, GLfloat& value)
 {
-    formHelper->addVariable(label, value, true);
+    AddVariable(label, [&](const GLfloat& val) { value = val; }, [&]() -> GLfloat { return value; });
+}
+
+void Dialog::SetLayout(nanogui::Orientation orientation, nanogui::Alignment align, int margin, int spacing)
+{
+    widget = new nanogui::Widget(window);
+    widget->setLayout(new nanogui::BoxLayout(orientation, align, margin, spacing));
+    layoutWidget = widget;
+}
+
+void Dialog::ClearLayout()
+{
+    layoutWidget = window;
 }
 
 void Dialog::Hide()
@@ -47,4 +82,10 @@ void Dialog::Hide()
 void Dialog::Show()
 {
     window->setVisible(true);
+}
+
+void Dialog::Refresh()
+{
+    for (auto const &callback : refreshCallbacks)
+        callback();
 }

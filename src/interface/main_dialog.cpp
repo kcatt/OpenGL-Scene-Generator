@@ -8,12 +8,15 @@
 #include "tapered_cylinder.h"
 #include "mesh_3vn.h"
 
-MainDialog::MainDialog(nanogui::FormHelper* formHelper, int posX, int posY) : Dialog(formHelper, "Main", posX, posY)
+MainDialog::MainDialog(nanogui::Screen* screen, int posX, int posY) : Dialog(screen, "Main", posX, posY)
 {
     Create();
 
-    taperedCylinderDialog = new TaperedCylinderDialog(formHelper, [this]{ Insert("TaperedCylinder"); });
+    taperedCylinderDialog = new TaperedCylinderDialog(screen, [this]{ Insert("TaperedCylinder"); });
     taperedCylinderDialog->Hide();
+
+    attributesDialog = new AttributesDialog(screen);
+    attributesDialog->Hide();
 }
 
 MainDialog::~MainDialog()
@@ -25,7 +28,7 @@ void MainDialog::Create()
 {
     AddButton("Load SDL File", [this]{ OpenLoadDialog(); });
     AddButton("Save SDL File", [this]{ OpenSaveDialog(); });
-    AddButton("Global Attributes", []{ std::cout << "Global attributes..." << std::endl; });
+    AddButton("Global Attributes", [this]{ attributesDialog->Show(); });
     AddGroup("Insert");
     AddButton("Cube", [this]{ Insert("Cube"); });
     AddButton("Sphere", [this]{ Insert("Sphere"); });
@@ -51,6 +54,16 @@ void MainDialog::SetSaveCallback(void (*callback)(void* context, const std::stri
 void MainDialog::SetInsertCallback(void (*callback)(void* context, SceneObject* newObject))
 {
     insertCallback = callback;
+}
+
+void MainDialog::SetAttributesPointers(Vector3* lightPosition, Color3* lightColor, Color3* ambientColor, Color3* backgroundColor)
+{
+    attributesDialog->lightPosition   = lightPosition;
+    attributesDialog->lightColor      = lightColor;
+    attributesDialog->ambientColor    = ambientColor;
+    attributesDialog->backgroundColor = backgroundColor;
+
+    attributesDialog->Refresh();
 }
 
 void MainDialog::OpenLoadDialog()

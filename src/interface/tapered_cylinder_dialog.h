@@ -11,7 +11,7 @@ class TaperedCylinderDialog : public Dialog
         /***************
          * Constructor *
          ***************/
-        TaperedCylinderDialog(nanogui::FormHelper* formHelper, const std::function<void()>& callback);
+        TaperedCylinderDialog(nanogui::Screen* screen, const std::function<void()>& callback);
 
         /********************
          * Public Variables *

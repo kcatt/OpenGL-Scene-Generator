@@ -17,9 +17,9 @@ class Light
          * Public Function *
          *******************/
         void SetColor(const Color3& color);
-        Color3 GetColor();
+        Color3& GetColor();
         void SetPosition(const Vector3& position);
-        Vector3 GetPosition();
+        Vector3& GetPosition();
 
     private:
         /*********************

@@ -3,6 +3,8 @@
 
 #include <nanogui/nanogui.h>
 #include "dialog.h"
+#include "vector3.h"
+#include "color3.h"
 
 class AttributesDialog : public Dialog
 {
@@ -10,7 +12,7 @@ class AttributesDialog : public Dialog
         /***************
          * Constructor *
          ***************/
-        AttributesDialog(nanogui::FormHelper* formHelper);
+        AttributesDialog(nanogui::Screen* screen);
 
         /**************
          * Destructor *
@@ -20,10 +22,10 @@ class AttributesDialog : public Dialog
         /********************
          * Public Variables *
          ********************/
-        Vector3 lightPosition;
-        Color3  lightColor;
-        Color3  ambientColor;
-        Color3  backgroundColor;
+        Vector3* lightPosition;
+        Color3*  lightColor;
+        Color3*  ambientColor;
+        Color3*  backgroundColor;
 
     private:
         /*********************

@@ -10,8 +10,8 @@ class Dialog
         /***************
          * Constructor *
          ***************/
-        Dialog(nanogui::FormHelper* helper, const std::string& windowLabel, int posX, int posY);
-        Dialog(nanogui::FormHelper* helper, const std::string& windowLabel);
+        Dialog(nanogui::Screen* helper, const std::string& windowLabel, int posX, int posY);
+        Dialog(nanogui::Screen* helper, const std::string& windowLabel);
 
         /**************
          * Destructor *
@@ -26,16 +26,22 @@ class Dialog
         void AddButton(const std::string& label, const std::function<void()>& callback);
         void AddVariable(const std::string& label, const std::function<void(const GLfloat&)>& setter, const std::function<GLfloat()>& getter);
         void AddVariable(const std::string& label, GLfloat& value);
+        void SetLayout(nanogui::Orientation orientation, nanogui::Alignment align, int margin = 0, int spacing = 0);
+        void ClearLayout();
         void Hide();
         void Show();
+        void Refresh();
 
     protected:
         /**********************
          * Protected Variable *
          **********************/
-        nanogui::FormHelper* formHelper;
+        bool useLayout;
+        nanogui::Screen* screen;
+        nanogui::Widget* widget;
+        nanogui::Widget* layoutWidget;
         nanogui::ref<nanogui::Window> window;
-        nanogui::FormHelper *gui;
+        std::vector<std::function<void()>> refreshCallbacks;
 };
 
 #endif
