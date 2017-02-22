@@ -4,4 +4,4 @@
 3. Add in support for 'def { }' and 'use' in the SDL file.
 4. Documentation
 5. Insert objects some distance immediately in front of the camera
-6. 
+6. Implement teapot and plane

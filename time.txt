@@ -29,3 +29,4 @@
 2/18/2017|3|Added in tapered cylinder dialog and began work on attributes dialog.
 2/19/2017|.5|Wrote up the progress report for the project.
 2/20/2017|4|Modified dialog class to be more robust and finished attributes dialog.
+2/21/2017|3.5|Researching methods for detecting intersection with an object.
