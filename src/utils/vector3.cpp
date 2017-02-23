@@ -24,6 +24,14 @@ Vector3 operator*(GLfloat scalar, const Vector3& rhs)
     return retVal;
 }
 
+Vector3 operator*(const Mat4x4& matrix, const Vector3& rhs)
+{
+    GLfloat vectorArr[4] = { rhs.x, rhs.y, rhs.z, 1.0f };
+    Vector3 retVal;
+
+    //retVal.x = 
+}
+
 Vector3 operator+(const Vector3& lhs, const Vector3& rhs)
 {
     Vector3 retVal(lhs);

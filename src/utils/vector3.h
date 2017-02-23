@@ -45,6 +45,7 @@ class Vector3
          ********************/
         friend Vector3 operator*(const Vector3& lhs, GLfloat scalar);
         friend Vector3 operator*(GLfloat scalar, const Vector3& rhs);
+        friend Vector3 operator*(const Mat4x4& matrix, const Vector3& rhs);
         friend Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
         friend Vector3 operator-(const Vector3& lhs, const Vector3& rhs);
         friend std::ostream& operator<<(std::ostream& out, const Vector3& v);
