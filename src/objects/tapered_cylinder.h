@@ -16,8 +16,11 @@ class TaperedCylinder : public SceneObject
         /**************
         * Destructor *
         **************/
-        ~TaperedCylinder() { }
-
+        ~TaperedCylinder() 
+        { 
+            if (boundBox != NULL)
+                delete boundBox;
+        }
 
         /**********************
         * Overloaded Function *

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "vector3.h"
+#include "transform.h"
 
 class AABB
 {
@@ -18,11 +19,13 @@ class AABB
          ********************/
         void Generate(const std::vector<Vector3>& vertices);
         void Generate(const Vector3& minExtents, const Vector3& maxExtents);
-        void Recalculate();
+        void RecalculateFromTransform();
+
         /********************
          * Public Variables *
          ********************/
-        Transform transform;
+        // Pointer to the object's transform
+        Transform* transform;
 
     private:
         /*********************

@@ -15,7 +15,11 @@ class Cube : public SceneObject
         /**************
          * Destructor *
          **************/
-        ~Cube() { }
+        ~Cube() 
+        { 
+            if (boundBox != NULL)
+                delete boundBox;
+        }
 
 
         /***********************

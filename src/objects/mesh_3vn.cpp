@@ -45,6 +45,9 @@ void Mesh3VN::Free()
 {
     delete [] points; // release whole vertex list
     delete [] normals;
+
+    if (boundBox != NULL)
+        delete boundBox;
 }
 
 bool Mesh3VN::IsEmpty()
@@ -129,6 +132,10 @@ void Mesh3VN::ReadMesh(const std::string & file)
     }
 
     input.close();
+
+    std::vector<Vector3> vertVec(points, points + numVerts);
+    boundBox = new AABB(vertVec);
+    boundBox->transform = &transform;
 
     SetUpMesh();
 }

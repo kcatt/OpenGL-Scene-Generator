@@ -31,3 +31,4 @@
 2/20/2017|4|Modified dialog class to be more robust and finished attributes dialog.
 2/21/2017|3.5|Researching methods for detecting intersection with an object.
 2/22/2017|2.5|More reasearch on intersection methods and started work on implementing AABB method.
+2/23/2017|1.5|Finished AABB implementation and started on RayCast implementation.

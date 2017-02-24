@@ -50,12 +50,18 @@ void TaperedCylinder::SetTopRadius(GLfloat radius)
 
 void TaperedCylinder::Generate()
 {
+    if (generated && boundBox != NULL)
+        delete boundBox;
+    
     generated = true;
 
     GenerateBase();
     GenerateTop();
     GenerateSides();
     GenerateCompleteMesh();
+
+    boundBox = new AABB(vertVector);
+    boundBox->transform = &transform;
 
     mesh.Create(vertVector);
     mesh.SetUpGL();

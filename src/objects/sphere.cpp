@@ -6,6 +6,8 @@
 Sphere::Sphere()
 {
     SetUpSphere();
+    boundBox = new AABB(vertVector);
+    boundBox->transform = &transform;    
 
     type = "sphere";
 }

@@ -15,7 +15,11 @@ class Sphere : public SceneObject
         /**************
          * Destructor *
          **************/
-        ~Sphere() { }
+        ~Sphere() 
+        { 
+            if (boundBox != NULL)
+                delete boundBox;
+        }
 
         /***********************
          * Overloaded Function *

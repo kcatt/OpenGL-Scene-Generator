@@ -9,6 +9,7 @@
 #include "material.h"
 #include "vector3.h"
 #include "mesh.h"
+#include "aabb.h"
 
 class SceneObject
 {
@@ -20,8 +21,8 @@ class SceneObject
          ********************/
         Transform transform;
         Material  material;
-
-        Mesh     mesh;
+        AABB*     boundBox = NULL;
+        Mesh      mesh;
 
         std::string type;
 

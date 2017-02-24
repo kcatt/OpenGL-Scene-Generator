@@ -9,7 +9,7 @@ AABB::AABB(const AABB& aabb)
 
     for (int i = 0; i < 8; i++)
     {
-        vertices[i] = aabb.vertices;
+        vertices[i] = aabb.vertices[i];
     }
 }
 
@@ -58,7 +58,14 @@ void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
     center.Set((maxExtents.x + minExtents.x)/2.0f, (maxExtents.y + minExtents.y)/2.0f, (maxExtents.z + minExtents.z)/2.0f);
 }
 
-void AABB::Recalculate()
+void AABB::RecalculateFromTransform()
 {
+    for (int i = 0; i < 8; i++)
+    {
+        vertices[i] = transform->affine * vertices[i];
+    }
 
+    std::vector<Vector3> boxVec(vertices, vertices + 8);
+
+    Generate(boxVec);
 }

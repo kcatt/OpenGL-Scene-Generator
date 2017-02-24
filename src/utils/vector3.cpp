@@ -29,7 +29,20 @@ Vector3 operator*(const Mat4x4& matrix, const Vector3& rhs)
     GLfloat vectorArr[4] = { rhs.x, rhs.y, rhs.z, 1.0f };
     Vector3 retVal;
 
-    //retVal.x = 
+    retVal.x = matrix.matrix[0][0] * vectorArr[0] + 
+               matrix.matrix[0][1] * vectorArr[1] + 
+               matrix.matrix[0][2] * vectorArr[2] +
+               matrix.matrix[0][3];
+    retVal.y = matrix.matrix[1][0] * vectorArr[0] + 
+               matrix.matrix[1][1] * vectorArr[1] + 
+               matrix.matrix[1][2] * vectorArr[2] +
+               matrix.matrix[1][3];
+    retVal.z = matrix.matrix[2][0] * vectorArr[0] + 
+               matrix.matrix[2][1] * vectorArr[1] + 
+               matrix.matrix[2][2] * vectorArr[2] +
+               matrix.matrix[2][3];
+
+    return retVal;     
 }
 
 Vector3 operator+(const Vector3& lhs, const Vector3& rhs)

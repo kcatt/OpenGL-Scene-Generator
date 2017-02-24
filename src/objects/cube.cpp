@@ -47,6 +47,9 @@ Cube::Cube()
         Vector3(-1.0f,  1.0f, -1.0f)
     };
 
+    boundBox = new AABB(vertVec);
+    boundBox->transform = &transform;
+
     mesh.Create(vertVec);
     mesh.SetUpGL();
 
