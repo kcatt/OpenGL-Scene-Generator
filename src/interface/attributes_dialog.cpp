@@ -3,7 +3,10 @@
 
 AttributesDialog::AttributesDialog(nanogui::Screen* screen) : Dialog(screen, "Global Attributes")
 {
-    Create();
+    lightPosition   = NULL;
+    lightColor      = NULL;
+    ambientColor    = NULL;
+    backgroundColor = NULL;
 }
 
 void AttributesDialog::Create()

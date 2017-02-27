@@ -63,6 +63,7 @@ void MainDialog::SetAttributesPointers(Vector3* lightPosition, Color3* lightColo
     attributesDialog->ambientColor    = ambientColor;
     attributesDialog->backgroundColor = backgroundColor;
 
+    attributesDialog->Create();
     attributesDialog->Refresh();
 }
 

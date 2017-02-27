@@ -19,24 +19,18 @@ class AttributesDialog : public Dialog
          **************/
         ~AttributesDialog();
 
+        /*******************
+         * Public Function *
+         *******************/
+        void Create();
+
         /********************
          * Public Variables *
          ********************/
         Vector3* lightPosition;
         Color3*  lightColor;
         Color3*  ambientColor;
-        Color3*  backgroundColor;
-
-    private:
-        /*********************
-         * Private Variables *
-         *********************/
-        
-
-        /*********************
-         * Private Functions *
-         *********************/
-        void Create();
+        Color3*  backgroundColor;        
 };
 
 #endif

@@ -3,7 +3,6 @@
 Interface::Interface(nanogui::Screen* screen)
 {
     this->screen = screen;
-    formHelper = new nanogui::FormHelper(screen);
     mainDialog = new MainDialog(screen, 10, 10);
 }
 
