@@ -2,6 +2,7 @@
 #include <iterator>
 #include "sphere.h"
 #include <iostream>
+#include <cmath>
 
 Sphere::Sphere()
 {
