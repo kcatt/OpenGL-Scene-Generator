@@ -151,6 +151,31 @@ void Vector3::Set(const Vector3& v)
     this->z = v.z;
 }
 
+Vector3 Vector3::MatMultiply(const Mat4x4& mat, bool homogenous)
+{
+    if (homogenous)
+    {
+        return mat * *this;
+    }
+    else
+    {   
+        GLfloat vectorArr[4] = { x, y, z, 0.0f };
+        Vector3 retVal;
+
+        retVal.x = mat.matrix[0][0] * vectorArr[0] + 
+                   mat.matrix[0][1] * vectorArr[1] + 
+                   mat.matrix[0][2] * vectorArr[2];
+        retVal.y = mat.matrix[1][0] * vectorArr[0] + 
+                   mat.matrix[1][1] * vectorArr[1] + 
+                   mat.matrix[1][2] * vectorArr[2];
+        retVal.z = mat.matrix[2][0] * vectorArr[0] + 
+                   mat.matrix[2][1] * vectorArr[1] + 
+                   mat.matrix[2][2] * vectorArr[2];
+
+        return retVal; 
+    }
+}
+
 Vector3 Vector3::Cross(const Vector3& lhs, const Vector3& rhs)
 {
     return Vector3(lhs.y*rhs.z - lhs.z*rhs.y,

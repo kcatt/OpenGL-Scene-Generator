@@ -34,6 +34,7 @@ class Vector3
         void    Normalize();
         void    Set(GLfloat x, GLfloat y, GLfloat z);
         void    Set(const Vector3& v);
+        Vector3 MatMultiply(const Mat4x4& mat, bool homogenous);
         
         /********************
          * Static Functions *

@@ -33,3 +33,5 @@
 2/22/2017|2.5|More reasearch on intersection methods and started work on implementing AABB method.
 2/23/2017|1.5|Finished AABB implementation and started on RayCast implementation.
 2/26/2017|3|Making the project easier to compile on other 64-bit machines.
+3/1/2017|.5|Updating Dr. Morse on status of project and showing him a a demo.
+3/4/2017|4|Working on being able to convert from screen coordinates to world coordinates.

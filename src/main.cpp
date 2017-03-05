@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "vector3.h"
 #include "scene.h"
+#include "ray_cast.h"
 
 using namespace std;
 using namespace nanogui;
@@ -104,6 +105,7 @@ int main(int argc, char* argv[])
         [](GLFWwindow *, int count, const char **filenames) {
             screen->dropCallbackEvent(count, filenames);
         }
+
     );
 
     glfwSetFramebufferSizeCallback(window,
@@ -137,6 +139,7 @@ int main(int argc, char* argv[])
     scene.SetUpMainDialog();
 
     cam = new Camera(viewMat, projectionMat);
+    cam->SetShape(45.0f, 800.0f, 600.0f, 0.1f, 200.0f);
     Vector3 cPos = cam->GetPosition();
     
     while (!glfwWindowShouldClose(window))
@@ -201,6 +204,16 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
             middleHeld = true;
         else if (action == GLFW_RELEASE)
             middleHeld = false;
+    }
+    else if (button == GLFW_MOUSE_BUTTON_LEFT)
+    {
+        double xPos, yPos;
+        glfwGetCursorPos(window, &xPos, &yPos);
+        Vector3 dir = cam->GetPosition() - cam->MouseToWorld(xPos, yPos);
+
+        dir = dir - cam->GetPosition();
+
+        RayCast ray(cam->GetPosition(), dir);
     }
 
     screen->mouseButtonCallbackEvent(button, action, modifiers);

@@ -25,7 +25,7 @@ Camera::Camera(GLuint viewMatLoc, GLuint projectMatLoc)
     updateViewMatrix = false;
     updateProjectionMatrix = false;
 
-    SetShape(45.0f, 800.0f/600.0f, 0.1f, 200.0f);
+    SetShape(45.0f, 800.0f, 600.0f, 0.1f, 200.0f);
     Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
@@ -96,10 +96,12 @@ void Camera::Slide(GLfloat delU, GLfloat delV, GLfloat delN)
     updateViewMatrix = true;
 }
 
-void Camera::SetShape(GLfloat viewAngle, GLfloat aspect, GLfloat nearDist, GLfloat farDist)
+void Camera::SetShape(GLfloat viewAngle, GLfloat width, GLfloat height, GLfloat nearDist, GLfloat farDist)
 {
     this->viewAngle = viewAngle;
-    this->aspect    = aspect;
+    this->width     = width;
+    this->height    = height;
+    this->aspect    = width/height;
     this->nearDist  = nearDist;
     this->farDist   = farDist;
 
@@ -126,52 +128,48 @@ void Camera::SetProjectionMatrixLoc(GLuint location)
 
 void Camera::SetViewMatrix()
 {
-    Mat4x4 mat;
+    viewMatrix.matrix[0][0] = u.x;
+    viewMatrix.matrix[0][1] = u.y;
+    viewMatrix.matrix[0][2] = u.z;
+    viewMatrix.matrix[0][3] = (-1 * eye).Dot(u);
+    viewMatrix.matrix[1][0] = v.x;
+    viewMatrix.matrix[1][1] = v.y;
+    viewMatrix.matrix[1][2] = v.z;
+    viewMatrix.matrix[1][3] = (-1 * eye).Dot(v);
+    viewMatrix.matrix[2][0] = n.x;
+    viewMatrix.matrix[2][1] = n.y;
+    viewMatrix.matrix[2][2] = n.z;
+    viewMatrix.matrix[2][3] = (-1 * eye).Dot(n);
+    viewMatrix.matrix[3][0] = 0;
+    viewMatrix.matrix[3][1] = 0;
+    viewMatrix.matrix[3][2] = 0;
+    viewMatrix.matrix[3][3] = 1;
 
-    mat.matrix[0][0] = u.x;
-    mat.matrix[0][1] = u.y;
-    mat.matrix[0][2] = u.z;
-    mat.matrix[0][3] = (-1 * eye).Dot(u);
-    mat.matrix[1][0] = v.x;
-    mat.matrix[1][1] = v.y;
-    mat.matrix[1][2] = v.z;
-    mat.matrix[1][3] = (-1 * eye).Dot(v);
-    mat.matrix[2][0] = n.x;
-    mat.matrix[2][1] = n.y;
-    mat.matrix[2][2] = n.z;
-    mat.matrix[2][3] = (-1 * eye).Dot(n);
-    mat.matrix[3][0] = 0;
-    mat.matrix[3][1] = 0;
-    mat.matrix[3][2] = 0;
-    mat.matrix[3][3] = 1;
+    GLfloat viewMat[16];
+    viewMatrix.ConvertToOpenGLMatrix(viewMat);
 
-    GLfloat viewMatrix[16];
-    mat.ConvertToOpenGLMatrix(viewMatrix);
-
-    glUniformMatrix4fv(viewUniformLoc, 1, GL_FALSE, viewMatrix);
+    glUniformMatrix4fv(viewUniformLoc, 1, GL_FALSE, viewMat);
 }
 
 void Camera::SetProjectionMatrix()
 {
-    Mat4x4 mat;
-
     GLfloat top = nearDist * (tan((3.14159/180.0f) * (viewAngle/2.0f)));
     GLfloat bot = -top;
     GLfloat right = top * aspect;
     GLfloat left = -right;
 
-    mat.matrix[0][0] = (2 * nearDist) / (right - left);
-    mat.matrix[0][2] = (right + left) / (right - left);
-    mat.matrix[1][1] = (2 * nearDist) / (top - bot);
-    mat.matrix[1][2] = (top + bot) / (top - bot);
-    mat.matrix[2][2] = (-(farDist + nearDist))/(farDist - nearDist);
-    mat.matrix[2][3] = (-2 * farDist * nearDist)/(farDist - nearDist);
-    mat.matrix[3][2] = -1;
-    mat.matrix[3][3] = 0;
+    projectionMatrix.matrix[0][0] = (2 * nearDist) / (right - left);
+    projectionMatrix.matrix[0][2] = (right + left) / (right - left);
+    projectionMatrix.matrix[1][1] = (2 * nearDist) / (top - bot);
+    projectionMatrix.matrix[1][2] = (top + bot) / (top - bot);
+    projectionMatrix.matrix[2][2] = (-(farDist + nearDist))/(farDist - nearDist);
+    projectionMatrix.matrix[2][3] = (-2 * farDist * nearDist)/(farDist - nearDist);
+    projectionMatrix.matrix[3][2] = -1;
+    projectionMatrix.matrix[3][3] = 0;
 
     GLfloat projectMatrix[16];
 
-    mat.ConvertToOpenGLMatrix(projectMatrix);
+    projectionMatrix.ConvertToOpenGLMatrix(projectMatrix);
 
     glUniformMatrix4fv(projectionUniformLoc, 1, GL_FALSE, projectMatrix);
 }
@@ -188,6 +186,24 @@ void Camera::UpdateMatrices()
         SetProjectionMatrix();
         updateProjectionMatrix = false;
     }
+}
+
+Vector3 Camera::MouseToWorld(GLfloat xPos, GLfloat yPos)
+{
+    GLfloat x = 2.0 * xPos/width - 1;
+    GLfloat y = 1 - 2.0 * yPos/height;
+    Vector3 clip(x, y, -1);
+
+    Vector3 eye = projectionMatrix.Inverse() * clip;
+    eye.z = -1;
+
+    eye.Normalize();
+    Vector3 world = eye.MatMultiply(viewMatrix.Inverse(), false);
+    world.Normalize(); 
+
+    std::cout << world << std::endl;
+
+    return world;
 }
 
 Vector3 Camera::GetPosition()

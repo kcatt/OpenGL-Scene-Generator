@@ -26,13 +26,13 @@ class AABB
          ********************/
         // Pointer to the object's transform
         Transform* transform;
+        Vector3 maxExtents;
+        Vector3 minExtents;
 
     private:
         /*********************
          * Private Variables *
          *********************/
-        Vector3 maxExtents;
-        Vector3 minExtents;
         Vector3 center;
         Vector3 vertices[8];
 };

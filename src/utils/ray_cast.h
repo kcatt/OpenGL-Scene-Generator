@@ -5,6 +5,7 @@
 #include <vector>
 #include "vector3.h"
 #include "scene_object.h"
+#include "aabb.h"
 
 class RayCast
 {
@@ -12,7 +13,6 @@ class RayCast
         /****************
          * Constructors *
          ****************/
-        RayCast();
         RayCast(const Vector3& origin, const Vector3& direction);
 
         /********************
@@ -26,7 +26,13 @@ class RayCast
          *********************/
         Vector3 origin;
         Vector3 direction;
+        Vector3 invDirection;
         GLfloat magnitude;
+
+        /********************
+         * Private Function *
+         ********************/
+        GLfloat Intersect(const AABB& box);
 };
 
 #endif

@@ -25,11 +25,12 @@ class Camera
         void Pitch(GLfloat angle);
         void Yaw(GLfloat angle);
         void Slide(GLfloat delU, GLfloat delV, GLfloat delN);
-        void SetShape(GLfloat viewAngle, GLfloat aspect, GLfloat nearDist, GLfloat farDist);
+        void SetShape(GLfloat viewAngle, GLfloat width, GLfloat height, GLfloat nearDist, GLfloat farDist);
         void GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GLfloat& farDist);
         void SetViewMatrixLoc(GLuint location);
         void SetProjectionMatrixLoc(GLuint location);
         void UpdateMatrices();
+        Vector3 MouseToWorld(GLfloat xPos, GLfloat yPos);
         Vector3 GetPosition();
 
     private:
@@ -38,9 +39,11 @@ class Camera
          *********************/
         Vector3 eye, look;
         Vector3 u, v, n;
-        GLfloat viewAngle, aspect, nearDist, farDist;
+        GLfloat viewAngle, aspect, width, height, nearDist, farDist;
         GLuint  viewUniformLoc, projectionUniformLoc;
         bool    updateViewMatrix, updateProjectionMatrix;
+
+        Mat4x4  projectionMatrix, viewMatrix;
 
         /********************
          * Private Function *
