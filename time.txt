@@ -36,4 +36,4 @@
 3/1/2017|.5|Updating Dr. Morse on status of project and showing him a a demo.
 3/4/2017|4|Working on being able to convert from screen coordinates to world coordinates.
 3/5/2017|5|Researching how to convert screen to world coordinates and attempting several methods.
-3/6/2017|3|Got object selection working and began work on object transformation dialog.
+3/6/2017|3.5|Got object selection working and began work on object transformation dialog.

@@ -511,8 +511,8 @@ void Scene::SetUpMainDialog()
 void Scene::SetSelectedObject(SceneObject* obj)
 {
     ObjectDialog* dialog = interface->GetObjectDialog();
-    dialog->Create();
     dialog->selectedObject = obj;
+    dialog->Create();
     
     if (obj == NULL)
         dialog->Hide();

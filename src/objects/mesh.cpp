@@ -59,7 +59,8 @@ void Mesh::Draw()
         case MODE_SOLID:
             DrawFaces();
             break;
-        default:
+        case MODE_WIRE_SOLID:
+            
             DrawFaces();
             DrawEdges();
             break;

@@ -226,7 +226,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
         SceneObject* selected = ray.IntersectTest(scene.objects);
 
         if (selected != NULL)
-            selected->mesh.SetRenderMode(Mesh::MODE_WIRE);
+            selected->mesh.SetRenderMode(Mesh::MODE_WIRE_SOLID);
 
         scene.SetSelectedObject(selected);
     }
