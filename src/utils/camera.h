@@ -25,7 +25,7 @@ class Camera
         void Pitch(GLfloat angle);
         void Yaw(GLfloat angle);
         void Slide(GLfloat delU, GLfloat delV, GLfloat delN);
-        void SetShape(GLfloat viewAngle, GLfloat width, GLfloat height, GLfloat nearDist, GLfloat farDist);
+        void SetShape(GLfloat viewAngle, GLint width, GLint height, GLfloat nearDist, GLfloat farDist);
         void GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GLfloat& farDist);
         void SetViewMatrixLoc(GLuint location);
         void SetProjectionMatrixLoc(GLuint location);
@@ -39,11 +39,13 @@ class Camera
          *********************/
         Vector3 eye, look;
         Vector3 u, v, n;
-        GLfloat viewAngle, aspect, width, height, nearDist, farDist;
+        GLfloat viewAngle, aspect, nearDist, farDist;
+        GLint   width, height;
         GLuint  viewUniformLoc, projectionUniformLoc;
         bool    updateViewMatrix, updateProjectionMatrix;
 
         Mat4x4  projectionMatrix, viewMatrix;
+        Mat4x4  invProjectionMatrix, invViewMatrix;
 
         /********************
          * Private Function *

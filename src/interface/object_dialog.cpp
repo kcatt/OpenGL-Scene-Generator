@@ -1,16 +1,28 @@
-#include "attributes_dialog.h"
+#include "object_dialog.h"
 #include <iostream>
 
-AttributesDialog::AttributesDialog(nanogui::Screen* screen) : Dialog(screen, "Global Attributes")
+ObjectDialog::ObjectDialog(nanogui::Screen* screen) : Dialog(screen, "Global Attributes")
 {
-    lightPosition   = NULL;
-    lightColor      = NULL;
-    ambientColor    = NULL;
-    backgroundColor = NULL;
+    selectedObject = NULL;
+    created = false;
 }
 
-void AttributesDialog::Create()
+void ObjectDialog::Create()
 {
+    if (created)
+        return;
+    
+    AddGroup("Position");
+    SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.position.x = x; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+                      [this]{ return selectedObject->transform.position.x; });
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.position.y = y; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+                      [this]{ return selectedObject->transform.position.y; });
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.position.z = z; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+                      [this]{ return selectedObject->transform.position.z; });
+
+    created = true;
+                      /*
     AddGroup("Light Position");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
     AddVariable("X:", [this](GLfloat x){ lightPosition->x = x; }, [this]{ return lightPosition->x; });
@@ -36,5 +48,5 @@ void AttributesDialog::Create()
     AddVariable("B:", [this](GLfloat b){ backgroundColor->b = b; }, [this]{ return backgroundColor->b; });
 
     ClearLayout();
-    AddButton("Close", [this]{ Hide(); });
+    AddButton("Close", [this]{ Hide(); });*/
 }

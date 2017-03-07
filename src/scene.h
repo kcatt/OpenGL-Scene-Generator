@@ -55,6 +55,8 @@ class Scene
         void Export();
         void Insert(SceneObject* newObject);
         void SetUpMainDialog();
+        void SetSelectedObject(SceneObject* obj);
+        void ResetRenderModes();
 
         /********************
          * Static Functions *
@@ -68,6 +70,7 @@ class Scene
          *******************/
         Interface* interface = NULL;
         Color3     backgroundColor; 
+        std::vector<SceneObject*> objects;
 
     private:
         /*********************
@@ -81,7 +84,6 @@ class Scene
         Material    currMaterial;
         std::string exportFileName;
         std::vector<std::string>              comments;
-        std::vector<SceneObject*>             objects;
         std::unique_ptr<std::ifstream>        inFile;
         std::unique_ptr<std::stringstream>    fileStream;
         

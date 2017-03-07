@@ -35,6 +35,7 @@ class AABB
          *********************/
         Vector3 center;
         Vector3 vertices[8];
+        Vector3 originalVertices[8];
 };
 
 #endif

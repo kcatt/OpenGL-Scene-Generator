@@ -1,4 +1,8 @@
 #include "aabb.h"
+#include <limits>
+
+#define POS_INF std::numeric_limits<GLfloat>::infinity()
+#define NEG_INF -std::numeric_limits<GLfloat>::infinity()
 
 AABB::AABB(const AABB& aabb)
 {
@@ -10,16 +14,27 @@ AABB::AABB(const AABB& aabb)
     for (int i = 0; i < 8; i++)
     {
         vertices[i] = aabb.vertices[i];
+        originalVertices[i] = aabb.originalVertices[i];
     }
 }
 
 AABB::AABB(const std::vector<Vector3>& vertices)
 {
     Generate(vertices);
+
+    for (int i = 0; i < 8; i++)
+    {
+        originalVertices[i] = this->vertices[i];
+    }
 }
 
 void AABB::Generate(const std::vector<Vector3>& vertices)
 {
+    // Reset the max and min to negative and positive infinity respectively
+    // so they get set properly from the new vertices
+    minExtents.Set(POS_INF, POS_INF, POS_INF);
+    maxExtents.Set(NEG_INF, NEG_INF, NEG_INF);
+
     for (size_t i = 0; i < vertices.size(); i++)
     {
         if (vertices[i].x > maxExtents.x)
@@ -62,7 +77,7 @@ void AABB::RecalculateFromTransform()
 {
     for (int i = 0; i < 8; i++)
     {
-        vertices[i] = transform->affine * vertices[i];
+        vertices[i] = transform->affine * originalVertices[i];
     }
 
     std::vector<Vector3> boxVec(vertices, vertices + 8);

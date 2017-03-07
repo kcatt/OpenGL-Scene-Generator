@@ -151,9 +151,9 @@ void Vector3::Set(const Vector3& v)
     this->z = v.z;
 }
 
-Vector3 Vector3::MatMultiply(const Mat4x4& mat, bool homogenous)
+Vector3 Vector3::MatMultiply(const Mat4x4& mat, bool point)
 {
-    if (homogenous)
+    if (point)
     {
         return mat * *this;
     }

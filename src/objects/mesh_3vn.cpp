@@ -18,6 +18,8 @@ Mesh3VN::Mesh3VN(const std::string & file)
 {
     Mesh3VN();
     ReadMesh(file);
+
+    type = "mesh " + file;
 }
 
 void Mesh3VN::Draw()
@@ -86,8 +88,6 @@ void Mesh3VN::ReadMesh(const std::string & file)
     for (size_t i = 0; i < numFaces; i++) {
         int numFaceVerts = 0;
         input >> numFaceVerts;
-
-        
 
         if (numFaceVerts == 4)
         {

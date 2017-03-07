@@ -7,6 +7,7 @@
 #include "tapered_cylinder.h"
 #include "mesh_3vn.h"
 #include "main_dialog.h"
+#include "object_dialog.h"
 
 Scene::Scene() {
     currMaterial.SetDefault();
@@ -505,6 +506,26 @@ void Scene::SetUpMainDialog()
     mainDialog->SetSaveCallback(ExportFunctionForwarder);
     mainDialog->SetInsertCallback(InsertFunctionForwarder);
     mainDialog->SetAttributesPointers(&(light.GetPosition()), &(light.GetColor()), &ambientColor, &backgroundColor);
+}
+
+void Scene::SetSelectedObject(SceneObject* obj)
+{
+    ObjectDialog* dialog = interface->GetObjectDialog();
+    dialog->Create();
+    dialog->selectedObject = obj;
+    
+    if (obj == NULL)
+        dialog->Hide();
+    else
+        dialog->Show();
+}
+
+void Scene::ResetRenderModes()
+{
+    for (size_t i = 0; i < objects.size(); i++)
+    {
+        objects[i]->mesh.SetRenderMode(Mesh::MODE_SOLID);
+    }
 }
 
 void Scene::ReadFunctionForwarder(void* context, const std::string& fileName)

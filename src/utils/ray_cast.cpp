@@ -1,5 +1,6 @@
 #include "ray_cast.h"
 #include <algorithm>
+#include <iostream>
 
 RayCast::RayCast(const Vector3& origin, const Vector3& direction)
 {
@@ -8,7 +9,7 @@ RayCast::RayCast(const Vector3& origin, const Vector3& direction)
     this->invDirection.Set(1/direction.x, 1/direction.y, 1/direction.z);
 }
 
-SceneObject* RayCast::IntersectTest(std::vector<SceneObject*> objects)
+SceneObject* RayCast::IntersectTest(const std::vector<SceneObject*>& objects)
 {   
     std::vector<GLfloat> intersectTimes;
     std::vector<SceneObject*> intersectObjects;
@@ -16,6 +17,8 @@ SceneObject* RayCast::IntersectTest(std::vector<SceneObject*> objects)
     for (size_t i = 0; i < objects.size(); i++)
     {
         GLfloat t = Intersect(*(objects[i]->boundBox));
+
+        std::cout << "t: " << t << std::endl;
 
         if (t > 0)
         {
@@ -35,11 +38,19 @@ SceneObject* RayCast::IntersectTest(std::vector<SceneObject*> objects)
             smallest = i;
     }
 
-    return objects[smallest];
+    return intersectObjects[smallest];
 }
 
-GLfloat RayCast::Intersect(const AABB& box)
+void RayCast::SetCamera(Camera* cam)
 {
+    camera = cam;
+}
+
+GLfloat RayCast::Intersect(AABB& box)
+{
+    box.RecalculateFromTransform();
+    std::cout << "MIN: " << box.minExtents << " MAX: " << box.maxExtents << std::endl;
+
     double t1 = (box.minExtents.x - origin.x)*invDirection.x;
     double t2 = (box.maxExtents.x - origin.x)*invDirection.x;
  
@@ -49,14 +60,16 @@ GLfloat RayCast::Intersect(const AABB& box)
     t1 = (box.minExtents.y - origin.y)*invDirection.y;
     t2 = (box.maxExtents.y - origin.y)*invDirection.y;
  
-    tmin = std::min(t1, t2);
-    tmax = std::max(t1, t2);
+    tmin = std::max(tmin, std::min(t1, t2));
+    tmax = std::min(tmax, std::max(t1, t2));
 
     t1 = (box.minExtents.z - origin.z)*invDirection.z;
     t2 = (box.maxExtents.z - origin.z)*invDirection.z;
  
-    tmin = std::min(t1, t2);
-    tmax = std::max(t1, t2);
+    tmin = std::max(tmin, std::min(t1, t2));
+    tmax = std::min(tmax, std::max(t1, t2));
+
+    std::cout << tmin << " " << tmax << std::endl;
 
     if (tmax > std::max(tmin, 0.0))
         return tmax;

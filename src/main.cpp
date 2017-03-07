@@ -11,6 +11,8 @@
 #include "vector3.h"
 #include "scene.h"
 #include "ray_cast.h"
+#include "mesh.h"
+#include "scene_object.h"
 
 using namespace std;
 using namespace nanogui;
@@ -32,6 +34,7 @@ struct MousePositionSave mousePosition;
 Camera* cam = NULL;
 GLFWwindow* window = NULL;
 Screen* screen = NULL;
+Scene  scene;
 
 // Variables needed to remember state of mouse buttons being held
 bool rightHeld = false;
@@ -115,7 +118,6 @@ int main(int argc, char* argv[])
     );
 
     Shader shader(argv[1], argv[2]);
-    Scene  scene;
 
     scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
@@ -139,7 +141,7 @@ int main(int argc, char* argv[])
     scene.SetUpMainDialog();
 
     cam = new Camera(viewMat, projectionMat);
-    cam->SetShape(45.0f, 800.0f, 600.0f, 0.1f, 200.0f);
+    cam->SetShape(45.0f, 800, 600, 0.1f, 200.0f);
     Vector3 cPos = cam->GetPosition();
     
     while (!glfwWindowShouldClose(window))
@@ -191,6 +193,10 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
     if (cam == NULL)
         return;
     
+    // If the mouse is captured by the gui, do nothing
+    if (screen->mouseButtonCallbackEvent(button, action, modifiers))
+        return;
+
     if (button == GLFW_MOUSE_BUTTON_RIGHT)
     {
         if (action == GLFW_PRESS)
@@ -205,18 +211,25 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
         else if (action == GLFW_RELEASE)
             middleHeld = false;
     }
-    else if (button == GLFW_MOUSE_BUTTON_LEFT)
+    else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
+        scene.ResetRenderModes();
+
         double xPos, yPos;
         glfwGetCursorPos(window, &xPos, &yPos);
-        Vector3 dir = cam->GetPosition() - cam->MouseToWorld(xPos, yPos);
+        Vector3 dir = cam->MouseToWorld(xPos, yPos);
 
         dir = dir - cam->GetPosition();
 
         RayCast ray(cam->GetPosition(), dir);
-    }
+        
+        SceneObject* selected = ray.IntersectTest(scene.objects);
 
-    screen->mouseButtonCallbackEvent(button, action, modifiers);
+        if (selected != NULL)
+            selected->mesh.SetRenderMode(Mesh::MODE_WIRE);
+
+        scene.SetSelectedObject(selected);
+    }
 }
 
 void HandleMouseMovement()

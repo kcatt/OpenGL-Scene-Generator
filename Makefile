@@ -22,7 +22,7 @@ OBJ        := $(patsubst src/%.cpp, build/%.o, $(SRC))
 BACKUPS    := *~ src/*~
 EXECUTABLE := test
 FLAGS      := -std=c++14 -c -Wall -g -Wno-deprecated -Wl,-rpath=./src/lib
-INCLUDES   := $(addprefix -I,$(SRC_DIR)) -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl -L./src/lib/ -lnanogui -L./src/lib/nfd -lnfd
+INCLUDES   := $(addprefix -I,$(SRC_DIR)) -lglfw3 -lGL -lGLU -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl -L./src/lib/ -lnanogui -L./src/lib/nfd -lnfd
 INCDIR     := 
 XLIBS      := -std=c++14 -Wl,-rpath=./src/lib
 CC         := g++

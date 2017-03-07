@@ -4,12 +4,17 @@ Interface::Interface(nanogui::Screen* screen)
 {
     this->screen = screen;
     mainDialog = new MainDialog(screen, 10, 10);
+    objectDialog = new ObjectDialog(screen);
+    objectDialog->Hide();
 }
 
 Interface::~Interface()
 {
     if (mainDialog != NULL)
         delete mainDialog;
+
+    if (objectDialog != NULL)
+        delete objectDialog;
 
     if (formHelper != NULL)
         delete formHelper;
@@ -18,6 +23,11 @@ Interface::~Interface()
 MainDialog* Interface::GetMainDialog()
 {
     return mainDialog;
+}
+
+ObjectDialog* Interface::GetObjectDialog()
+{
+    return objectDialog;
 }
 
 void Interface::Disable()

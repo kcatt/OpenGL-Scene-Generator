@@ -6,6 +6,7 @@
 #include "vector3.h"
 #include "scene_object.h"
 #include "aabb.h"
+#include "camera.h"
 
 class RayCast
 {
@@ -18,7 +19,8 @@ class RayCast
         /********************
          * Public Functions *
          ********************/
-        SceneObject* IntersectTest(std::vector<SceneObject*> objects);
+        SceneObject* IntersectTest(const std::vector<SceneObject*>& objects);
+        void SetCamera(Camera* cam);
 
     private:
         /*********************
@@ -28,11 +30,12 @@ class RayCast
         Vector3 direction;
         Vector3 invDirection;
         GLfloat magnitude;
+        Camera* camera;
 
         /********************
          * Private Function *
          ********************/
-        GLfloat Intersect(const AABB& box);
+        GLfloat Intersect(AABB& box);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include <cmath>
 #include "camera.h"
 #include <iostream>
+#include <GL/glu.h>
 
 Camera::Camera()
 {
@@ -96,12 +97,12 @@ void Camera::Slide(GLfloat delU, GLfloat delV, GLfloat delN)
     updateViewMatrix = true;
 }
 
-void Camera::SetShape(GLfloat viewAngle, GLfloat width, GLfloat height, GLfloat nearDist, GLfloat farDist)
+void Camera::SetShape(GLfloat viewAngle, GLint width, GLint height, GLfloat nearDist, GLfloat farDist)
 {
     this->viewAngle = viewAngle;
     this->width     = width;
     this->height    = height;
-    this->aspect    = width/height;
+    this->aspect    = (GLfloat)width/(GLfloat)height;
     this->nearDist  = nearDist;
     this->farDist   = farDist;
 
@@ -145,6 +146,24 @@ void Camera::SetViewMatrix()
     viewMatrix.matrix[3][2] = 0;
     viewMatrix.matrix[3][3] = 1;
 
+    invViewMatrix.Set(viewMatrix.Transpose());
+    invViewMatrix.matrix[0][3] = 0;
+    invViewMatrix.matrix[1][3] = 0;
+    invViewMatrix.matrix[2][3] = 0;
+    invViewMatrix.matrix[3][3] = 1;
+
+    invViewMatrix.matrix[3][0] = 0;
+    invViewMatrix.matrix[3][1] = 0;
+    invViewMatrix.matrix[3][2] = 0;
+
+    Vector3 trans(viewMatrix.matrix[0][3], viewMatrix.matrix[1][3], viewMatrix.matrix[2][3]);
+    Vector3 invTrans(invViewMatrix * trans);
+
+    invViewMatrix.matrix[0][3] = -invTrans.x;
+    invViewMatrix.matrix[1][3] = -invTrans.y;
+    invViewMatrix.matrix[2][3] = -invTrans.z;
+    invViewMatrix.matrix[3][3] = 1;
+
     GLfloat viewMat[16];
     viewMatrix.ConvertToOpenGLMatrix(viewMat);
 
@@ -166,6 +185,13 @@ void Camera::SetProjectionMatrix()
     projectionMatrix.matrix[2][3] = (-2 * farDist * nearDist)/(farDist - nearDist);
     projectionMatrix.matrix[3][2] = -1;
     projectionMatrix.matrix[3][3] = 0;
+
+    invProjectionMatrix.matrix[0][0] = 1/projectionMatrix.matrix[0][0];
+    invProjectionMatrix.matrix[1][1] = 1/projectionMatrix.matrix[1][1];
+    invProjectionMatrix.matrix[2][2] = 0;
+    invProjectionMatrix.matrix[2][3] = 1/projectionMatrix.matrix[3][2];
+    invProjectionMatrix.matrix[3][2] = 1/projectionMatrix.matrix[2][3];
+    invProjectionMatrix.matrix[3][3] = -projectionMatrix.matrix[2][2] / (projectionMatrix.matrix[2][3] * projectionMatrix.matrix[3][2]);
 
     GLfloat projectMatrix[16];
 
@@ -190,20 +216,28 @@ void Camera::UpdateMatrices()
 
 Vector3 Camera::MouseToWorld(GLfloat xPos, GLfloat yPos)
 {
-    GLfloat x = 2.0 * xPos/width - 1;
-    GLfloat y = 1 - 2.0 * yPos/height;
-    Vector3 clip(x, y, -1);
+    yPos = height - yPos - 1;
+    Vector3 clip(xPos, yPos, 1);
 
-    Vector3 eye = projectionMatrix.Inverse() * clip;
-    eye.z = -1;
+    clip.x = clip.x / width;
+    clip.y = clip.y / height;
 
-    eye.Normalize();
-    Vector3 world = eye.MatMultiply(viewMatrix.Inverse(), false);
-    world.Normalize(); 
+    clip.x = clip.x * 2 - 1;
+    clip.y = clip.y * 2 - 1;
+    clip.z = clip.z * 2 - 1;
 
-    std::cout << world << std::endl;
+    Mat4x4 inverse = invViewMatrix * invProjectionMatrix;
 
-    return world;
+    Vector3 result = inverse * clip;
+
+    GLfloat w = inverse.matrix[3][0] * clip.x + 
+                inverse.matrix[3][1] * clip.y + 
+                inverse.matrix[3][2] * clip.z +
+                inverse.matrix[3][3];
+
+    result = result * (1/w);
+
+    return result;
 }
 
 Vector3 Camera::GetPosition()
