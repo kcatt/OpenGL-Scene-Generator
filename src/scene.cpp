@@ -510,19 +510,19 @@ void Scene::SetUpMainDialog()
 
 void Scene::SetSelectedObject(SceneObject* obj)
 {
+    
     ObjectDialog* dialog = interface->GetObjectDialog();
     dialog->selectedObject = obj;
-    dialog->Create();
-    
+
     if (obj == NULL)
     {
         dialog->Hide();
+        return;
     }
-    else
-    {
-        dialog->Refresh();
-        dialog->Show();
-    }
+
+    dialog->Create();
+    dialog->Refresh();
+    dialog->Show();
 }
 
 void Scene::ResetRenderModes()
