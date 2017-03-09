@@ -515,9 +515,14 @@ void Scene::SetSelectedObject(SceneObject* obj)
     dialog->Create();
     
     if (obj == NULL)
+    {
         dialog->Hide();
+    }
     else
+    {
+        dialog->Refresh();
         dialog->Show();
+    }
 }
 
 void Scene::ResetRenderModes()

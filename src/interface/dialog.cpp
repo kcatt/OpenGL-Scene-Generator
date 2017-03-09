@@ -26,7 +26,8 @@ void Dialog::AddGroup(const std::string& caption)
 {
     // The pointer doesn't need to be stored because it will be automatically freed at
     // the deletion of the parent window
-    new nanogui::Label(window, caption, "sans-bold");
+    nanogui::Label* newLabel = new nanogui::Label(window, caption, "sans-bold");
+    newLabel->setFixedHeight(10);
     layoutWidget = window;
 }
 
@@ -40,7 +41,8 @@ void Dialog::AddButton(const std::string& label, const std::function<void()>& ca
 
 void Dialog::AddVariable(const std::string& label, const std::function<void(const GLfloat&)>& setter, const std::function<GLfloat()>& getter)
 {
-    new nanogui::Label(layoutWidget, label);
+    nanogui::Label* newLabel = new nanogui::Label(layoutWidget, label);
+    newLabel->setFixedHeight(15);
     nanogui::FloatBox<GLfloat>* variableBox = new nanogui::FloatBox<GLfloat>(layoutWidget);
     
     auto refresh = [variableBox, getter] {
@@ -55,6 +57,7 @@ void Dialog::AddVariable(const std::string& label, const std::function<void(cons
 
     variableBox->setCallback(setter);
     variableBox->setEditable(true);
+    variableBox->setFixedHeight(20);
 }
 
 void Dialog::AddVariable(const std::string& label, GLfloat& value)

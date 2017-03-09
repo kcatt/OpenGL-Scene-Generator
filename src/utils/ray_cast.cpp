@@ -49,7 +49,6 @@ void RayCast::SetCamera(Camera* cam)
 GLfloat RayCast::Intersect(AABB& box)
 {
     box.RecalculateFromTransform();
-    std::cout << "MIN: " << box.minExtents << " MAX: " << box.maxExtents << std::endl;
 
     double t1 = (box.minExtents.x - origin.x)*invDirection.x;
     double t2 = (box.maxExtents.x - origin.x)*invDirection.x;
@@ -68,8 +67,6 @@ GLfloat RayCast::Intersect(AABB& box)
  
     tmin = std::max(tmin, std::min(t1, t2));
     tmax = std::min(tmax, std::max(t1, t2));
-
-    std::cout << tmin << " " << tmax << std::endl;
 
     if (tmax > std::max(tmin, 0.0))
         return tmax;

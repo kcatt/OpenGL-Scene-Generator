@@ -1,7 +1,7 @@
 #include "object_dialog.h"
 #include <iostream>
 
-ObjectDialog::ObjectDialog(nanogui::Screen* screen) : Dialog(screen, "Global Attributes")
+ObjectDialog::ObjectDialog(nanogui::Screen* screen, int posX, int posY) : Dialog(screen, "Object Properties", posX, posY)
 {
     selectedObject = NULL;
     created = false;
@@ -20,33 +20,52 @@ void ObjectDialog::Create()
                       [this]{ return selectedObject->transform.position.y; });
     AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.position.z = z; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
                       [this]{ return selectedObject->transform.position.z; });
-
-    created = true;
-                      /*
-    AddGroup("Light Position");
+    
+    AddGroup("Rotation");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("X:", [this](GLfloat x){ lightPosition->x = x; }, [this]{ return lightPosition->x; });
-    AddVariable("Y:", [this](GLfloat y){ lightPosition->y = y; }, [this]{ return lightPosition->y; });
-    AddVariable("Z:", [this](GLfloat z){ lightPosition->z = z; }, [this]{ return lightPosition->z; });
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.rotation.x = x; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+                      [this]{ return selectedObject->transform.rotation.x; });
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.rotation.y = y; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+                      [this]{ return selectedObject->transform.rotation.y; });
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.rotation.z = z; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+                      [this]{ return selectedObject->transform.rotation.z; });
 
-    AddGroup("Light Color");
+    AddGroup("Scale");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("R:", [this](GLfloat r){ lightColor->r = r; }, [this]{ return lightColor->r; });
-    AddVariable("G:", [this](GLfloat g){ lightColor->g = g; }, [this]{ return lightColor->g; });
-    AddVariable("B:", [this](GLfloat b){ lightColor->b = b; }, [this]{ return lightColor->b; });
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.scale.x = x; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+                      [this]{ return selectedObject->transform.scale.x; });
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.scale.y = y; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+                      [this]{ return selectedObject->transform.scale.y; });
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.scale.z = z; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+                      [this]{ return selectedObject->transform.scale.z; });
+    
+    AddGroup("Emissive:");
+    SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
+    AddVariable("R:", [this](GLfloat r){ selectedObject->material.emissive.r = r; }, [this]{ return selectedObject->material.emissive.r; });
+    AddVariable("G:", [this](GLfloat g){ selectedObject->material.emissive.g = g; }, [this]{ return selectedObject->material.emissive.g; });
+    AddVariable("B:", [this](GLfloat b){ selectedObject->material.emissive.b = b; }, [this]{ return selectedObject->material.emissive.b; });
 
-    AddGroup("Ambient Color");
+    AddGroup("Diffuse:");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("R:", [this](GLfloat r){ ambientColor->r = r; }, [this]{ return ambientColor->r; });
-    AddVariable("G:", [this](GLfloat g){ ambientColor->g = g; }, [this]{ return ambientColor->g; });
-    AddVariable("B:", [this](GLfloat b){ ambientColor->b = b; }, [this]{ return ambientColor->b; });
+    AddVariable("R:", [this](GLfloat r){ selectedObject->material.diffuse.r = r; }, [this]{ return selectedObject->material.diffuse.r; });
+    AddVariable("G:", [this](GLfloat g){ selectedObject->material.diffuse.g = g; }, [this]{ return selectedObject->material.diffuse.g; });
+    AddVariable("B:", [this](GLfloat b){ selectedObject->material.diffuse.b = b; }, [this]{ return selectedObject->material.diffuse.b; });
 
-    AddGroup("Background Color");
+    AddGroup("Ambient:");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("R:", [this](GLfloat r){ backgroundColor->r = r; }, [this]{ return backgroundColor->r; });
-    AddVariable("G:", [this](GLfloat g){ backgroundColor->g = g; }, [this]{ return backgroundColor->g; });
-    AddVariable("B:", [this](GLfloat b){ backgroundColor->b = b; }, [this]{ return backgroundColor->b; });
+    AddVariable("R:", [this](GLfloat r){ selectedObject->material.ambient.r = r; }, [this]{ return selectedObject->material.ambient.r; });
+    AddVariable("G:", [this](GLfloat g){ selectedObject->material.ambient.g = g; }, [this]{ return selectedObject->material.ambient.g; });
+    AddVariable("B:", [this](GLfloat b){ selectedObject->material.ambient.b = b; }, [this]{ return selectedObject->material.ambient.b; });
+
+    AddGroup("Specular:");
+    SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
+    AddVariable("R:", [this](GLfloat r){ selectedObject->material.specular.r = r; }, [this]{ return selectedObject->material.specular.r; });
+    AddVariable("G:", [this](GLfloat g){ selectedObject->material.specular.g = g; }, [this]{ return selectedObject->material.specular.g; });
+    AddVariable("B:", [this](GLfloat b){ selectedObject->material.specular.b = b; }, [this]{ return selectedObject->material.specular.b; });
 
     ClearLayout();
-    AddButton("Close", [this]{ Hide(); });*/
+
+    AddVariable("Specular Exponent:", [this](GLfloat val){ selectedObject->material.specularExponent = val; }, [this]{ return selectedObject->material.specularExponent; });
+
+    created = true;
 }

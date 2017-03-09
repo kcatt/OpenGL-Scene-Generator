@@ -10,12 +10,12 @@ class ObjectDialog : public Dialog
         /***************
          * Constructor *
          ***************/
-        ObjectDialog(nanogui::Screen* screen);
+        ObjectDialog(nanogui::Screen* screen, int posX, int posY);
 
         /**************
          * Destructor *
          **************/
-        //~ObjectDialog();
+        ~ObjectDialog() {}
 
         /*******************
          * Public Function *

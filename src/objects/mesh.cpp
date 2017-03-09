@@ -15,7 +15,7 @@ Mesh::Mesh(const std::vector<Vector3>& vertexVector)
     mode = MODE_SOLID; // Default is to make solid mesh
 }
 
-void Mesh::Create(const std::vector<Vector3>& vertexVector)
+void Mesh::Create(const std::vector<Vector3>& vertexVector, bool hardEdges)
 {
     vertices.resize(vertexVector.size());
     normals.resize(vertexVector.size());
@@ -23,9 +23,17 @@ void Mesh::Create(const std::vector<Vector3>& vertexVector)
     std::copy(vertexVector.begin(), vertexVector.end(), vertices.begin());
 
     GenerateNormals();
-    ReduceArrays();
-    GenerateIndexVector();
-    CreateGLArrays();
+    
+    if (!hardEdges)
+    {
+        ReduceArrays();
+        GenerateIndexVector();
+        CreateGLArrays();
+    }
+    else
+    {
+        SetHardEdgeGLArrays();
+    }
 }
 
 void Mesh::DrawGL() const
@@ -117,6 +125,34 @@ void Mesh::SetGLArrays(Vector3* vertices, Vector3* normals, size_t numVerts, siz
         indexVec[i]   = vertIndices[i];
         indexVec[i+3] = normIndices[i];
     }   
+}
+
+void Mesh::SetHardEdgeGLArrays()
+{
+    indexVec.resize(vertices.size()*2);
+
+    size_t index = 0;
+
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        reducedGLArray.push_back(vertices[i].x);
+        reducedGLArray.push_back(vertices[i].y);
+        reducedGLArray.push_back(vertices[i].z);
+
+        reducedGLArray.push_back(normals[i].x);
+        reducedGLArray.push_back(normals[i].y);
+        reducedGLArray.push_back(normals[i].z);
+
+        // The indices for the normals and the vertices are the same because OpenGL
+        // views the lists of the two as their own separate lists
+        indexVec[index] = i;
+        indexVec[index+3] = i;
+
+        if (((index+1) % 3) == 0 && (((index+4) % 6) == 0))
+            index += 4;
+        else
+            index++;
+    } 
 }
 
 void Mesh::GenerateNormals()

@@ -27,7 +27,7 @@ class Mesh
         /********************
          * Public Functions *
          ********************/
-        void Create(const std::vector<Vector3>& vertexVector);
+        void Create(const std::vector<Vector3>& vertexVector, bool hardEdges = false);
         void Draw();
         void SetUpGL();
         void SetRenderMode(RenderMode m);
@@ -60,6 +60,7 @@ class Mesh
         void ReduceArrays();
         void GenerateIndexVector();
         void CreateGLArrays();
+        void SetHardEdgeGLArrays();
 
         void DrawEdges() const;
         void DrawFaces() const;
