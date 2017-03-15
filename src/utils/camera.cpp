@@ -1,7 +1,6 @@
 #include <cmath>
 #include "camera.h"
 #include <iostream>
-#include <GL/glu.h>
 
 Camera::Camera()
 {
