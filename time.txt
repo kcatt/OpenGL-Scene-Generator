@@ -38,3 +38,4 @@
 3/5/2017|5|Researching how to convert screen to world coordinates and attempting several methods.
 3/6/2017|3.5|Got object selection working and began work on object transformation dialog.
 3/8/2017|3.5|Finished object dialog and added ability for flat shading.
+3/22/2017|.5|Updated Dr. Morse on the status of the project.
