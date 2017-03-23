@@ -7,8 +7,10 @@
 #endif
 #include "vector3.h"
 #include "mat4x4.h"
+#include "iobservable.h"
+#include "scene_object.h"
 
-class Camera
+class Camera : public IObservable<Camera>
 {
     public:
         /****************
