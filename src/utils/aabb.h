@@ -4,6 +4,7 @@
 #include <vector>
 #include "vector3.h"
 #include "transform.h"
+#include "mesh.h"
 
 class AABB
 {
@@ -28,6 +29,7 @@ class AABB
         Transform* transform;
         Vector3 maxExtents;
         Vector3 minExtents;
+        Mesh    mesh;
 
     private:
         /*********************

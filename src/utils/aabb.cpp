@@ -70,6 +70,30 @@ void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
     vertices[6].Set(maxExtents.x, maxExtents.y, minExtents.z);
     vertices[7].Set(minExtents.x, maxExtents.y, minExtents.z);
 
+    vector<Vector3> vertVec =
+    {
+        vertices[0], vertices[1], vertices[2],
+        vertices[2], vertices[3], vertices[0],
+
+        vertices[4], vertices[5], vertices[6],
+        vertices[6], vertices[7], vertices[4],
+
+        vertices[0], vertices[3], vertices[7],
+        vertices[7], vertices[4], vertices[0],
+
+        vertices[1], vertices[2], vertices[6],
+        vertices[6], vertices[5], vertices[1],
+
+        vertices[2], vertices[6], vertices[7],
+        vertices[7], vertices[3], vertices[2],
+
+        vertices[0], vertices[1], vertices[5],
+        vertices[5], vertices[4], vertices[0]
+    };
+
+    mesh.Create(vertVector);
+    mesh.SetUpGL();
+
     center.Set((maxExtents.x + minExtents.x)/2.0f, (maxExtents.y + minExtents.y)/2.0f, (maxExtents.z + minExtents.z)/2.0f);
 }
 

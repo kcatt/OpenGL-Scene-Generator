@@ -22,7 +22,11 @@ void TaperedCylinder::Draw()
     GLfloat modelMatrix[16];
     transform.affine.ConvertToOpenGLMatrix(modelMatrix);
 
+    GLfloat modelViewMat[16];
+    modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
+
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
+    glUniformMatrix4fv(modelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
 
     glUniform3f(matAmbientLoc,  material.ambient.r, material.ambient.g, material.ambient.b);
     glUniform3f(matDiffuseLoc,  material.diffuse.r, material.diffuse.g, material.diffuse.b);

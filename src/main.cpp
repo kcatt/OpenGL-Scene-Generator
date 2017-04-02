@@ -122,8 +122,6 @@ int main(int argc, char* argv[])
     scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
-    GLuint viewMat = glGetUniformLocation(shader.GetProgram(), "view");
-    GLuint projectionMat = glGetUniformLocation(shader.GetProgram(), "projection");
     GLuint lightColor = glGetUniformLocation(shader.GetProgram(), "light.color");
     GLuint lightPos = glGetUniformLocation(shader.GetProgram(), "light.position");
     GLuint lightAmbient = glGetUniformLocation(shader.GetProgram(), "light.ambient");
@@ -133,15 +131,19 @@ int main(int argc, char* argv[])
     GLuint matSpecular = glGetUniformLocation(shader.GetProgram(), "material.specular");
     GLuint matEmissive = glGetUniformLocation(shader.GetProgram(), "material.emissive");
     GLuint matSpecExponent = glGetUniformLocation(shader.GetProgram(), "material.shininess");
+    GLuint modelViewMat = glGetUniformLocation(shader.GetProgram(), "modelView");
 
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
+    scene.SetModelViewUniformLocation(modelViewMat);
 
     scene.interface = new Interface(screen);
     scene.SetUpMainDialog();
 
-    cam = new Camera(viewMat, projectionMat);
+    cam = new Camera();
     cam->SetShape(45.0f, 800, 600, 0.1f, 200.0f);
+    cam->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    scene.SetCamera(cam);
     Vector3 cPos = cam->GetPosition();
     
     while (!glfwWindowShouldClose(window))

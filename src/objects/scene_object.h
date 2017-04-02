@@ -10,11 +10,14 @@
 #include "vector3.h"
 #include "mesh.h"
 #include "aabb.h"
+#include "iobserver.h"
+#include "camera.h"
+#include "mat4x4.h"
 
-class SceneObject
+class SceneObject : public IObserver<Camera>
 {
     public:
-        SceneObject() {}
+        SceneObject();
 
         /********************
          * Public Variables *
@@ -29,12 +32,15 @@ class SceneObject
         /**************
          * Destructor *
          **************/
-        virtual ~SceneObject() {}
+        virtual ~SceneObject() { delete[] boundsIndexArr; }
 
         /********************
          * Public Functions *
          ********************/
         void SetUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
+        void SetModelViewUniformLocation(GLuint modelView);
+        void Update(Camera* observable);
+        void DrawBounds();
 
         /*********************
          * Virtual Functions *
@@ -46,12 +52,14 @@ class SceneObject
         /***********************
          * Protected Variables *
          ***********************/
+        GLuint modelViewMatrixLoc;
         GLuint modelMatrixLoc;
         GLuint matAmbientLoc;
         GLuint matDiffuseLoc;
         GLuint matSpecularLoc;
         GLuint matEmissiveLoc;
         GLuint matSpecExponentLoc;
+        Mat4x4 modelViewMatrix;
 };
 
 #endif

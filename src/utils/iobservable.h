@@ -11,8 +11,16 @@ class IObservable
         /********************
          * Public Functions *
          ********************/
-        void Attach(IObserver<T> &observer);
-        void Notify();
+        void Attach(IObserver<T> &observer)
+        {
+            observers.push_back(&observer);
+        }
+
+        void Notify()
+        {
+            for (auto observer : observers)
+                observer->Update(static_cast<T*>(this));
+        }
 
     private:
         /********************

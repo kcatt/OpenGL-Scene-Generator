@@ -15,6 +15,7 @@
 #include "scene_object.h"
 #include "light.h"
 #include "interface.h"
+#include "camera.h"
 
 // Enums for the tokens of the sdl file
 enum mTokenType {
@@ -50,6 +51,7 @@ class Scene
         bool ReadFile(const std::string& fileName);
         void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
         void SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient);
+        void SetModelViewUniformLocation(GLuint modelView);
         void SetExportFileName(const std::string& fileName);
         void Export(const std::string& fileName);
         void Export();
@@ -57,6 +59,7 @@ class Scene
         void SetUpMainDialog();
         void SetSelectedObject(SceneObject* obj);
         void ResetRenderModes();
+        void SetCamera(Camera* cam);
 
         /********************
          * Static Functions *
@@ -82,11 +85,13 @@ class Scene
         Color3  ambientColor;
         Transform   currTransform;
         Material    currMaterial;
+        Camera*     camera;
         std::string exportFileName;
         std::vector<std::string>              comments;
         std::unique_ptr<std::ifstream>        inFile;
         std::unique_ptr<std::stringstream>    fileStream;
         
+        GLuint modelViewMatrixLoc;
         GLuint modelMatrixLoc;
         GLuint matAmbientLoc;
         GLuint matDiffuseLoc;

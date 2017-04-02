@@ -8,7 +8,6 @@
 #include "vector3.h"
 #include "mat4x4.h"
 #include "iobservable.h"
-#include "scene_object.h"
 
 class Camera : public IObservable<Camera>
 {
@@ -17,7 +16,6 @@ class Camera : public IObservable<Camera>
          * Constructors *
          ****************/
         Camera();
-        Camera(GLuint viewMatLoc, GLuint projectMatLoc);
 
         /********************
          * Public Functions *
@@ -29,24 +27,25 @@ class Camera : public IObservable<Camera>
         void Slide(GLfloat delU, GLfloat delV, GLfloat delN);
         void SetShape(GLfloat viewAngle, GLint width, GLint height, GLfloat nearDist, GLfloat farDist);
         void GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GLfloat& farDist);
-        void SetViewMatrixLoc(GLuint location);
-        void SetProjectionMatrixLoc(GLuint location);
         void UpdateMatrices();
         Vector3 MouseToWorld(GLfloat xPos, GLfloat yPos);
         Vector3 GetPosition();
+
+        /********************
+         * Public Variables *
+         ********************/
+        Mat4x4  projectionMatrix, viewMatrix;
+        Vector3 backward, right, up;
+        Vector3 eye, look;
 
     private:
         /*********************
          * Private Variables *
          *********************/
-        Vector3 eye, look;
-        Vector3 u, v, n;
         GLfloat viewAngle, aspect, nearDist, farDist;
         GLint   width, height;
-        GLuint  viewUniformLoc, projectionUniformLoc;
         bool    updateViewMatrix, updateProjectionMatrix;
 
-        Mat4x4  projectionMatrix, viewMatrix;
         Mat4x4  invProjectionMatrix, invViewMatrix;
 
         /********************

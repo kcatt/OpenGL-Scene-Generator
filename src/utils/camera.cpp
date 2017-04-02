@@ -6,9 +6,9 @@ Camera::Camera()
 {
     eye.Set(0, 0, 0);
     look.Set(0, 0, 0);
-    u.Set(0, 0, 0);
-    n.Set(0, 0, 0);
-    v.Set(0, 0, 0);
+    right.Set(0, 0, 0);
+    backward.Set(0, 0, 0);
+    up.Set(0, 0, 0);
     viewAngle = 0;
     aspect = 0;
     nearDist = 0;
@@ -17,28 +17,17 @@ Camera::Camera()
     updateProjectionMatrix = false;
 }
 
-Camera::Camera(GLuint viewMatLoc, GLuint projectMatLoc)
-{
-    SetProjectionMatrixLoc(projectMatLoc);
-    SetViewMatrixLoc(viewMatLoc);
-
-    updateViewMatrix = false;
-    updateProjectionMatrix = false;
-
-    SetShape(45.0f, 800.0f, 600.0f, 0.1f, 200.0f);
-    Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
-}
-
 void Camera::Set(Vector3 eye, Vector3 look, Vector3 up)
 {
     this->eye.Set(eye);
     this->look.Set(look);
 
-    n.Set(eye.x - look.x, eye.y - look.y, eye.z - look.z);
-    n.Normalize();
-    u.Set(Vector3::Cross(up, n));
-    u.Normalize();
-    v.Set(Vector3::Cross(n, u));
+    backward.Set(eye.x - look.x, eye.y - look.y, eye.z - look.z);
+    backward.Normalize();
+    right.Set(Vector3::Cross(up, backward));
+    right.Normalize();
+    this->up.Set(Vector3::Cross(backward, right));
+
     updateViewMatrix = true;
 }
 
@@ -48,10 +37,10 @@ void Camera::Roll(GLfloat angle)
     GLfloat c = cos(3.14159/180 * angle);
     GLfloat s = sin(3.14159/180 * angle);
 
-    Vector3 temp(u);
+    Vector3 temp(right);
 
-    u.Set(c*temp.x - s*v.x, c*temp.y - s*v.y, c*temp.z - s*v.z);
-    v.Set(s*temp.x + c*v.x, s*temp.y + c*v.y, s*temp.z + c*v.z);
+    right.Set(c*temp.x - s*up.x, c*temp.y - s*up.y, c*temp.z - s*up.z);
+    up.Set(s*temp.x + c*up.x, s*temp.y + c*up.y, s*temp.z + c*up.z);
 
     updateViewMatrix = true;
 }
@@ -62,10 +51,10 @@ void Camera::Pitch(GLfloat angle)
     GLfloat c = cos(3.14159/180 * angle);
     GLfloat s = sin(3.14158/180 * angle);
     
-    Vector3 temp(v);
-    v.Set(c*temp.x - s*n.x, c*temp.y - s*n.y, c*temp.z - s*n.z);
-    n.Set(s*temp.x + c*n.x, s*temp.y + c*n.y, s*temp.z + c*n.z);
+    Vector3 temp(up);
 
+    up.Set(c*temp.x - s*backward.x, c*temp.y - s*backward.y, c*temp.z - s*backward.z);
+    backward.Set(s*temp.x + c*backward.x, s*temp.y + c*backward.y, s*temp.z + c*backward.z);
     updateViewMatrix = true;
 }
 
@@ -75,9 +64,10 @@ void Camera::Yaw(GLfloat angle)
     GLfloat c = cos (3.14159/180 * angle);
     GLfloat s = sin (3.14159/180 * angle);
 
-    Vector3 temp (n);
-    n.Set(c*temp.x - s*u.x, c*temp.y - s*u.y, c*temp.z - s*u.z);
-    u.Set(s*temp.x + c*u.x, s*temp.y + c*u.y, s*temp.z + c*u.z);
+    Vector3 temp(backward);
+
+    backward.Set(c*temp.x - s*right.x, c*temp.y - s*right.y, c*temp.z - s*right.z);
+    right.Set(s*temp.x + c*right.x, s*temp.y + c*right.y, s*temp.z + c*right.z);
 
     updateViewMatrix = true;
 }
@@ -88,9 +78,9 @@ void Camera::Yaw(GLfloat angle)
            delN - Change in z direction */
 void Camera::Slide(GLfloat delU, GLfloat delV, GLfloat delN)
 {
-    GLfloat delX = delU*u.x + delV*v.x + delN*n.x;
-    GLfloat delY = delU*u.y + delV*v.y + delN*n.y;
-    GLfloat delZ = delU*u.z + delV*v.z + delN*n.z;
+    GLfloat delX = delU*right.x + delV*up.x + delN*backward.x;
+    GLfloat delY = delU*right.y + delV*up.y + delN*backward.y;
+    GLfloat delZ = delU*right.z + delV*up.z + delN*backward.z;
     eye.Set(eye.x+delX, eye.y+delY, eye.z+delZ);
     
     updateViewMatrix = true;
@@ -116,30 +106,20 @@ void Camera::GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GL
     farDist   = this->farDist;
 }
 
-void Camera::SetViewMatrixLoc(GLuint location)
-{
-    viewUniformLoc = location;
-}
-
-void Camera::SetProjectionMatrixLoc(GLuint location)
-{
-    projectionUniformLoc = location;
-}
-
 void Camera::SetViewMatrix()
 {
-    viewMatrix.matrix[0][0] = u.x;
-    viewMatrix.matrix[0][1] = u.y;
-    viewMatrix.matrix[0][2] = u.z;
-    viewMatrix.matrix[0][3] = (-1 * eye).Dot(u);
-    viewMatrix.matrix[1][0] = v.x;
-    viewMatrix.matrix[1][1] = v.y;
-    viewMatrix.matrix[1][2] = v.z;
-    viewMatrix.matrix[1][3] = (-1 * eye).Dot(v);
-    viewMatrix.matrix[2][0] = n.x;
-    viewMatrix.matrix[2][1] = n.y;
-    viewMatrix.matrix[2][2] = n.z;
-    viewMatrix.matrix[2][3] = (-1 * eye).Dot(n);
+    viewMatrix.matrix[0][0] = right.x;
+    viewMatrix.matrix[0][1] = right.y;
+    viewMatrix.matrix[0][2] = right.z;
+    viewMatrix.matrix[0][3] = (-1 * eye).Dot(right);
+    viewMatrix.matrix[1][0] = up.x;
+    viewMatrix.matrix[1][1] = up.y;
+    viewMatrix.matrix[1][2] = up.z;
+    viewMatrix.matrix[1][3] = (-1 * eye).Dot(up);
+    viewMatrix.matrix[2][0] = backward.x;
+    viewMatrix.matrix[2][1] = backward.y;
+    viewMatrix.matrix[2][2] = backward.z;
+    viewMatrix.matrix[2][3] = (-1 * eye).Dot(backward);
     viewMatrix.matrix[3][0] = 0;
     viewMatrix.matrix[3][1] = 0;
     viewMatrix.matrix[3][2] = 0;
@@ -162,11 +142,6 @@ void Camera::SetViewMatrix()
     invViewMatrix.matrix[1][3] = -invTrans.y;
     invViewMatrix.matrix[2][3] = -invTrans.z;
     invViewMatrix.matrix[3][3] = 1;
-
-    GLfloat viewMat[16];
-    viewMatrix.ConvertToOpenGLMatrix(viewMat);
-
-    glUniformMatrix4fv(viewUniformLoc, 1, GL_FALSE, viewMat);
 }
 
 void Camera::SetProjectionMatrix()
@@ -191,16 +166,12 @@ void Camera::SetProjectionMatrix()
     invProjectionMatrix.matrix[2][3] = 1/projectionMatrix.matrix[3][2];
     invProjectionMatrix.matrix[3][2] = 1/projectionMatrix.matrix[2][3];
     invProjectionMatrix.matrix[3][3] = -projectionMatrix.matrix[2][2] / (projectionMatrix.matrix[2][3] * projectionMatrix.matrix[3][2]);
-
-    GLfloat projectMatrix[16];
-
-    projectionMatrix.ConvertToOpenGLMatrix(projectMatrix);
-
-    glUniformMatrix4fv(projectionUniformLoc, 1, GL_FALSE, projectMatrix);
 }
 
 void Camera::UpdateMatrices()
 {
+    bool notify = (updateViewMatrix || updateProjectionMatrix);
+
     if (updateViewMatrix)
     {
         SetViewMatrix();
@@ -211,6 +182,10 @@ void Camera::UpdateMatrices()
         SetProjectionMatrix();
         updateProjectionMatrix = false;
     }
+
+    // If the camera has changed, notify the observers
+    if (notify)
+        Notify();
 }
 
 Vector3 Camera::MouseToWorld(GLfloat xPos, GLfloat yPos)

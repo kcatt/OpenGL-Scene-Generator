@@ -4,7 +4,7 @@
 template <class T>
 class IObserver
 {
-    protected:
+    public:
         /**********************
          * Abstract Functions *
          **********************/

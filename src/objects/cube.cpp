@@ -66,8 +66,12 @@ void Cube::Draw()
     glUniform3f(matSpecularLoc, material.specular.r, material.specular.g, material.specular.b);
     glUniform3f(matEmissiveLoc, material.emissive.r, material.emissive.g, material.emissive.b);
     glUniform1f(matSpecExponentLoc, material.specularExponent);
+    
+    GLfloat modelViewMat[16];
+    modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
 
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
+    glUniformMatrix4fv(modelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
 
     mesh.Draw();
 }

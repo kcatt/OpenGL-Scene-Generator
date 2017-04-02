@@ -23,3 +23,23 @@ void SceneObject::SetUniformLocations(GLuint model, GLuint ambient, GLuint diffu
     matEmissiveLoc = emissive;
     matSpecExponentLoc = specExponent;
 }
+
+void SceneObject::SetModelViewUniformLocation(GLuint modelView)
+{
+    modelViewMatrixLoc = modelView;
+}
+
+void SceneObject::Update(Camera* observable)
+{
+    modelViewMatrix = observable->projectionMatrix * observable->viewMatrix * transform.affine;
+}
+
+void SceneObject::DrawBounds()
+{
+    GLfloat modelViewMat[16];
+    modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
+
+    glUniformMatrix4fv(modelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
+
+    boundBox->mesh.Draw();
+}

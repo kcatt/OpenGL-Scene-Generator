@@ -33,7 +33,11 @@ void Mesh3VN::Draw()
     glUniform3f(matEmissiveLoc, material.emissive.r, material.emissive.g, material.emissive.b);
     glUniform1f(matSpecExponentLoc, material.specularExponent);
 
+    GLfloat modelViewMat[16];
+    modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
+
     glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, modelMatrix);
+    glUniformMatrix4fv(modelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
 
     mesh.Draw();
 }

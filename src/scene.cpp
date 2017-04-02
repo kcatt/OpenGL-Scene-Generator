@@ -422,7 +422,13 @@ bool Scene::GetObject(void)
                 // load transform
                 ((SceneObject*)newObject)->transform = this->currTransform;
                 ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
-                
+                ((SceneObject*)newObject)->SetModelViewUniformLocation(modelViewMatrixLoc);
+
+                camera->Attach(*newObject);
+
+                // Call the notify function on the camera to notify the new object of the camera's data
+                camera->Notify();
+
                 objects.push_back(newObject);
                 
                 return true;
@@ -486,12 +492,21 @@ void Scene::Insert(SceneObject* newObject)
     Material  newMat;
     Transform newTransf;
 
-    // common things to do to all Shape
-    ((SceneObject*)newObject)->material.Set(newMat);
-    // load transform
-    ((SceneObject*)newObject)->transform = newTransf;
-    ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
-    
+    // Common things to do to all Shape
+    newObject->material.Set(newMat);
+    // Load transform
+    newObject->transform = newTransf;
+    // Set the new object's position to be 5 units in front of the camera
+    newObject->transform.SetPosition(camera->eye + (-1 * camera->backward * 5));
+
+    newObject->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
+    newObject->SetModelViewUniformLocation(modelViewMatrixLoc);
+
+    camera->Attach(*newObject);
+
+    // Call the notify function on the camera to notify the new object of the camera's data
+    camera->Notify();
+
     objects.push_back(newObject);
 }
 
@@ -533,6 +548,11 @@ void Scene::ResetRenderModes()
     }
 }
 
+void Scene::SetCamera(Camera* cam)
+{
+    camera = cam;
+}
+
 void Scene::ReadFunctionForwarder(void* context, const std::string& fileName)
 {
     static_cast<Scene*>(context)->ReadFile(fileName);
@@ -568,6 +588,11 @@ void Scene::SetLightUniformLocations(GLuint position, GLuint color, GLuint ambie
     lightPositionLoc = position;
     lightColorLoc    = color;
     lightAmbientLoc  = ambient;
+}
+
+void Scene::SetModelViewUniformLocation(GLuint modelView)
+{
+    modelViewMatrixLoc = modelView;
 }
 
 void Scene::SetUpLight()
