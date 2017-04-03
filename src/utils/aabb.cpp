@@ -1,5 +1,6 @@
 #include "aabb.h"
 #include <limits>
+#include <iostream>
 
 #define POS_INF std::numeric_limits<GLfloat>::infinity()
 #define NEG_INF -std::numeric_limits<GLfloat>::infinity()
@@ -70,7 +71,7 @@ void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
     vertices[6].Set(maxExtents.x, maxExtents.y, minExtents.z);
     vertices[7].Set(minExtents.x, maxExtents.y, minExtents.z);
 
-    vector<Vector3> vertVec =
+    std::vector<Vector3> vertVec =
     {
         vertices[0], vertices[1], vertices[2],
         vertices[2], vertices[3], vertices[0],
@@ -91,8 +92,9 @@ void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
         vertices[5], vertices[4], vertices[0]
     };
 
-    mesh.Create(vertVector);
+    mesh.Create(vertVec);
     mesh.SetUpGL();
+    mesh.SetRenderMode(Mesh::MODE_WIRE);
 
     center.Set((maxExtents.x + minExtents.x)/2.0f, (maxExtents.y + minExtents.y)/2.0f, (maxExtents.z + minExtents.z)/2.0f);
 }
@@ -104,7 +106,7 @@ void AABB::RecalculateFromTransform()
         vertices[i] = transform->affine * originalVertices[i];
     }
 
-    std::vector<Vector3> boxVec(vertices, vertices + 8);
+    std::vector<Vector3> boxVec(vertices, vertices + sizeof(vertices) / sizeof(Vector3));
 
     Generate(boxVec);
 }

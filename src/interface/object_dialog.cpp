@@ -14,29 +14,29 @@ void ObjectDialog::Create()
     
     AddGroup("Position");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.position.x = x; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.position.x = x; selectedObject->transform.SetPosition(selectedObject->transform.position); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.position.x; });
-    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.position.y = y; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.position.y = y; selectedObject->transform.SetPosition(selectedObject->transform.position); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.position.y; });
-    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.position.z = z; selectedObject->transform.SetPosition(selectedObject->transform.position); }, 
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.position.z = z; selectedObject->transform.SetPosition(selectedObject->transform.position); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.position.z; });
     
     AddGroup("Rotation");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.rotation.x = x; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.rotation.x = x; selectedObject->transform.SetRotation(selectedObject->transform.rotation); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.rotation.x; });
-    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.rotation.y = y; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.rotation.y = y; selectedObject->transform.SetRotation(selectedObject->transform.rotation); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.rotation.y; });
-    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.rotation.z = z; selectedObject->transform.SetRotation(selectedObject->transform.rotation); }, 
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.rotation.z = z; selectedObject->transform.SetRotation(selectedObject->transform.rotation); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.rotation.z; });
 
     AddGroup("Scale");
     SetLayout(nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 6);
-    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.scale.x = x; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+    AddVariable("X:", [this](GLfloat x){ selectedObject->transform.scale.x = x; selectedObject->transform.SetScale(selectedObject->transform.scale); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.scale.x; });
-    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.scale.y = y; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+    AddVariable("Y:", [this](GLfloat y){ selectedObject->transform.scale.y = y; selectedObject->transform.SetScale(selectedObject->transform.scale); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.scale.y; });
-    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.scale.z = z; selectedObject->transform.SetScale(selectedObject->transform.scale); }, 
+    AddVariable("Z:", [this](GLfloat z){ selectedObject->transform.scale.z = z; selectedObject->transform.SetScale(selectedObject->transform.scale); selectedObject->boundBox->RecalculateFromTransform(); }, 
                       [this]{ return selectedObject->transform.scale.z; });
     
     AddGroup("Emissive:");

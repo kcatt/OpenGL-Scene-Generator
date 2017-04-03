@@ -423,6 +423,7 @@ bool Scene::GetObject(void)
                 ((SceneObject*)newObject)->transform = this->currTransform;
                 ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
                 ((SceneObject*)newObject)->SetModelViewUniformLocation(modelViewMatrixLoc);
+                ((SceneObject*)newObject)->SetBoundsModelViewUnformLocation(boundsModelViewMatrixLoc);
 
                 camera->Attach(*newObject);
 
@@ -498,9 +499,11 @@ void Scene::Insert(SceneObject* newObject)
     newObject->transform = newTransf;
     // Set the new object's position to be 5 units in front of the camera
     newObject->transform.SetPosition(camera->eye + (-1 * camera->backward * 5));
+    newObject->boundBox->RecalculateFromTransform();
 
     newObject->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
     newObject->SetModelViewUniformLocation(modelViewMatrixLoc);
+    newObject->SetBoundsModelViewUnformLocation(boundsModelViewMatrixLoc);
 
     camera->Attach(*newObject);
 
@@ -529,6 +532,8 @@ void Scene::SetSelectedObject(SceneObject* obj)
     ObjectDialog* dialog = interface->GetObjectDialog();
     dialog->selectedObject = obj;
 
+    selectedObject = obj;
+
     if (obj == NULL)
     {
         dialog->Hide();
@@ -546,6 +551,14 @@ void Scene::ResetRenderModes()
     {
         objects[i]->mesh.SetRenderMode(Mesh::MODE_SOLID);
     }
+}
+
+void Scene::DrawSelectedBounds()
+{
+    if (selectedObject == NULL)
+        return;
+
+    selectedObject->DrawBounds();
 }
 
 void Scene::SetCamera(Camera* cam)
@@ -593,6 +606,11 @@ void Scene::SetLightUniformLocations(GLuint position, GLuint color, GLuint ambie
 void Scene::SetModelViewUniformLocation(GLuint modelView)
 {
     modelViewMatrixLoc = modelView;
+}
+
+void Scene::SetBoundsModelViewUnformLocation(GLuint modelView)
+{
+    boundsModelViewMatrixLoc = modelView;
 }
 
 void Scene::SetUpLight()

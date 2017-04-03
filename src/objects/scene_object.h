@@ -17,7 +17,7 @@
 class SceneObject : public IObserver<Camera>
 {
     public:
-        SceneObject();
+        SceneObject() { };
 
         /********************
          * Public Variables *
@@ -32,13 +32,14 @@ class SceneObject : public IObserver<Camera>
         /**************
          * Destructor *
          **************/
-        virtual ~SceneObject() { delete[] boundsIndexArr; }
+        virtual ~SceneObject() { }
 
         /********************
          * Public Functions *
          ********************/
         void SetUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
         void SetModelViewUniformLocation(GLuint modelView);
+        void SetBoundsModelViewUnformLocation(GLuint modelView);
         void Update(Camera* observable);
         void DrawBounds();
 
@@ -59,6 +60,8 @@ class SceneObject : public IObserver<Camera>
         GLuint matSpecularLoc;
         GLuint matEmissiveLoc;
         GLuint matSpecExponentLoc;
+        GLuint boundsModelViewMatrixLoc;
+
         Mat4x4 modelViewMatrix;
 };
 

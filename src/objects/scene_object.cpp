@@ -29,6 +29,11 @@ void SceneObject::SetModelViewUniformLocation(GLuint modelView)
     modelViewMatrixLoc = modelView;
 }
 
+void SceneObject::SetBoundsModelViewUnformLocation(GLuint modelView)
+{
+    boundsModelViewMatrixLoc = modelView;
+}
+
 void SceneObject::Update(Camera* observable)
 {
     modelViewMatrix = observable->projectionMatrix * observable->viewMatrix * transform.affine;
@@ -39,7 +44,7 @@ void SceneObject::DrawBounds()
     GLfloat modelViewMat[16];
     modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
 
-    glUniformMatrix4fv(modelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
+    glUniformMatrix4fv(boundsModelViewMatrixLoc, 1, GL_FALSE, modelViewMat);
 
     boundBox->mesh.Draw();
 }

@@ -118,6 +118,7 @@ int main(int argc, char* argv[])
     );
 
     Shader shader(argv[1], argv[2]);
+    Shader boundsShader("src/vshader-bounds.glsl", "src/fshader-bounds.glsl");
 
     scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
     
@@ -132,10 +133,12 @@ int main(int argc, char* argv[])
     GLuint matEmissive = glGetUniformLocation(shader.GetProgram(), "material.emissive");
     GLuint matSpecExponent = glGetUniformLocation(shader.GetProgram(), "material.shininess");
     GLuint modelViewMat = glGetUniformLocation(shader.GetProgram(), "modelView");
+    GLuint boundsModelMat = glGetUniformLocation(boundsShader.GetProgram(), "modelView");
 
     scene.SetModelUniformLocations(modelMat, matAmbient, matDiffuse, matSpecular, matEmissive, matSpecExponent);
     scene.SetLightUniformLocations(lightPos, lightColor, lightAmbient);
     scene.SetModelViewUniformLocation(modelViewMat);
+    scene.SetBoundsModelViewUnformLocation(boundsModelMat);
 
     scene.interface = new Interface(screen);
     scene.SetUpMainDialog();
@@ -158,11 +161,15 @@ int main(int argc, char* argv[])
 
         shader.Use();
         cam->UpdateMatrices();
+        cam->Notify();
         cPos = cam->GetPosition();
 
         glUniform3f(viewPos, cPos.x, cPos.y, cPos.z);
 
         scene.DrawScene();
+
+        boundsShader.Use();
+        scene.DrawSelectedBounds();
 
         screen->setVisible(true);
         screen->performLayout();

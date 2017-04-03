@@ -17,6 +17,9 @@ Mesh::Mesh(const std::vector<Vector3>& vertexVector)
 
 void Mesh::Create(const std::vector<Vector3>& vertexVector, bool hardEdges)
 {
+    vertices.clear();
+    normals.clear();
+    
     vertices.resize(vertexVector.size());
     normals.resize(vertexVector.size());
 

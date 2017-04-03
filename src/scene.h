@@ -52,6 +52,7 @@ class Scene
         void SetModelUniformLocations(GLuint model, GLuint ambient, GLuint diffuse, GLuint specular, GLuint emissive, GLuint specExponent);
         void SetLightUniformLocations(GLuint position, GLuint color, GLuint ambient);
         void SetModelViewUniformLocation(GLuint modelView);
+        void SetBoundsModelViewUnformLocation(GLuint modelView);
         void SetExportFileName(const std::string& fileName);
         void Export(const std::string& fileName);
         void Export();
@@ -60,6 +61,7 @@ class Scene
         void SetSelectedObject(SceneObject* obj);
         void ResetRenderModes();
         void SetCamera(Camera* cam);
+        void DrawSelectedBounds();
 
         /********************
          * Static Functions *
@@ -83,9 +85,10 @@ class Scene
         int nextLine;
         Light   light;
         Color3  ambientColor;
-        Transform   currTransform;
-        Material    currMaterial;
-        Camera*     camera;
+        Transform    currTransform;
+        Material     currMaterial;
+        Camera*      camera;
+        SceneObject* selectedObject;
         std::string exportFileName;
         std::vector<std::string>              comments;
         std::unique_ptr<std::ifstream>        inFile;
@@ -101,6 +104,7 @@ class Scene
         GLuint lightPositionLoc;
         GLuint lightColorLoc;
         GLuint lightAmbientLoc;
+        GLuint boundsModelViewMatrixLoc;
 
         /*********************
          * Private Functions *
