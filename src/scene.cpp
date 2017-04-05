@@ -11,7 +11,7 @@
 
 Scene::Scene() {
     currMaterial.SetDefault();
-    backgroundColor.Set(.8,.3,0.6f);
+    backgroundColor.Set(0.2f, 0.3f, 0.3f);
     ambientColor.Set(0.1f,0.1f,0.1f);
 
     SetUpMainDialog();
@@ -164,7 +164,7 @@ bool Scene::IsIdentifier(const std::string& keyword)
 bool Scene::ReadFile(const std::string& fileName)
 {
     currMaterial.SetDefault();
-    backgroundColor.Set(.8,.3,0.6f);
+    backgroundColor.Set(0.2f, 0.3f, 0.3f);
     ambientColor.Set(0.1f,0.1f,0.1f);
     FreeScene();
 

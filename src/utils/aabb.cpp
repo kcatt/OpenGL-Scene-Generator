@@ -48,18 +48,7 @@ AABB::AABB(const std::vector<Vector3>& vertices)
         originalVertices[0], originalVertices[1], originalVertices[5],
         originalVertices[5], originalVertices[4], originalVertices[0]
     };
-
-    int tri = 1;
-    for (size_t i = 0; i < vertVec.size(); i++)
-    {
-        if (i % 3 == 0)
-        {
-            std::cout << "TRIANGLE " << tri << std::endl;
-            tri++;
-        }
-        std::cout << vertVec[i] << std::endl;
-    }
-
+    
     mesh.Create(vertVec);
     mesh.SetUpGL();
     mesh.SetRenderMode(Mesh::MODE_WIRE);
@@ -106,8 +95,6 @@ void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
     vertices[5].Set(maxExtents.x, minExtents.y, minExtents.z); // bottom right B 
     vertices[6].Set(maxExtents.x, maxExtents.y, minExtents.z); // top right B
     vertices[7].Set(minExtents.x, maxExtents.y, minExtents.z); // top left B
-
-    
 
     center.Set((maxExtents.x + minExtents.x)/2.0f, (maxExtents.y + minExtents.y)/2.0f, (maxExtents.z + minExtents.z)/2.0f);
 }

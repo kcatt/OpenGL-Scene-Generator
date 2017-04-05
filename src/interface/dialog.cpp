@@ -84,6 +84,7 @@ void Dialog::Hide()
 
 void Dialog::Show()
 {
+    Refresh();
     window->setVisible(true);
 }
 

@@ -74,13 +74,8 @@ void MainDialog::OpenLoadDialog()
 
     if (result == NFD_OKAY)
     {
-        std::cout << outPath << std::endl;
         loadCallback(sceneContext, std::string(outPath));
         delete outPath;
-    }
-    else if (result == NFD_CANCEL)
-    {
-        std::cout << "Canceled!" << std::endl;
     }
 }
 
@@ -91,13 +86,8 @@ void MainDialog::OpenSaveDialog()
 
     if (result == NFD_OKAY)
     {
-        std::cout << outPath << std::endl;
         saveCallback(sceneContext, std::string(outPath));
         delete outPath;
-    }
-    else if (result == NFD_CANCEL)
-    {
-        std::cout << "Canceled!" << std::endl;
     }
 }
 
@@ -134,11 +124,6 @@ void MainDialog::Insert(const std::string& objType)
         {
             newObject = new Mesh3VN(std::string(outPath));
             delete outPath;
-        }
-        else if (result == NFD_CANCEL)
-        {
-            std::cout << "Canceled!" << std::endl;
-            return;
         }
     }
 

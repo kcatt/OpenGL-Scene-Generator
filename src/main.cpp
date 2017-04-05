@@ -17,12 +17,18 @@
 using namespace std;
 using namespace nanogui;
 
+float windowWidth = 1024;
+float windowHeight = 768;
+string autosaveName = "";
+string loadName = "";
+
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers);
 void HandleMouseMovement();
 void ResizeCallback(GLFWwindow* window, int width, int height);
+void ParseOptions(int argc, char* argv[]);
 
 struct MousePositionSave
 {
@@ -42,12 +48,7 @@ bool middleHeld = false;
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3)
-    {
-        cout << "Incorrect number of arguments!" << endl;
-        cout << "Usage: [executable] vertexShader fragmentShader" << endl;
-        return -1;
-    }
+    ParseOptions(argc, argv);
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -109,14 +110,12 @@ int main(int argc, char* argv[])
             screen->dropCallbackEvent(count, filenames);
         }
 
-    );
+    );    
 
-    
-
-    Shader shader(argv[1], argv[2]);
+    Shader shader("src/vshader.glsl", "src/fshader.glsl");
     Shader boundsShader("src/vshader-bounds.glsl", "src/fshader-bounds.glsl");
 
-    scene.SetBackground(Color3(0.2f, 0.3f, 0.3f));
+    scene.SetBackground(Color3(0.1f, 0.3f, 0.1f));
     
     GLuint modelMat = glGetUniformLocation(shader.GetProgram(), "model");
     GLuint lightColor = glGetUniformLocation(shader.GetProgram(), "light.color");
@@ -151,6 +150,11 @@ int main(int argc, char* argv[])
     );
 
     scene.SetCamera(cam);
+
+    // Load the given file if it was passed as an argument
+    if (loadName != "")
+	scene.ReadFile(loadName);
+    
     Vector3 cPos = cam->GetPosition();
     
     while (!glfwWindowShouldClose(window))
@@ -159,7 +163,7 @@ int main(int argc, char* argv[])
 
         glfwPollEvents();
         HandleMouseMovement();
-
+	
         glClearColor(scene.backgroundColor.r, scene.backgroundColor.g, scene.backgroundColor.b, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -280,4 +284,44 @@ void HandleMouseMovement()
 void ResizeCallback(GLFWwindow* window, int width, int height)
 {
     
+}
+
+void ParseOptions(int argc, char* argv[])
+{
+    vector<string> temp;
+    for (int i = 1; i < argc; i++) {
+        temp.push_back(argv[i]);
+    }
+    for (size_t i = 0; i < temp.size(); i+=2) {
+        if (temp[i] == "-w" ||
+                   temp[i] == "-W") {
+            if (i+1 == temp.size()) {
+                cout << "Width flag set, but no block size given. Defaulting to 640." << endl;
+                continue;
+            }
+            windowWidth = atoi(temp[i+1].c_str());
+        } else if (temp[i] == "-h" ||
+                   temp[i] == "-H") {
+            if (i+1 == temp.size()) {
+                cout << "Height flag set, but no block size given. Defaulting to 480." << endl;
+                continue;
+            }
+            windowHeight = atoi(temp[i+1].c_str());
+        } else if (temp[i] == "-f" ||
+                   temp[i] == "-F") {
+            if (i+1 == temp.size()) {
+              cout << "File flag set, but no filename given. Defaulting to scene.txt." << endl;
+              continue;
+            }
+            loadName = temp[i+1];
+        }
+	else if (temp[i] == "a" ||
+		 temp[i] == "A") {
+	    if (i+1 == temp.size()) {
+		cout << "Autosave file flag set, but no filename given. Defaulting to auto generated name." << endl;
+		continue;
+	    }
+	    autosaveName = temp[i+1];
+	}
+    }
 }

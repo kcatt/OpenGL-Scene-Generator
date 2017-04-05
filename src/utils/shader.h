@@ -9,16 +9,27 @@
 
 class Shader
 {
-    public: 
+    public:
+        /***************
+         * Constructor *
+         ***************/
         Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+
+	/********************
+         * Public Functions *
+         ********************/
         void Use();
         GLuint GetProgram();
     
     private:
-        // Prevent the creation of instances of this object
-        
-
+	/********************
+         * Private Function *
+         ********************/
         GLuint SetUpShader(const GLchar* source, std::string shaderType);
+
+	/********************
+         * Private Variable *
+         ********************/
         GLuint program;
 };
 

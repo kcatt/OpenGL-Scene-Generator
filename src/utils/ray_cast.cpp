@@ -18,8 +18,6 @@ SceneObject* RayCast::IntersectTest(const std::vector<SceneObject*>& objects)
     {
         GLfloat t = Intersect(*(objects[i]->boundBox));
 
-        std::cout << "t: " << t << std::endl;
-
         if (t > 0)
         {
             intersectTimes.push_back(t);

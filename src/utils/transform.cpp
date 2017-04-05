@@ -270,8 +270,6 @@ void Transform::ApplyTransform()
 
     affine.PreMultiply(translate);
     invAffine.PostMultiply(invTrans);
-
-    (affine * invAffine).Print();
 }
 
 void Transform::CheckRotation()

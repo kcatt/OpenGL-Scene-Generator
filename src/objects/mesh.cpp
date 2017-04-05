@@ -38,17 +38,6 @@ void Mesh::Create(const std::vector<Vector3>& vertexVector, bool hardEdges)
     {
         SetHardEdgeGLArrays();
     }
-
-    int tri = 1;
-    for (size_t i = 0; i < vertices.size(); i++)
-    {
-        if (i % 3 == 0)
-        {
-            std::cout << "MESH TRIANGLE " << tri << std::endl;
-            tri++;
-        }
-        std::cout << vertices[i] << std::endl;
-    }
 }
 
 void Mesh::DrawGL() const
