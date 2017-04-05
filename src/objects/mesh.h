@@ -51,6 +51,8 @@ class Mesh
         GLuint meshVBO;
         GLuint meshEBO;
 
+        bool setup;
+
         /*********************
          * Private Functions *
          *********************/

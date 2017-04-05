@@ -6,6 +6,7 @@
 Mesh::Mesh()
 {
     mode = MODE_SOLID; // Default is to make solid mesh
+    setup = false;
 }
 
 Mesh::Mesh(const std::vector<Vector3>& vertexVector)
@@ -36,6 +37,17 @@ void Mesh::Create(const std::vector<Vector3>& vertexVector, bool hardEdges)
     else
     {
         SetHardEdgeGLArrays();
+    }
+
+    int tri = 1;
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        if (i % 3 == 0)
+        {
+            std::cout << "MESH TRIANGLE " << tri << std::endl;
+            tri++;
+        }
+        std::cout << vertices[i] << std::endl;
     }
 }
 
@@ -80,26 +92,43 @@ void Mesh::Draw()
 
 void Mesh::SetUpGL()
 {
-    glGenVertexArrays(1, &meshVAO);
-    glGenBuffers(1, &meshVBO);
-    glGenBuffers(1, &meshEBO);
+    if (!setup)
+    {
+        glGenVertexArrays(1, &meshVAO);
+        glGenBuffers(1, &meshVBO);
+        glGenBuffers(1, &meshEBO);
 
-    glBindVertexArray(meshVAO);
+        glBindVertexArray(meshVAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
-    glBufferData(GL_ARRAY_BUFFER, reducedGLArray.size() * sizeof(GLfloat), &reducedGLArray[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+        glBufferData(GL_ARRAY_BUFFER, reducedGLArray.size() * sizeof(GLfloat), &reducedGLArray[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexVec.size() * sizeof(GLuint), &indexVec[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexVec.size() * sizeof(GLuint), &indexVec[0], GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+    else
+    {
+        glBindVertexArray(meshVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, reducedGLArray.size() * sizeof(GLfloat), &reducedGLArray[0]);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEBO);
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(GLfloat), indexVec.size() * sizeof(GLuint), &indexVec[0]);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    setup = true;
 }
 
 void Mesh::SetRenderMode(RenderMode m)

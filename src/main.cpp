@@ -33,6 +33,7 @@ struct MousePositionSave
 struct MousePositionSave mousePosition;
 Camera* cam = NULL;
 GLFWwindow* window = NULL;
+GLFWwindow* dialogWindow = NULL;
 Screen* screen = NULL;
 Scene  scene;
 
@@ -56,6 +57,7 @@ int main(int argc, char* argv[])
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     window = glfwCreateWindow(800, 600, "Scene Description Language Generator", nullptr, nullptr);
+    dialogWindow = glfwCreateWindow(800, 600, "Scene Description Language Generator", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create the GLFW window" << std::endl;

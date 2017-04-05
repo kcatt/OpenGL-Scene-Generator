@@ -42,6 +42,7 @@ void SceneObject::Update(Camera* observable)
 void SceneObject::DrawBounds()
 {
     GLfloat modelViewMat[16];
+
     modelViewMatrix.ConvertToOpenGLMatrix(modelViewMat);
 
     glUniformMatrix4fv(boundsModelViewMatrixLoc, 1, GL_FALSE, modelViewMat);

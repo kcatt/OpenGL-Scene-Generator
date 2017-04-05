@@ -228,16 +228,6 @@ void Transform::ApplyTransform()
 {
     ResetMatrices();
 
-    Vector3 xAxis(1, 0, 0);
-    Vector3 yAxis(0, 1, 0);
-    Vector3 zAxis(0, 0, 1);
-    Rotate(rotation.x, xAxis);
-    Rotate(rotation.y, yAxis);
-    Rotate(rotation.z, zAxis);
-
-    affine.PreMultiply(rotationMat);
-    invAffine.PostMultiply(invRotation);
-
     Mat4x4 scaleMat;
     Mat4x4 invScale;
     
@@ -258,6 +248,16 @@ void Transform::ApplyTransform()
     affine.PreMultiply(scaleMat);
     invAffine.PostMultiply(invScale);
 
+    Vector3 xAxis(1, 0, 0);
+    Vector3 yAxis(0, 1, 0);
+    Vector3 zAxis(0, 0, 1);
+    Rotate(rotation.x, xAxis);
+    Rotate(rotation.y, yAxis);
+    Rotate(rotation.z, zAxis);
+
+    affine.PreMultiply(rotationMat);
+    invAffine.PostMultiply(invRotation);
+
     Mat4x4 translate;
     Mat4x4 invTrans;
     translate.matrix[0][3] = position.x;
@@ -270,6 +270,8 @@ void Transform::ApplyTransform()
 
     affine.PreMultiply(translate);
     invAffine.PostMultiply(invTrans);
+
+    (affine * invAffine).Print();
 }
 
 void Transform::CheckRotation()

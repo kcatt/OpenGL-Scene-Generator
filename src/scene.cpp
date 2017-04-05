@@ -455,11 +455,22 @@ void Scene::Export(const std::string& fileName)
     for (size_t i = 0; i < objects.size(); i++)
     {
         outFile << "push ";
-        outFile << "rotate "    << objects[i]->transform.rotation.x << " 1 0 0 ";
-        outFile << "rotate "    << objects[i]->transform.rotation.y << " 0 1 0 ";
-        outFile << "rotate "    << objects[i]->transform.rotation.z << " 0 0 1 ";
-        outFile << "scale "     << objects[i]->transform.scale      << " ";
-        outFile << "translate " << objects[i]->transform.position   << " ";
+
+        if (objects[i]->transform.scale != Vector3(0,0,0))
+            outFile << "scale "     << objects[i]->transform.scale      << " ";
+
+        if (objects[i]->transform.rotation.x != 0)
+            outFile << "rotate "    << objects[i]->transform.rotation.x << " 1 0 0 ";
+        
+        if (objects[i]->transform.rotation.y != 0)
+            outFile << "rotate "    << objects[i]->transform.rotation.y << " 0 1 0 ";
+
+        if (objects[i]->transform.rotation.z != 0)
+            outFile << "rotate "    << objects[i]->transform.rotation.z << " 0 0 1 ";
+        
+        if (objects[i]->transform.position != Vector3(0,0,0))
+            outFile << "translate " << objects[i]->transform.position   << " ";
+
         outFile << "ambient "   << objects[i]->material.ambient     << " ";
         outFile << "diffuse "   << objects[i]->material.diffuse     << " ";
         outFile << "specular "  << objects[i]->material.specular    << " ";

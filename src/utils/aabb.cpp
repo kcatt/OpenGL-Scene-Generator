@@ -27,6 +27,42 @@ AABB::AABB(const std::vector<Vector3>& vertices)
     {
         originalVertices[i] = this->vertices[i];
     }
+
+    std::vector<Vector3> vertVec =
+    {
+        originalVertices[0], originalVertices[1], originalVertices[2],
+        originalVertices[2], originalVertices[3], originalVertices[0],
+
+        originalVertices[4], originalVertices[5], originalVertices[6],
+        originalVertices[6], originalVertices[7], originalVertices[4],
+
+        originalVertices[0], originalVertices[3], originalVertices[7],
+        originalVertices[7], originalVertices[4], originalVertices[0],
+
+        originalVertices[1], originalVertices[2], originalVertices[6],
+        originalVertices[6], originalVertices[5], originalVertices[1],
+
+        originalVertices[2], originalVertices[6], originalVertices[7],
+        originalVertices[7], originalVertices[3], originalVertices[2],
+
+        originalVertices[0], originalVertices[1], originalVertices[5],
+        originalVertices[5], originalVertices[4], originalVertices[0]
+    };
+
+    int tri = 1;
+    for (size_t i = 0; i < vertVec.size(); i++)
+    {
+        if (i % 3 == 0)
+        {
+            std::cout << "TRIANGLE " << tri << std::endl;
+            tri++;
+        }
+        std::cout << vertVec[i] << std::endl;
+    }
+
+    mesh.Create(vertVec);
+    mesh.SetUpGL();
+    mesh.SetRenderMode(Mesh::MODE_WIRE);
 }
 
 void AABB::Generate(const std::vector<Vector3>& vertices)
@@ -62,39 +98,16 @@ void AABB::Generate(const std::vector<Vector3>& vertices)
 
 void AABB::Generate(const Vector3& minExtents, const Vector3& maxExtents)
 {
-    vertices[0].Set(minExtents.x, minExtents.y, maxExtents.z);
-    vertices[1].Set(maxExtents.x, minExtents.y, maxExtents.z);
-    vertices[2].Set(maxExtents.x, maxExtents.y, maxExtents.z);
-    vertices[3].Set(minExtents.x, maxExtents.y, maxExtents.z);
-    vertices[4].Set(minExtents.x, minExtents.y, minExtents.z);
-    vertices[5].Set(maxExtents.x, minExtents.y, minExtents.z);
-    vertices[6].Set(maxExtents.x, maxExtents.y, minExtents.z);
-    vertices[7].Set(minExtents.x, maxExtents.y, minExtents.z);
+    vertices[0].Set(minExtents.x, minExtents.y, maxExtents.z); // bottom left F 
+    vertices[1].Set(maxExtents.x, minExtents.y, maxExtents.z); // bottom right F
+    vertices[2].Set(maxExtents.x, maxExtents.y, maxExtents.z); // top right F
+    vertices[3].Set(minExtents.x, maxExtents.y, maxExtents.z); // top left F
+    vertices[4].Set(minExtents.x, minExtents.y, minExtents.z); // bottom left B
+    vertices[5].Set(maxExtents.x, minExtents.y, minExtents.z); // bottom right B 
+    vertices[6].Set(maxExtents.x, maxExtents.y, minExtents.z); // top right B
+    vertices[7].Set(minExtents.x, maxExtents.y, minExtents.z); // top left B
 
-    std::vector<Vector3> vertVec =
-    {
-        vertices[0], vertices[1], vertices[2],
-        vertices[2], vertices[3], vertices[0],
-
-        vertices[4], vertices[5], vertices[6],
-        vertices[6], vertices[7], vertices[4],
-
-        vertices[0], vertices[3], vertices[7],
-        vertices[7], vertices[4], vertices[0],
-
-        vertices[1], vertices[2], vertices[6],
-        vertices[6], vertices[5], vertices[1],
-
-        vertices[2], vertices[6], vertices[7],
-        vertices[7], vertices[3], vertices[2],
-
-        vertices[0], vertices[1], vertices[5],
-        vertices[5], vertices[4], vertices[0]
-    };
-
-    mesh.Create(vertVec);
-    mesh.SetUpGL();
-    mesh.SetRenderMode(Mesh::MODE_WIRE);
+    
 
     center.Set((maxExtents.x + minExtents.x)/2.0f, (maxExtents.y + minExtents.y)/2.0f, (maxExtents.z + minExtents.z)/2.0f);
 }

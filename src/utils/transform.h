@@ -60,14 +60,14 @@ class Transform
 
             return *this;
         }
-
+Mat4x4 invRotation;
     private:
         /*********************
          * Private Variables *
          *********************/
         // define rotation matrices to use to find rotations
         Mat4x4 rotationMat;
-        Mat4x4 invRotation;
+        
 
         /*********************
          * Private Functions *

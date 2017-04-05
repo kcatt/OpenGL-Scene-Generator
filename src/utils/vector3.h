@@ -52,6 +52,7 @@ class Vector3
         friend Vector3 operator-(const Vector3& lhs, const Vector3& rhs);
         friend std::ostream& operator<<(std::ostream& out, const Vector3& v);
         friend bool operator==(const Vector3& lhs, const Vector3& rhs);
+        friend bool operator!=(const Vector3& lhs, const Vector3& rhs);
 
         // operator= cannot be defined using friend
         inline Vector3& operator=(const Vector3& rhs)
