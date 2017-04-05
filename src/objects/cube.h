@@ -2,7 +2,6 @@
 #define __CUBE__H_
 
 #include "scene_object.h"
-#include "mesh.h"
 
 class Cube : public SceneObject
 {
@@ -20,7 +19,6 @@ class Cube : public SceneObject
             if (boundBox != NULL)
                 delete boundBox;
         }
-
 
         /***********************
          * Overloaded Function *

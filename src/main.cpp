@@ -33,7 +33,6 @@ struct MousePositionSave
 struct MousePositionSave mousePosition;
 Camera* cam = NULL;
 GLFWwindow* window = NULL;
-GLFWwindow* dialogWindow = NULL;
 Screen* screen = NULL;
 Scene  scene;
 
@@ -56,8 +55,7 @@ int main(int argc, char* argv[])
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(800, 600, "Scene Description Language Generator", nullptr, nullptr);
-    dialogWindow = glfwCreateWindow(800, 600, "Scene Description Language Generator", nullptr, nullptr);
+    window = glfwCreateWindow(1024, 768, "Scene Description Language Generator", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create the GLFW window" << std::endl;
@@ -113,11 +111,7 @@ int main(int argc, char* argv[])
 
     );
 
-    glfwSetFramebufferSizeCallback(window,
-        [](GLFWwindow *, int width, int height) {
-            screen->resizeCallbackEvent(width, height);
-        }
-    );
+    
 
     Shader shader(argv[1], argv[2]);
     Shader boundsShader("src/vshader-bounds.glsl", "src/fshader-bounds.glsl");
@@ -146,8 +140,16 @@ int main(int argc, char* argv[])
     scene.SetUpMainDialog();
 
     cam = new Camera();
-    cam->SetShape(45.0f, 800, 600, 0.1f, 200.0f);
+    cam->SetShape(45.0f, width, height, 0.1f, 200.0f);
     cam->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
+    glfwSetFramebufferSizeCallback(window,
+        [](GLFWwindow *, int width, int height) {
+            screen->resizeCallbackEvent(width, height);
+            cam->SetShape(45.0f, width, height, 0.1f, 200.0f);
+        }
+    );
+
     scene.SetCamera(cam);
     Vector3 cPos = cam->GetPosition();
     

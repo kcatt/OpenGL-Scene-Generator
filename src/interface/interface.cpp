@@ -4,7 +4,7 @@ Interface::Interface(nanogui::Screen* screen)
 {
     this->screen = screen;
     mainDialog = new MainDialog(screen, 10, 10);
-    objectDialog = new ObjectDialog(screen, 550, 10);
+    objectDialog = new ObjectDialog(screen, 774, 10);
     objectDialog->Hide();
 }
 
