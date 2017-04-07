@@ -22,6 +22,11 @@ class IObservable
                 observer->Update(static_cast<T*>(this));
         }
 
+        void ClearObservers()
+        {
+            observers.clear();
+        }
+
     private:
         /********************
          * Private Variable *

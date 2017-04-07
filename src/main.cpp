@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(1024, 768, "Scene Description Language Generator", nullptr, nullptr);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Scene Description Language Generator", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create the GLFW window" << std::endl;

@@ -112,6 +112,8 @@ std::string Scene::NextToken(void)
 // Clear the vectors in the scene
 void Scene::FreeScene(void)
 {
+    SetSelectedObject(NULL);
+
     for (size_t i = 0; i < objects.size(); i++)
     {
         if (objects[i] != NULL)
@@ -119,6 +121,7 @@ void Scene::FreeScene(void)
     }
 
     objects.clear();
+    camera->ClearObservers();
 }
 
 GLfloat Scene::GetFloat(void)
@@ -166,6 +169,7 @@ bool Scene::ReadFile(const std::string& fileName)
     currMaterial.SetDefault();
     backgroundColor.Set(0.2f, 0.3f, 0.3f);
     ambientColor.Set(0.1f,0.1f,0.1f);
+    
     FreeScene();
 
     inFile = std::make_unique<std::ifstream>(fileName.c_str());
@@ -175,11 +179,10 @@ bool Scene::ReadFile(const std::string& fileName)
         std::cout << "Cannot find or open file: " << fileName << std::endl;
         return false;
     }
-
+    
     fileStream = std::make_unique<std::stringstream>();
     currLine = nextLine = 1;
     char nextChar;
-    FreeScene();
 
     // Read the whole file
     while (inFile->get(nextChar)) 
@@ -417,6 +420,7 @@ bool Scene::GetObject(void)
                         return false;
                     }
                 }
+                
                 // common things to do to all Shape
                 ((SceneObject*)newObject)->material.Set(currMaterial);
                 // load transform
@@ -429,7 +433,7 @@ bool Scene::GetObject(void)
 
                 // Call the notify function on the camera to notify the new object of the camera's data
                 camera->Notify();
-
+                
                 objects.push_back(newObject);
                 
                 return true;
