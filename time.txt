@@ -44,3 +44,4 @@
 4/3/2017|1.5|Worked on poster.
 4/4/2017|5.5|Got a wireframe to display on selected object and worked on poster. Began adding def support.
 4/5/2017|3|Command line arguments added and debug text removed. Worked on presentation.
+4/6/2017|2|Finished working on presentation and practiced.
