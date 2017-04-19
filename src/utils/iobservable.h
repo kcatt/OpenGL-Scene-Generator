@@ -23,7 +23,7 @@ class IObservable
         }
 
         void ClearObservers()
-        {
+        {	    
             observers.clear();
         }
 

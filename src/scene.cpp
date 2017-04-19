@@ -113,7 +113,7 @@ std::string Scene::NextToken(void)
 void Scene::FreeScene(void)
 {
     SetSelectedObject(NULL);
-
+    
     for (size_t i = 0; i < objects.size(); i++)
     {
         if (objects[i] != NULL)
@@ -166,6 +166,7 @@ bool Scene::IsIdentifier(const std::string& keyword)
 
 bool Scene::ReadFile(const std::string& fileName)
 {
+    LoadCamera(fileName);
     currMaterial.SetDefault();
     backgroundColor.Set(0.2f, 0.3f, 0.3f);
     ambientColor.Set(0.1f,0.1f,0.1f);
@@ -489,7 +490,57 @@ void Scene::Export(const std::string& fileName)
     {
         outFile << "!" << comments[i] << std::endl;
     }
+
+    SaveCamera(fileName);
 }
+
+void Scene::SaveCamera(const std::string& fileName)
+{
+    std::string cameraFileName = fileName + ".camera";
+    std::ofstream outFile(cameraFileName.c_str());
+
+    GLfloat viewAngle, width, height, nearDist, farDist;
+    camera->GetShape(viewAngle, width, height, nearDist, farDist);
+    
+    outFile << camera->backward << " "
+	    << camera->right << " "
+	    << camera->up << ""
+	    << camera->eye << std::endl;
+    outFile << viewAngle << " "
+	    << width << " "
+	    << height << " "
+	    << nearDist << " "
+	    << farDist << std::endl;
+}
+
+void Scene::LoadCamera(const std::string& fileName)
+{
+    GLfloat x, y, z;
+
+    std::string cameraFileName = fileName + ".camera";
+    std::ifstream infile(cameraFileName.c_str());
+
+    if (infile)
+    {
+	infile >> x >> y >> z;
+	Vector3 backward(x, y, z);
+	infile >> x >> y >> z;
+	Vector3 right(x, y, z);
+	infile >> x >> y >> z;
+	Vector3 up(x, y, z);
+	infile >> x >> y >> z;
+	Vector3 eye(x, y, z);
+	GLfloat viewAngle, width, height, nearDist, farDist;
+	infile >> viewAngle >> width >> height  >> nearDist >> farDist;
+	camera->SetFromAxes(backward, right, up, eye);
+	camera->SetShape(viewAngle, width, height, nearDist, farDist);
+    }
+    else
+    {
+	camera->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    }
+}
+
 
 void Scene::Export()
 {

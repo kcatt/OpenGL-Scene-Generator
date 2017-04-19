@@ -62,6 +62,8 @@ class Scene
         void ResetRenderModes();
         void SetCamera(Camera* cam);
         void DrawSelectedBounds();
+	void SaveCamera(const std::string& fileName);
+	void LoadCamera(const std::string& fileName);
 
         /********************
          * Static Functions *

@@ -31,6 +31,16 @@ void Camera::Set(Vector3 eye, Vector3 look, Vector3 up)
     updateViewMatrix = true;
 }
 
+void Camera::SetFromAxes(Vector3 backward, Vector3 right, Vector3 up, Vector3 eye)
+{
+    this->eye.Set(eye);
+    this->backward.Set(backward);
+    this->right.Set(right);
+    this->up.Set(up);
+
+    updateViewMatrix = true;
+}
+
 /* Rotate the camera about the Z-axis */
 void Camera::Roll(GLfloat angle)
 {
@@ -102,6 +112,15 @@ void Camera::GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GL
 {
     viewAngle = this->viewAngle;
     aspect    = this->aspect;
+    nearDist  = this->nearDist;
+    farDist   = this->farDist;
+}
+
+void Camera::GetShape(GLfloat& viewAngle, GLfloat& width, GLfloat& height, GLfloat& nearDist, GLfloat& farDist)
+{
+    viewAngle = this->viewAngle;
+    width     = this->width;
+    height    = this->height;
     nearDist  = this->nearDist;
     farDist   = this->farDist;
 }

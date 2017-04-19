@@ -188,7 +188,7 @@ int main(int argc, char* argv[])
         glfwSwapBuffers(window);
     }
 
-    delete cam;
+    //delete cam;
     delete screen;
 
     nanogui::shutdown();
