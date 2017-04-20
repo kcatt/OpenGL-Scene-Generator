@@ -17,6 +17,7 @@
 #include "light.h"
 #include "interface.h"
 #include "camera.h"
+#include "def_object.h"
 
 // Enums for the tokens of the sdl file
 enum mTokenType {

@@ -385,7 +385,7 @@ bool Scene::GetObject(void)
             case T_NULL:
                 break; // The null token represents end-of-file
             case DEF: {
-                std::string name, temp, leftBrack, rightBracket;
+                std::string name, temp, leftBracket, rightBracket;
                 std::string input;
 
                 name = NextToken();

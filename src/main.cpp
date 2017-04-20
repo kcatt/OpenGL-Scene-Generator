@@ -18,8 +18,8 @@
 using namespace std;
 using namespace nanogui;
 
-float windowWidth = 1024;
-float windowHeight = 768;
+float windowWidth = 800;
+float windowHeight = 600;
 string autosaveName = "";
 string loadName = "";
 
