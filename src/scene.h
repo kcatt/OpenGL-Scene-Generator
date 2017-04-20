@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <map>
 #include "transform.h"
 #include "material.h"
 #include "color3.h"
@@ -56,28 +57,28 @@ class Scene
         void SetExportFileName(const std::string& fileName);
         void Export(const std::string& fileName);
         void Export();
-        void Insert(SceneObject* newObject);
+        void Insert(std::shared_ptr<SceneObject> newObject);
         void SetUpMainDialog();
-        void SetSelectedObject(SceneObject* obj);
+        void SetSelectedObject(std::shared_ptr<SceneObject> obj);
         void ResetRenderModes();
         void SetCamera(Camera* cam);
         void DrawSelectedBounds();
-	void SaveCamera(const std::string& fileName);
-	void LoadCamera(const std::string& fileName);
+        void SaveCamera(const std::string& fileName);
+        void LoadCamera(const std::string& fileName);
 
         /********************
          * Static Functions *
          ********************/
         static void ReadFunctionForwarder(void* context, const std::string& fileName);
         static void ExportFunctionForwarder(void* context, const std::string& fileName);
-        static void InsertFunctionForwarder(void* context, SceneObject* newObject);
+        static void InsertFunctionForwarder(void* context, std::shared_ptr<SceneObject> newObject);
 
         /*******************
          * Public Variable *
          *******************/
         Interface* interface = NULL;
         Color3     backgroundColor; 
-        std::vector<SceneObject*> objects;
+        std::vector<std::shared_ptr<SceneObject>> objects;
 
     private:
         /*********************
@@ -90,11 +91,13 @@ class Scene
         Transform    currTransform;
         Material     currMaterial;
         Camera*      camera;
-        SceneObject* selectedObject;
+        
         std::string exportFileName;
-        std::vector<std::string>              comments;
-        std::unique_ptr<std::ifstream>        inFile;
-        std::unique_ptr<std::stringstream>    fileStream;
+        std::vector<std::string>            comments;
+        std::shared_ptr<SceneObject>        selectedObject;
+        std::unique_ptr<std::ifstream>      inFile;
+        std::unique_ptr<std::stringstream>  fileStream;
+        std::map<std::string, std::shared_ptr<DefObject> > defObjects;
         
         GLuint modelViewMatrixLoc;
         GLuint modelMatrixLoc;

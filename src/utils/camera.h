@@ -17,18 +17,23 @@ class Camera : public IObservable<Camera>
          ****************/
         Camera();
 
+        /**************
+         * Destructor *
+         **************/
+        ~Camera() { };
+
         /********************
          * Public Functions *
          ********************/
         void Set(Vector3 eye, Vector3 look, Vector3 up);
-	void SetFromAxes(Vector3 backward, Vector3 right, Vector3 up, Vector3 eye);
+	    void SetFromAxes(Vector3 backward, Vector3 right, Vector3 up, Vector3 eye);
         void Roll(GLfloat angle);
         void Pitch(GLfloat angle);
         void Yaw(GLfloat angle);
         void Slide(GLfloat delU, GLfloat delV, GLfloat delN);
         void SetShape(GLfloat viewAngle, GLint width, GLint height, GLfloat nearDist, GLfloat farDist);
         void GetShape(GLfloat& viewAngle, GLfloat& aspect, GLfloat& nearDist, GLfloat& farDist);
-	void GetShape(GLfloat& viewAngle, GLfloat& width, GLfloat& height, GLfloat& nearDist, GLfloat& farDist);
+	    void GetShape(GLfloat& viewAngle, GLfloat& width, GLfloat& height, GLfloat& nearDist, GLfloat& farDist);
         void UpdateMatrices();
         Vector3 MouseToWorld(GLfloat xPos, GLfloat yPos);
         Vector3 GetPosition();

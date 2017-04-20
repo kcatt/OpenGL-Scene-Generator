@@ -2,6 +2,8 @@
 #define __I_OBSERVABLE__H_
 
 #include <list>
+#include <iostream>
+#include <memory>
 #include "iobserver.h"
 
 template <class T>
@@ -11,9 +13,9 @@ class IObservable
         /********************
          * Public Functions *
          ********************/
-        void Attach(IObserver<T> &observer)
+        void Attach(std::shared_ptr<IObserver<T> > observer)
         {
-            observers.push_back(&observer);
+            observers.push_back(observer);
         }
 
         void Notify()
@@ -23,7 +25,7 @@ class IObservable
         }
 
         void ClearObservers()
-        {	    
+        {
             observers.clear();
         }
 
@@ -31,7 +33,7 @@ class IObservable
         /********************
          * Private Variable *
          ********************/
-        std::list<IObserver<T> *> observers;
+        std::list<std::shared_ptr<IObserver<T> > > observers;
 };
 
 #endif

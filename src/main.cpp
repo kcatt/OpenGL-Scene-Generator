@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <memory>
 
 #include "shader.h"
 #include "camera.h"
@@ -37,7 +38,7 @@ struct MousePositionSave
 };
 
 struct MousePositionSave mousePosition;
-Camera* cam = NULL;
+unique_ptr<Camera> cam(nullptr);
 GLFWwindow* window = NULL;
 Screen* screen = NULL;
 Scene  scene;
@@ -138,7 +139,7 @@ int main(int argc, char* argv[])
     scene.interface = new Interface(screen);
     scene.SetUpMainDialog();
 
-    cam = new Camera();
+    cam = make_unique<Camera>();
     cam->SetShape(45.0f, width, height, 0.1f, 200.0f);
     cam->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -149,7 +150,7 @@ int main(int argc, char* argv[])
         }
     );
 
-    scene.SetCamera(cam);
+    scene.SetCamera(cam.get());
 
     // Load the given file if it was passed as an argument
     if (loadName != "")
@@ -188,7 +189,6 @@ int main(int argc, char* argv[])
         glfwSwapBuffers(window);
     }
 
-    //delete cam;
     delete screen;
 
     nanogui::shutdown();
@@ -240,7 +240,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int modifie
 
         RayCast ray(cam->GetPosition(), dir);
         
-        SceneObject* selected = ray.IntersectTest(scene.objects);
+        shared_ptr<SceneObject> selected = ray.IntersectTest(scene.objects);
 
         if (selected != NULL)
             selected->mesh.SetRenderMode(Mesh::MODE_WIRE_SOLID);

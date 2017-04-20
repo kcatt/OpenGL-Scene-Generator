@@ -2,6 +2,7 @@
 #define __MAIN_DIALOG__H_
 
 #include <nanogui/nanogui.h>
+#include <memory>
 #include "dialog.h"
 #include "scene_object.h"
 #include "tapered_cylinder_dialog.h"
@@ -28,7 +29,7 @@ class MainDialog : public Dialog
         void SetSceneContext   (void* context);
         void SetLoadCallback   (void (*callback)(void* context, const std::string& fileName));
         void SetSaveCallback   (void (*callback)(void* context, const std::string& fileName));
-        void SetInsertCallback (void (*callback)(void* context, SceneObject* newObject));
+        void SetInsertCallback (void (*callback)(void* context, std::shared_ptr<SceneObject> newObject));
         void SetAttributesPointers(Vector3* lightPosition, Color3* lightColor, Color3* ambientColor, Color3* backgroundColor);
 
     private:
@@ -37,7 +38,7 @@ class MainDialog : public Dialog
          *********************/
         void (*loadCallback)(void* context, const std::string& fileName);
         void (*saveCallback)(void* context, const std::string& fileName);
-        void (*insertCallback)(void* context, SceneObject* newObject);
+        void (*insertCallback)(void* context, std::shared_ptr<SceneObject> newObject);
         void* sceneContext;
         TaperedCylinderDialog* taperedCylinderDialog;
         AttributesDialog* attributesDialog;

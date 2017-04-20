@@ -26,6 +26,7 @@ class SceneObject : public IObserver<Camera>
         Material  material;
         AABB*     boundBox = NULL;
         Mesh      mesh;
+        Mat4x4    modelViewMatrix;
 
         std::string type;
 
@@ -62,7 +63,7 @@ class SceneObject : public IObserver<Camera>
         GLuint matSpecExponentLoc;
         GLuint boundsModelViewMatrixLoc;
 
-        Mat4x4 modelViewMatrix;
+        
 };
 
 #endif

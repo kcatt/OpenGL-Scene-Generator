@@ -114,11 +114,8 @@ void Scene::FreeScene(void)
 {
     SetSelectedObject(NULL);
     
-    for (size_t i = 0; i < objects.size(); i++)
-    {
-        if (objects[i] != NULL)
-            delete objects[i];
-    }
+    for (auto object : objects)
+        object = nullptr;
 
     objects.clear();
     camera->ClearObservers();
@@ -274,10 +271,11 @@ void Scene::DrawScene(void)
 bool Scene::GetObject(void)
 {
     std::string  nextStr;
-    SceneObject *newObject;
     mTokenType   type;
 
     while ((type = (WhichToken(nextStr = NextToken()))) != T_NULL) {
+        std::shared_ptr<SceneObject> newObject(nullptr);
+
         switch(type) {
             case LIGHT: 
             {
@@ -386,21 +384,49 @@ bool Scene::GetObject(void)
                 break;
             case T_NULL:
                 break; // The null token represents end-of-file
+            case DEF: {
+                std::string name, temp, leftBrack, rightBracket;
+                std::string input;
+
+                name = NextToken();
+                
+                if (WhichToken(name) != IDENT)
+                {
+                    std::cout << "Error: Identifier expected." << std::endl;
+                    return false;
+                }
+
+                if (defObjects.find(name) != defObjects.end())
+                {
+                    std::cout << currLine << ": " << name;
+                    std::cout << ": attempt to redefine." << std::endl;
+                    return false;
+                }
+                
+                leftBracket = NextToken();
+                if (WhichToken(leftBracket) != LFTCURLY)
+                {
+                    std::cout << "Error: { expected." << std::endl;
+                    return false;
+                }
+
+                /* Get object data */
+            }
             default:  {
                 switch(type) {
                     case CUBE:
-                        newObject = new Cube;
+                        newObject = std::make_shared<Cube>();
                         break;
                     case SPHERE:
-                        newObject = new Sphere;
+                        newObject = std::make_shared<Sphere>();
                         break;
                     /*case TORUS:
                         newObject = new Torus;
                         break;*/
                     case TAPEREDCYLINDER:
-                        newObject = new TaperedCylinder;
-                        ((TaperedCylinder*)newObject)->SetTopRadius(GetFloat());
-                        ((TaperedCylinder*)newObject)->Generate();
+                        newObject = std::make_shared<TaperedCylinder>();
+                        ((TaperedCylinder*)newObject.get())->SetTopRadius(GetFloat());
+                        ((TaperedCylinder*)newObject.get())->Generate();
                         break;
                     /*case TEAPOT:
                         newObject = new Teapot;
@@ -411,7 +437,7 @@ bool Scene::GetObject(void)
                     case MESH: 
                     {
                         std::string fname = NextToken();
-                        newObject = new Mesh3VN(fname);
+                        newObject = std::make_shared<Mesh3VN>(fname);
                         break;
                     }// end of case: MESH
                     default: 
@@ -423,14 +449,14 @@ bool Scene::GetObject(void)
                 }
                 
                 // common things to do to all Shape
-                ((SceneObject*)newObject)->material.Set(currMaterial);
+                ((SceneObject*)newObject.get())->material.Set(currMaterial);
                 // load transform
-                ((SceneObject*)newObject)->transform = this->currTransform;
-                ((SceneObject*)newObject)->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
-                ((SceneObject*)newObject)->SetModelViewUniformLocation(modelViewMatrixLoc);
-                ((SceneObject*)newObject)->SetBoundsModelViewUnformLocation(boundsModelViewMatrixLoc);
+                ((SceneObject*)newObject.get())->transform = this->currTransform;
+                ((SceneObject*)newObject.get())->SetUniformLocations(modelMatrixLoc, matAmbientLoc, matDiffuseLoc, matSpecularLoc, matEmissiveLoc, matSpecExponentLoc);
+                ((SceneObject*)newObject.get())->SetModelViewUniformLocation(modelViewMatrixLoc);
+                ((SceneObject*)newObject.get())->SetBoundsModelViewUnformLocation(boundsModelViewMatrixLoc);
 
-                camera->Attach(*newObject);
+                camera->Attach(newObject);
 
                 // Call the notify function on the camera to notify the new object of the camera's data
                 camera->Notify();
@@ -490,7 +516,6 @@ void Scene::Export(const std::string& fileName)
     {
         outFile << "!" << comments[i] << std::endl;
     }
-
     SaveCamera(fileName);
 }
 
@@ -522,26 +547,24 @@ void Scene::LoadCamera(const std::string& fileName)
 
     if (infile)
     {
-	infile >> x >> y >> z;
-	Vector3 backward(x, y, z);
-	infile >> x >> y >> z;
-	Vector3 right(x, y, z);
-	infile >> x >> y >> z;
-	Vector3 up(x, y, z);
-	infile >> x >> y >> z;
-	Vector3 eye(x, y, z);
-	GLfloat viewAngle, width, height, nearDist, farDist;
-	infile >> viewAngle >> width >> height  >> nearDist >> farDist;
-	camera->SetFromAxes(backward, right, up, eye);
-	camera->SetShape(viewAngle, width, height, nearDist, farDist);
+        infile >> x >> y >> z;
+        Vector3 backward(x, y, z);
+        infile >> x >> y >> z;
+        Vector3 right(x, y, z);
+        infile >> x >> y >> z;
+        Vector3 up(x, y, z);
+        infile >> x >> y >> z;
+        Vector3 eye(x, y, z);
+        GLfloat viewAngle, width, height, nearDist, farDist;
+        infile >> viewAngle >> width >> height  >> nearDist >> farDist;
+        camera->SetFromAxes(backward, right, up, eye);
+	    camera->SetShape(viewAngle, width, height, nearDist, farDist);
     }
     else
     {
-	camera->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	    camera->Set(Vector3(0, 0, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
     }
 }
-
-
 void Scene::Export()
 {
     std::string fileName = exportFileName;
@@ -554,14 +577,14 @@ void Scene::Export()
     Export(fileName);
 }
 
-void Scene::Insert(SceneObject* newObject)
+void Scene::Insert(std::shared_ptr<SceneObject> newObject)
 {
     Material  newMat;
     Transform newTransf;
 
     // Common things to do to all Shape
     newObject->material.Set(newMat);
-    // Load transform
+    // Load transform 
     newObject->transform = newTransf;
     // Set the new object's position to be 5 units in front of the camera
     newObject->transform.SetPosition(camera->eye + (-1 * camera->backward * 5));
@@ -571,7 +594,7 @@ void Scene::Insert(SceneObject* newObject)
     newObject->SetModelViewUniformLocation(modelViewMatrixLoc);
     newObject->SetBoundsModelViewUnformLocation(boundsModelViewMatrixLoc);
 
-    camera->Attach(*newObject);
+    camera->Attach(newObject);
 
     // Call the notify function on the camera to notify the new object of the camera's data
     camera->Notify();
@@ -592,11 +615,11 @@ void Scene::SetUpMainDialog()
     mainDialog->SetAttributesPointers(&(light.GetPosition()), &(light.GetColor()), &ambientColor, &backgroundColor);
 }
 
-void Scene::SetSelectedObject(SceneObject* obj)
+void Scene::SetSelectedObject(std::shared_ptr<SceneObject> obj)
 {
     
     ObjectDialog* dialog = interface->GetObjectDialog();
-    dialog->selectedObject = obj;
+    dialog->selectedObject = obj.get();
 
     selectedObject = obj;
 
@@ -642,7 +665,7 @@ void Scene::ExportFunctionForwarder(void* context, const std::string& fileName)
     static_cast<Scene*>(context)->Export(fileName);
 }
 
-void Scene::InsertFunctionForwarder(void* context, SceneObject* newObject)
+void Scene::InsertFunctionForwarder(void* context, std::shared_ptr<SceneObject> newObject)
 {
     static_cast<Scene*>(context)->Insert(newObject);
 }

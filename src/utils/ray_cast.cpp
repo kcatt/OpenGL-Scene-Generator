@@ -9,10 +9,10 @@ RayCast::RayCast(const Vector3& origin, const Vector3& direction)
     this->invDirection.Set(1/direction.x, 1/direction.y, 1/direction.z);
 }
 
-SceneObject* RayCast::IntersectTest(const std::vector<SceneObject*>& objects)
+std::shared_ptr<SceneObject> RayCast::IntersectTest(const std::vector<std::shared_ptr<SceneObject> >& objects)
 {   
     std::vector<GLfloat> intersectTimes;
-    std::vector<SceneObject*> intersectObjects;
+    std::vector<std::shared_ptr<SceneObject> > intersectObjects;
 
     for (size_t i = 0; i < objects.size(); i++)
     {

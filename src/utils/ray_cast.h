@@ -3,6 +3,7 @@
 
 #include <nanogui/nanogui.h>
 #include <vector>
+#include <memory>
 #include "vector3.h"
 #include "scene_object.h"
 #include "aabb.h"
@@ -19,7 +20,7 @@ class RayCast
         /********************
          * Public Functions *
          ********************/
-        SceneObject* IntersectTest(const std::vector<SceneObject*>& objects);
+        std::shared_ptr<SceneObject> IntersectTest(const std::vector<std::shared_ptr<SceneObject> >& objects);
         void SetCamera(Camera* cam);
 
     private:

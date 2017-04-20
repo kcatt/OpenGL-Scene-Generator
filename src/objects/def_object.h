@@ -2,6 +2,7 @@
 #define __DEF_OBJECT__H_
 
 #include <vector>
+#include <memory>
 #include "scene_object.h"
 
 class DefObject : public SceneObject
@@ -26,7 +27,7 @@ class DefObject : public SceneObject
         /*******************
          * Public Function *
          *******************/
-        void AddObject(SceneObject* object);
+        void AddObject(std::shared_ptr<SceneObject> object);
 
         /*******************
          * Public Variable *
@@ -34,7 +35,7 @@ class DefObject : public SceneObject
         std::string name;
 
     private:
-        std::vector<SceneObject*> objects;
+        std::vector<std::shared_ptr<SceneObject> > objects;
 };
 
 #endif

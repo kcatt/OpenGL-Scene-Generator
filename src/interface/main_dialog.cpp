@@ -51,7 +51,7 @@ void MainDialog::SetSaveCallback(void (*callback)(void* context, const std::stri
     saveCallback = callback;
 }
 
-void MainDialog::SetInsertCallback(void (*callback)(void* context, SceneObject* newObject))
+void MainDialog::SetInsertCallback(void (*callback)(void* context, std::shared_ptr<SceneObject> newObject))
 {
     insertCallback = callback;
 }
@@ -93,15 +93,15 @@ void MainDialog::OpenSaveDialog()
 
 void MainDialog::Insert(const std::string& objType)
 {
-    SceneObject* newObject;
+    std::shared_ptr<SceneObject> newObject(nullptr);
 
     if (objType == "Cube")
     {
-        newObject = new Cube;
+        newObject = std::make_shared<Cube>();
     }
     else if (objType == "Sphere")
     {
-        newObject = new Sphere;
+        newObject = std::make_shared<Sphere>();
     }
     else if (objType == "Cylinder")
     {
@@ -110,9 +110,9 @@ void MainDialog::Insert(const std::string& objType)
     }
     else if (objType == "TaperedCylinder")
     {
-        newObject = new TaperedCylinder;
-        ((TaperedCylinder*)newObject)->SetTopRadius(taperedCylinderDialog->cylinderRadius);
-        ((TaperedCylinder*)newObject)->Generate();
+        newObject = std::make_shared<TaperedCylinder>();
+        ((TaperedCylinder*)newObject.get())->SetTopRadius(taperedCylinderDialog->cylinderRadius);
+        ((TaperedCylinder*)newObject.get())->Generate();
         taperedCylinderDialog->Hide();
     }
     else if (objType == "Mesh")
@@ -122,7 +122,7 @@ void MainDialog::Insert(const std::string& objType)
 
         if (result == NFD_OKAY)
         {
-            newObject = new Mesh3VN(std::string(outPath));
+            newObject = std::make_shared<Mesh3VN>(std::string(outPath));
             delete outPath;
         }
     }
