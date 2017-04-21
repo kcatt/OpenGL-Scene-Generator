@@ -47,3 +47,5 @@
 4/6/2017|2|Finished working on presentation and practiced.
 4/12/2017|.5|Working on poster and looking at a bug.
 4/13/2017|3|Fixed a double free bug and converted to smart pointers.
+4/19/2017|5|Preparing for presentation.
+4/20/2017|5.5|Presentation, poster session, and working on final report.
