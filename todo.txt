@@ -1,5 +1,4 @@
 1. Find a way to make the camera not roll when moving around with mouse.
 2. Add in support for 'def { }' and 'use' in the SDL file.
 3. Documentation
-4. Insert objects some distance immediately in front of the camera
-5. Implement teapot and plane
+4. Implement teapot and plane
