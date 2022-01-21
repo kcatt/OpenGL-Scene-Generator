@@ -37,7 +37,7 @@ void Interface::Disable()
     for (size_t i = 0; i < dialogs.size(); i++)
     {
         dialogs[i].Hide();
-    }ambientColor.Set(0.1f
+    }
 
     enabled = false;
 }
